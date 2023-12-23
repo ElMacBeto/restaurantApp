@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131425582908",
+    "project_id": "restaurantapp-d6f48",
+    "storage_bucket": "restaurantapp-d6f48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131425582908:android:f526c184bbdbaf217b2839",
+        "android_client_info": {
+          "package_name": "com.humbjorch.restaurantapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRDAaH7EVaFyRpbHo1XrVewV01n0YlERg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.humbjorch.restaurantapp.ui.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.humbjorch.restaurantapp.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_orderTypeSelectionFragment"
+            app:destination="@id/orderTypeSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderTypeSelectionFragment"
+        android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderTypeSelection.OrderTypeSelectionFragment"
+        android:label="fragment_order_type_selection"
+        tools:layout="@layout/fragment_order_type_selection" >
+        <action
+            android:id="@+id/action_orderTypeSelectionFragment_to_orderSectionFragment"
+            app:destination="@id/orderSectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderSectionFragment"
+        android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderSection.OrderSectionFragment"
+        android:label="fragment_order_section"
+        tools:layout="@layout/fragment_order_section" />
+</navigation>

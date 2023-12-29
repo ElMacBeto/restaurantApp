@@ -62,6 +62,7 @@ dependencies {
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //viewmodel
     implementation("androidx.fragment:fragment-ktx:1.6.2")
@@ -86,4 +87,7 @@ dependencies {
 
     //glade
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //lottie
+    implementation("com.airbnb.android:lottie:5.2.0")
 }

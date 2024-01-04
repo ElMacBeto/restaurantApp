@@ -6,8 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.humbjorch.restaurantapp.data.model.HamburgerModel" />
-
+            type="com.humbjorch.restaurantapp.data.model.ProductListModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -55,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 tools:text="$85.00"
-                android:text="@{product.price}"
+                android:visibility="gone"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp"

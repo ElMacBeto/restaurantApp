@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.humbjorch.restaurantapp.App
-import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.data.model.TableAvailableModel
 import com.humbjorch.restaurantapp.databinding.FragmentOrderTypeSelectionBinding
 import com.humbjorch.restaurantapp.ui.orderRegister.orderTypeSelection.adapter.TableAdapter
@@ -19,7 +18,7 @@ class OrderTypeSelectionFragment : Fragment() {
 
     private lateinit var binding: FragmentOrderTypeSelectionBinding
     private lateinit var adapter: TableAdapter
-
+    private var tablePosition = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,31 +30,64 @@ class OrderTypeSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setAdapter()
         setListeners()
     }
 
     private fun setListeners() {
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_orderTypeSelectionFragment_to_orderSectionFragment)
+            if (binding.swDelivery.isChecked){
+                val action = OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragmentToOrderSectionFragment(
+                    tablePosition = -1
+                )
+                findNavController().navigate(action)
+            }else{
+                if (tablePosition<0){
+                    Toast.makeText(requireContext(), "Selecciona una meza", Toast.LENGTH_SHORT).show()
+                }else{
+                    val action = OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragmentToOrderSectionFragment(
+                        tablePosition = tablePosition
+                    )
+                    updateTableList()
+                    findNavController().navigate(action)
+                }
+            }
+        }
+        binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                binding.viewNoSelected.visibility = View.VISIBLE
+            }else{
+                binding.viewNoSelected.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun updateTableList() {
+        App.tablesAvailable.onEach {
+            if(it.position == tablePosition.toString()){
+                it.available = false
+            }
         }
     }
 
     private fun setAdapter() {
         val tableList = App.tablesAvailable
         adapter = TableAdapter(tableList){
-            update(it)
+            updatePositionSelected(it)
         }
         binding.rvTables.layoutManager = GridLayoutManager(requireContext(),3)
         binding.rvTables.adapter=adapter
     }
 
-    private fun update(table: TableAvailableModel){
-        App.tablesAvailable.onEach {
-            it.isClicked = table.position == it.position
-        }
-        adapter.updateList(App.tablesAvailable)
+    private fun updatePositionSelected(table: TableAvailableModel){
+        tablePosition = table.position.toInt()
     }
+
+    override fun onResume() {
+        super.onResume()
+        tablePosition = -1
+        binding.swDelivery.isChecked = false
+    }
+
 
 }

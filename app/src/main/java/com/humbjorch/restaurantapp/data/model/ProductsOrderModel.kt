@@ -1,8 +1,11 @@
 package com.humbjorch.restaurantapp.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ProductsOrderModel(
-    val product:String = "",
-    val amount: Int = 1,
-    val ingredient:String = "",
-    val price: Int = 0
+    var product:String = "",
+    var amount: String = "1",
+    var ingredients: List<String> = emptyList(),
+    var price: String = "0"
 )

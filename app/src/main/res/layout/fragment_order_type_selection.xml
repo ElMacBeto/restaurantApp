@@ -81,6 +81,19 @@
                 tools:itemCount="6"
                 tools:listitem="@layout/item_table"/>
 
+            <View
+                android:id="@+id/view_no_selected"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="@+id/rv_tables"
+                app:layout_constraintStart_toStartOf="@+id/rv_tables"
+                app:layout_constraintTop_toTopOf="@+id/rv_tables"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_tables"
+                android:elevation="10dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:background="@color/transparentGray"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_next"
                 android:layout_width="wrap_content"

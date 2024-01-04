@@ -4,5 +4,5 @@ import com.humbjorch.restaurantapp.data.model.TableAvailableModel
 
 data class TablesAvailableResponse(
     @field:JvmField
-    val tables: ArrayList<TableAvailableModel> = arrayListOf()
+    val list: ArrayList<TableAvailableModel> = arrayListOf()
 )

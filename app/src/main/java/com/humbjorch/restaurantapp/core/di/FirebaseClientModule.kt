@@ -10,5 +10,6 @@ import javax.inject.Singleton
 @Singleton
 class FirebaseClientModule @Inject constructor() {
     val productsCollection = Firebase.firestore.collection(Constants.PRODUCTS_COLLECTION)
-    val storage = FirebaseStorage.getInstance().getReference(Constants.PATH_FIREBASE_STORAGE)
+    val tableCollection = Firebase.firestore.collection(Constants.TABLES_COLLECTION)
+    val orderRegisterCollection = Firebase.firestore.collection(Constants.ORDERS_REGISTER_COLLECTION)
 }

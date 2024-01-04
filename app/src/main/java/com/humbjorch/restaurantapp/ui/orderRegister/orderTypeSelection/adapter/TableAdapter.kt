@@ -18,23 +18,28 @@ class TableAdapter(
     RecyclerView.Adapter<TableAdapter.ViewHolder>() {
 
 
-    fun updateList(newList: List<TableAvailableModel>) {
-        dataSet = newList
-        notifyDataSetChanged()
-    }
+    private var selectedPosition = -1
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val ctx = view.context
         private val binding = ItemTableBinding.bind(view)
 
-        fun bindView(table: TableAvailableModel) {
+        fun bindView(table: TableAvailableModel, isSelected: Boolean) {
             binding.tvPosition.text = table.position
             binding.tvPosition.isEnabled = table.available
-            if (table.isClicked){
-                binding.container.setBackgroundColor(ctx.getColor(R.color.gray2))
-            }else{
-                binding.container.setBackgroundColor(ctx.getColor(R.color.green1))
+
+            if (table.available) {
+                binding.tvPosition.setTextColor(ctx.getColor(R.color.black))
+                if (isSelected) {
+                    binding.container.setBackgroundColor(ctx.getColor(R.color.gray2))
+                } else {
+                    binding.container.setBackgroundColor(ctx.getColor(R.color.green1))
+                }
+            } else {
+                binding.tvPosition.setTextColor(ctx.getColor(R.color.white))
+                binding.container.setBackgroundColor(ctx.getColor(R.color.black))
             }
         }
     }
@@ -45,13 +50,18 @@ class TableAdapter(
         return ViewHolder(view)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val table = dataSet[position]
+        val isSelected = viewHolder.adapterPosition == selectedPosition
 
-        viewHolder.bindView(table)
+        viewHolder.bindView(table, isSelected)
         viewHolder.itemView.setOnClickListener {
-            onClick.invoke(table)
+            selectedPosition = viewHolder.adapterPosition
+            if (table.available){
+                onClick.invoke(table)
+                notifyDataSetChanged()
+            }
+
         }
     }
 

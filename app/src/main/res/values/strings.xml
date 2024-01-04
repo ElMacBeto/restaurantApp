@@ -5,4 +5,11 @@
 
 
     <string name="label_text_amount_product">x%d</string>
+
+    <!-- Custom toast labels -->
+    <string name="label_success">Success</string>
+    <string name="label_error">Error</string>
+    <string name="label_information">Information</string>
+    <string name="label_warning">Warning</string>
+    <string name="message_exit">Logout successful! See you next time.</string>
 </resources>

@@ -12,12 +12,12 @@ class ProductsOrderDiffUtil(
     override fun getNewListSize(): Int = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].product == newList[newItemPosition].product
+        return (oldList[oldItemPosition].product == newList[newItemPosition].product &&
+                oldList[oldItemPosition].ingredients == newList[newItemPosition].ingredients)
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return (oldList[oldItemPosition].amount == newList[newItemPosition].amount &&
-                oldList[oldItemPosition].ingredient == newList[newItemPosition].ingredient)
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 
 }

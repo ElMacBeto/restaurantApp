@@ -36,5 +36,12 @@
         android:id="@+id/orderSectionFragment"
         android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderSection.OrderSectionFragment"
         android:label="fragment_order_section"
-        tools:layout="@layout/fragment_order_section" />
+        tools:layout="@layout/fragment_order_section" >
+        <argument
+            android:name="tablePosition"
+            app:argType="integer"/>
+        <action
+            android:id="@+id/action_orderSectionFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

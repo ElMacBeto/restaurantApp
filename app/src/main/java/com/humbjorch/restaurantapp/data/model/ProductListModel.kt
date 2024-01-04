@@ -1,8 +1,6 @@
-package com.humbjorch.restaurantapp.data.datasource.remote.response
+package com.humbjorch.restaurantapp.data.model
 
-import com.humbjorch.restaurantapp.data.model.ProductsModel
-
-data class ProductResponse(
+data class ProductListModel(
     @field:JvmField
     val imageUrl: String = "",
     @field:JvmField

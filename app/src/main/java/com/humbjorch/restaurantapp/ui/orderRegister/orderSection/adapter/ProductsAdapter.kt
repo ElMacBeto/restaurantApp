@@ -8,17 +8,19 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.Extensions.Companion.loadImageUrl
-import com.humbjorch.restaurantapp.data.model.HamburgerModel
+import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.databinding.ItemProductsBinding
 
 
 class ProductsAdapter(
-    private var dataSet: List<HamburgerModel>,
-    private val onClick: (HamburgerModel, String) -> Unit
+    private var dataSet: List<ProductListModel>,
+    private val onClick: (ProductListModel) -> Unit
 ) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
 
-    fun updateList(newList: List<HamburgerModel>) {
+    private var selectedPosition = 0
+
+    fun updateList(newList: List<ProductListModel>) {
         dataSet = newList
         notifyDataSetChanged()
     }
@@ -27,19 +29,15 @@ class ProductsAdapter(
         private val ctx = view.context
         private val binding = ItemProductsBinding.bind(view)
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun bindView(product: HamburgerModel) {
+        fun bindView(product: ProductListModel, isSelected:Boolean) {
             binding.product = product
-            binding.imgProduct.loadImageUrl(product.image)
-            if (product.isClicked){
+            binding.imgProduct.loadImageUrl(product.imageUrl)
+            if (isSelected)
                 binding.container.setBackgroundColor(ctx.getColor(R.color.blue2))
-            }else{
+            else
                 binding.container.setBackgroundColor(ctx.getColor(R.color.white))
-            }
         }
-        fun getIngredient(): String{
-            return "con todo"
-        }
+
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -51,11 +49,12 @@ class ProductsAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val product = dataSet[position]
+        val isSelected = viewHolder.adapterPosition == selectedPosition
 
-        viewHolder.bindView(product)
+        viewHolder.bindView(product, isSelected)
         viewHolder.itemView.setOnClickListener {
-            val ingredient = viewHolder.getIngredient()
-            onClick.invoke(product, ingredient)
+            selectedPosition = viewHolder.adapterPosition
+            onClick.invoke(product)
         }
     }
 

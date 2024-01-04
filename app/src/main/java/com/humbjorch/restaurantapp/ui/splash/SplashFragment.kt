@@ -14,12 +14,14 @@ import androidx.navigation.fragment.findNavController
 import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.Status
+import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
-    private val viewModel:SplashViewModel by viewModels()
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +39,7 @@ class SplashFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.setProductsLiveData.observe(viewLifecycleOwner){
+        viewModel.setProductsLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
                     (activity as MainActivity).showLoader()
@@ -48,12 +50,16 @@ class SplashFragment : Fragment() {
                     viewModel.setProducts(it.data!!)
                     Handler(Looper.getMainLooper()).postDelayed({
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                    }, 2000)
+                    }, 1500)
                 }
 
                 Status.ERROR -> {
                     (activity as MainActivity).dismissLoader()
-                    Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_SHORT).show()
+                    CustomToastWidget.show(
+                        activity = requireActivity(),
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
                 }
             }
         }

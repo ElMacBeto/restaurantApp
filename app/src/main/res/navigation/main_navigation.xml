@@ -22,6 +22,12 @@
         <action
             android:id="@+id/action_homeFragment_to_orderTypeSelectionFragment"
             app:destination="@id/orderTypeSelectionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_orderSectionFragment"
+            app:destination="@id/orderSectionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderTypeSelectionFragment"
@@ -40,8 +46,21 @@
         <argument
             android:name="tablePosition"
             app:argType="integer"/>
+        <argument
+            app:argType="com.humbjorch.restaurantapp.data.model.OrderModel"
+            android:name="order"
+            app:nullable="true"/>
         <action
             android:id="@+id/action_orderSectionFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.humbjorch.restaurantapp.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

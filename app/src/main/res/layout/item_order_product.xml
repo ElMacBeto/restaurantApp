@@ -8,78 +8,114 @@
 
     <TextView
         android:id="@+id/tv_product_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         tools:text="x1"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Papi bacon"
-        android:textSize="18sp"
+        tools:text="Papi bacon"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="@color/black1"
-        android:layout_marginStart="26dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_ingredients"
         app:layout_constraintStart_toEndOf="@+id/tv_product_amount"/>
 
     <TextView
         android:id="@+id/tv_ingredients"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="sin jitomate, sin cebolla, sin lechuga"
-        android:textSize="18sp"
+        tools:text="sin jitomate, sin cebolla, sin lechuga"
+        android:textSize="14sp"
         android:textColor="@color/black1"
-        android:layout_marginStart="12dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_product_name"
+        app:layout_constraintEnd_toStartOf="@+id/container_btns"/>
+
+    <LinearLayout
+        android:id="@+id/container_btns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_ingredients"
         app:layout_constraintTop_toTopOf="@+id/tv_product_name"
-        app:layout_constraintEnd_toStartOf="@+id/btn_add"
         app:layout_constraintBottom_toBottomOf="@+id/tv_product_name"
-        app:layout_constraintStart_toEndOf="@+id/tv_product_name"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/btn_add"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/bg_filled_round"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="@drawable/foreground_nav_button"
-        android:text="+"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_minus"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="gone"
+            tools:text="$95.00"
+            android:textAlignment="textEnd"
+            android:textSize="14sp"
+            android:textColor="@color/black1"
+            android:layout_marginStart="8dp"
+            android:elevation="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/btn_minus"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/bg_filled_round"
-        android:backgroundTint="@color/red1"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="@drawable/foreground_nav_button"
-        android:text="-"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
+        <TextView
+            android:id="@+id/btn_minus"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_filled_round"
+            android:backgroundTint="@color/red1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/foreground_nav_button"
+            android:text="-"
+            tools:visibility="visible"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/btn_add"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_filled_round"
+            android:clickable="true"
+            android:focusable="true"
+            tools:visibility="visible"
+            android:foreground="@drawable/foreground_nav_button"
+            android:text="+"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

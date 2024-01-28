@@ -94,4 +94,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //printer
+    implementation ("com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.3.0")
 }

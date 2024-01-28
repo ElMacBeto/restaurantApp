@@ -43,8 +43,6 @@ class ProductsRepository @Inject constructor(
                 return Resource.error(it.message)
         }
 
-        App.tablesAvailable = tableAvailableResponse.data!!.list
-
         val allProducts = listOf(
             ProductsMapper().map(hamburgerResponse.data!!),
             ProductsMapper().map(drinksResponse.data!!),
@@ -52,6 +50,8 @@ class ProductsRepository @Inject constructor(
             ProductsMapper().map(wingsResponse.data!!),
             ProductsMapper().map(potatoesResponse.data!!),
         )
+        App.tablesAvailable = tableAvailableResponse.data!!.list
+        App.productListModel = allProducts
         return Resource.success(allProducts)
     }
 

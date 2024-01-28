@@ -20,11 +20,6 @@ class ProductsAdapter(
 
     private var selectedPosition = 0
 
-    fun updateList(newList: List<ProductListModel>) {
-        dataSet = newList
-        notifyDataSetChanged()
-    }
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val ctx = view.context
         private val binding = ItemProductsBinding.bind(view)
@@ -37,7 +32,6 @@ class ProductsAdapter(
             else
                 binding.container.setBackgroundColor(ctx.getColor(R.color.white))
         }
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -53,7 +47,11 @@ class ProductsAdapter(
 
         viewHolder.bindView(product, isSelected)
         viewHolder.itemView.setOnClickListener {
+            val oldPosition = selectedPosition
             selectedPosition = viewHolder.adapterPosition
+            onClick.invoke(product)
+            notifyItemChanged(oldPosition)
+            notifyItemChanged(selectedPosition)
             onClick.invoke(product)
         }
     }

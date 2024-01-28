@@ -1,5 +1,7 @@
 package com.humbjorch.restaurantapp.core.utils
 
+import android.view.View
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -11,7 +13,7 @@ import kotlinx.serialization.json.Json
 
 class Extensions {
     companion object{
-        fun CircleImageView.loadImageUrl(resource: String?) {
+        fun ImageView.loadImageUrl(resource: String?) {
             if (resource != null) {
                 val options: RequestOptions = RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -25,4 +27,10 @@ class Extensions {
         }
     }
 
+}
+fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
+    val safeClickListener = SafeClickListener {
+        onSafeClick(it)
+    }
+    setOnClickListener(safeClickListener)
 }

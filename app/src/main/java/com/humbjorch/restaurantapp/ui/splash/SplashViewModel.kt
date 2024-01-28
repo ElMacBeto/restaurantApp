@@ -25,8 +25,4 @@ class SplashViewModel @Inject constructor(
            _setProductsLiveData.value = productsRepository.getAllProducts()
         }
     }
-
-    fun setProducts(products: List<ProductListModel>) {
-        App.productListModel = products
-    }
 }

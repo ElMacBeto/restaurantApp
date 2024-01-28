@@ -1,11 +1,8 @@
 package com.humbjorch.restaurantapp.ui.orderRegister.orderTypeSelection.adapter
 
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.data.model.TableAvailableModel
@@ -20,7 +17,6 @@ class TableAdapter(
 
     private var selectedPosition = -1
 
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val ctx = view.context
@@ -33,7 +29,7 @@ class TableAdapter(
             if (table.available) {
                 binding.tvPosition.setTextColor(ctx.getColor(R.color.black))
                 if (isSelected) {
-                    binding.container.setBackgroundColor(ctx.getColor(R.color.gray2))
+                    binding.container.setBackgroundColor(ctx.getColor(R.color.blue2))
                 } else {
                     binding.container.setBackgroundColor(ctx.getColor(R.color.green1))
                 }
@@ -56,12 +52,13 @@ class TableAdapter(
 
         viewHolder.bindView(table, isSelected)
         viewHolder.itemView.setOnClickListener {
-            selectedPosition = viewHolder.adapterPosition
             if (table.available){
+                val oldPosition = selectedPosition
+                selectedPosition = viewHolder.adapterPosition
                 onClick.invoke(table)
-                notifyDataSetChanged()
+                notifyItemChanged(oldPosition)
+                notifyItemChanged(selectedPosition)
             }
-
         }
     }
 

@@ -12,10 +12,23 @@ object Constants {
     const val WINGS_DOCUMENT = "Wings"
     const val POTATOES_DOCUMENT = "Potatoes"
 
+    //preference
+    const val SETTING_PREFERENCE = "SETTINGS_PREFERENCE"
+    const val PRINTER_PORT_KEY = "printer_port_key"
+    const val PRINTER_ADDRESS_KEY = "printer_address_key"
+    const val ORDER_NUMBER_KEY = "order_number_key"
+
+    const val PRODUCT_DEFAULT_AMOUNT = "1"
 }
 
-enum class ProductActionListener{
+enum class ProductActionListener {
     ADD_PRODUCT,
     REMOVE_PRODUCT
+}
+
+enum class OrderStatus(val value: String) {
+    PAID("PAID"),
+    WITHOUT_PAYING("WITHOUT_PAYING"),
+    CANCEL("CANCEL")
 }
 

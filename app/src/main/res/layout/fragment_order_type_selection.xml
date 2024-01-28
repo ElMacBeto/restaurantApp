@@ -15,98 +15,109 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="16dp">
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="22dp">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_title_order_selection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tipo de orden"
-                android:textAllCaps="true"
-                android:textColor="@color/black1"
-                android:textSize="24sp"
-                android:textStyle="bold"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_label_delivery_sw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Para entregar a domicilio"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toStartOf="@+id/sw_delivery"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title_order_selection" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/sw_delivery"
-                android:layout_width="80dp"
-                android:layout_height="48dp"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_label_delivery_sw"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_label_delivery_sw" />
-
-            <TextView
-                android:id="@+id/tv_label_table_selection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Seleccion de meza"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="18dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sw_delivery" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_tables"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_table_selection"
-                app:layout_constraintBottom_toTopOf="@+id/btn_next"
-                app:spanCount="3"
-                tools:itemCount="6"
-                tools:listitem="@layout/item_table"/>
+                android:layout_height="match_parent"
+                android:padding="22dp"
+                android:animateLayoutChanges="true">
 
-            <View
-                android:id="@+id/view_no_selected"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="@+id/rv_tables"
-                app:layout_constraintStart_toStartOf="@+id/rv_tables"
-                app:layout_constraintTop_toTopOf="@+id/rv_tables"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_tables"
-                android:elevation="10dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:background="@color/transparentGray"/>
+                <TextView
+                    android:id="@+id/tv_title_order_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_order_type"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CONTINUAR"
-                app:cornerRadius="12dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/blue1"
-                app:layout_constraintTop_toBottomOf="@+id/rv_tables"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_label_delivery_sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_for_delivery"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/sw_delivery"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_order_selection" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_delivery"
+                    android:layout_width="80dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_label_delivery_sw"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_label_delivery_sw" />
+
+                <TextView
+                    android:id="@+id/tv_label_table_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_table_selection"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sw_delivery" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tables"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_label_table_selection"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_next"
+                    app:spanCount="3"
+                    tools:itemCount="6"
+                    tools:listitem="@layout/item_table" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_delivery"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="75dp"
+                    android:layout_marginRight="75dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_tables"
+                    app:layout_constraintLeft_toLeftOf="@+id/rv_tables"
+                    app:layout_constraintRight_toRightOf="@+id/rv_tables"
+                    app:layout_constraintTop_toTopOf="@+id/rv_tables"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/delivery"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="@color/blue1"
+                    android:text="@string/label_next"
+                    app:cornerRadius="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_tables"
+                    tools:ignore="TextContrastCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.cardview.widget.CardView>
 

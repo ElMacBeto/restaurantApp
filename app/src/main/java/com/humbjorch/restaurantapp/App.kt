@@ -14,6 +14,8 @@ class App:Application() {
         var tablesAvailable = emptyList<TableAvailableModel>()
         var productListModel = emptyList<ProductListModel>()
         var ordersList = OrderListModel()
+        var printerPort = 0
+        var printerAddress = ""
     }
 
 }

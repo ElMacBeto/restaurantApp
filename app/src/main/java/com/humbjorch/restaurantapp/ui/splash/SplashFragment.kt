@@ -47,7 +47,6 @@ class SplashFragment : Fragment() {
 
                 Status.SUCCESS -> {
                     (activity as MainActivity).dismissLoader()
-                    viewModel.setProducts(it.data!!)
                     Handler(Looper.getMainLooper()).postDelayed({
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                     }, 1500)

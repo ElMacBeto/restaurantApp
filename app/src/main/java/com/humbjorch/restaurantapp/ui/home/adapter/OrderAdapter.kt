@@ -16,8 +16,8 @@ class OrderAdapter(
 ) :
     RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 
+    private var selectedPosition = 0
 
-    private var selectedPosition = -1
 
     fun updateList(newList: List<OrderModel>) {
         val projectDiffUtil = OrderDiffUtil(dataSet, newList)
@@ -36,13 +36,13 @@ class OrderAdapter(
             binding.order = order
 
             if (isSelected) {
-                binding.container.setBackgroundColor(ctx.getColor(R.color.gray1))
+                binding.container.setBackgroundColor(ctx.getColor(R.color.blue2))
             } else {
                 binding.container.setBackgroundColor(ctx.getColor(R.color.white))
             }
 
             if (order.table.toInt() > 0) {
-                binding.tvTableNumber.text = order.table.toString()
+                binding.tvTableNumber.text = order.table
                 binding.imgOrderType.setImageDrawable(ctx.getDrawable(R.drawable.ic_table))
             } else {
                 binding.tvTableNumber.text = ""
@@ -63,9 +63,11 @@ class OrderAdapter(
 
         viewHolder.bindView(table, isSelected)
         viewHolder.itemView.setOnClickListener {
+            val oldPosition = selectedPosition
             selectedPosition = viewHolder.adapterPosition
             onClick.invoke(table)
-            notifyDataSetChanged()
+            notifyItemChanged(oldPosition)
+            notifyItemChanged(selectedPosition)
         }
     }
 

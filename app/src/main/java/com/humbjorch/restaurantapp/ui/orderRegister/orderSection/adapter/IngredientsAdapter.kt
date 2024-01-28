@@ -17,12 +17,6 @@ class IngredientsAdapter(
 
     private val selectedPositions = mutableListOf(0)
 
-    fun clearSelectedPositions(){
-        selectedPositions.clear()
-        selectedPositions.add(0)
-        notifyDataSetChanged()
-    }
-
     fun updateList(newList: List<String>) {
         val projectDiffUtil = IngredientsDiffUtil(dataSet, newList)
         val result = DiffUtil.calculateDiff(projectDiffUtil)
@@ -30,13 +24,22 @@ class IngredientsAdapter(
         result.dispatchUpdatesTo(this)
     }
 
+    fun clearCheckBoxes(){
+        selectedPositions.clear()
+        selectedPositions.add(0)
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val binding = ItemIngredientBinding.bind(view)
 
-        fun bindView(productType: String, isChecked: Boolean) {
+        fun bindView(productType: String) {
             binding.chSelected.text = productType
-            binding.chSelected.isChecked = isChecked
+            binding.chSelected.isChecked = false
+        }
+        fun setChecked(boolean: Boolean){
+            binding.chSelected.isChecked = boolean
         }
     }
 
@@ -48,9 +51,10 @@ class IngredientsAdapter(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val productType = dataSet[position]
-        val isCheckedCbx = viewHolder.adapterPosition in selectedPositions
 
-        viewHolder.bindView(productType, isCheckedCbx)
+        viewHolder.bindView(productType)
+        val isIngredientChecked = viewHolder.adapterPosition == 0
+        viewHolder.setChecked(isIngredientChecked)
 
         viewHolder.binding.chSelected.setOnCheckedChangeListener { _,isChecked  ->
             if (isChecked){
@@ -69,6 +73,8 @@ class IngredientsAdapter(
                 tempList = tempList.plus(dataSet[selectedPosition])
             }
         }
+        if (tempList.isEmpty() && dataSet.isNotEmpty())
+            tempList = tempList.plus(dataSet[0])
         return tempList
     }
 

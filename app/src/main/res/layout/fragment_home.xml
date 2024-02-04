@@ -7,93 +7,36 @@
     android:background="@color/gray1"
     tools:context=".ui.home.HomeFragment">
 
-    <LinearLayout
-        android:id="@+id/top_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="@string/label_papiz"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_label_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            tools:text="Miercoles 16 de noviembre de 2023" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/sw_delivery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="@string/label_delivery_orders" />
-
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/container_nav_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_toolbar">
-
-        <include
-            android:id="@+id/nav_bar"
-            layout="@layout/custom_nav_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-    </androidx.cardview.widget.CardView>
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.40" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/container_rv_orders"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="12dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_add_order"
         app:layout_constraintEnd_toEndOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/container_nav_bar"
-        app:layout_constraintTop_toBottomOf="@+id/top_toolbar">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
-            android:animateLayoutChanges="true">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/tv_label_order_title"
@@ -134,7 +77,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/container_rv_orders"
-        app:layout_constraintTop_toBottomOf="@+id/top_toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -186,13 +129,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
                 android:text="@string/label_total"
                 android:textColor="@color/black1"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/btn_edit_order"
-                app:layout_constraintEnd_toStartOf="@+id/tv_total" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_total"
+                app:layout_constraintEnd_toStartOf="@+id/tv_total"
+                app:layout_constraintTop_toTopOf="@+id/tv_total" />
 
             <TextView
                 android:id="@+id/tv_total"
@@ -200,41 +143,76 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black1"
                 android:textSize="22sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_label_total"
+                app:layout_constraintBottom_toTopOf="@+id/container_btn_ticket"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_label_total"
                 tools:text="$1500.00" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_edit_order"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/container_btn_ticket"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/black"
-                android:text="@string/label_edit"
-                app:cornerRadius="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/btn_take_order"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_edit_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/black"
+                    android:text="@string/label_edit"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_edit"
+                    app:iconGravity="textStart"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_take_order"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_print_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/blue3"
+                    android:text="@string/label_print_order"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_print"
+                    app:iconGravity="textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_edit_order"
+                    app:layout_constraintStart_toEndOf="@+id/btn_edit_order"
+                    app:layout_constraintTop_toTopOf="@+id/btn_edit_order" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cancel_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/red1"
+                    android:text="@string/label_cancel_order"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_cancel"
+                    app:iconGravity="textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_edit_order"
+                    app:layout_constraintStart_toEndOf="@+id/btn_print_order"
+                    app:layout_constraintTop_toTopOf="@+id/btn_edit_order" />
+
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_take_order"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/green1"
                 android:text="@string/label_take_order"
                 app:cornerRadius="12dp"
+                app:icon="@drawable/ic_money"
+                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_print_order"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/blue3"
-                android:text="@string/label_print_order"
-                app:cornerRadius="12dp"
-                app:layout_constraintStart_toEndOf="@+id/btn_edit_order"
-                app:layout_constraintTop_toTopOf="@+id/btn_edit_order" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -249,8 +227,9 @@
         android:backgroundTint="@color/blue1"
         android:text="@string/label_new_order"
         app:cornerRadius="12dp"
+        app:icon="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/container_nav_bar" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

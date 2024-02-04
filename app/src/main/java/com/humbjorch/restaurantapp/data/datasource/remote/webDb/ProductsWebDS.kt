@@ -7,15 +7,7 @@ import javax.inject.Inject
 
 class ProductsWebDS @Inject constructor(private val service: FirebaseApiService) {
 
-    suspend fun getDrinks(product: String) = service.getProduct(product)
-
-    suspend fun getHamburgers(product: String) = service.getProduct(product)
-
-    suspend fun getWings(product: String) = service.getProduct(product)
-
-    suspend fun getBoneless(product: String) = service.getProduct(product)
-
-    suspend fun getPotatoes(product: String) = service.getProduct(product)
+    suspend fun getProduct(product: String) = service.getProduct(product)
 
     suspend fun getTablesAvailable() = service.getAllTablesAvailable()
 

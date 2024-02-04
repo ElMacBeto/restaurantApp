@@ -13,6 +13,7 @@ import com.dantsu.escposprinter.connection.tcp.TcpConnection
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
+import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentTime
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -70,47 +71,99 @@ class PrinterUtils @Inject constructor(val context: Context) {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun printNewTicket(
         order: OrderModel,
+        printerPort: Int,
+        printerAddress: String
+    ): Resource<String> = withContext(Dispatchers.IO) {
+        try {
+            val printer =
+                EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 48)
+            var total = 0
+            val ticket = StringBuilder()
+
+            ticket.append(
+                "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(
+                    printer,
+                    context.resources.getDrawableForDensity(
+                        R.drawable.logo_bg_white,
+                        DisplayMetrics.DENSITY_XXHIGH
+                    )
+                ) + "</img>\n\n"
+            )
+            ticket.append("[L]<b>fecha: ${getCurrentDate(true)}</b>\n")
+            ticket.append("Calle Dr. Lucas Vallarta #84 Colonia Dr. Lucas Vallarta Tepic, Mexico\n")
+            ticket.append("[C]************************************************\n")
+            ticket.append("[L]cantidad [C]producto [R]precio\n")
+
+            for (product in order.productList) {
+                var extraPrice = 0
+                val extrasText =
+                    if (product.extras.isEmpty())
+                        ""
+                    else {
+                        val extraPrices = product.extras.map { it.price.toInt() }
+                        extraPrice = extraPrices.sum()
+                        val extrasList = product.extras.map { it.name }
+                        "extras: ${extrasList.joinToString()}"
+                    }
+                val price = (product.price.toInt() * product.amount.toInt()) + extraPrice
+                total += price
+                val text =
+                    "[L]<b>x${product.amount} ${product.product} </b> [R]$$price.00\n"
+                ticket.append(text)
+                ticket.append(extrasText+"\n")
+            }
+            ticket.append("[C]************************************************\n")
+            ticket.append("[R]<u><font size='big'>Total: $total</font></u>\n\n\n\n\n\n.")
+            printer.printFormattedTextAndCut("$ticket")
+            printer.disconnectPrinter()
+            Resource.success(null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.error(e.message.toString())
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun printOrder(
+        order: OrderModel,
         orderNumber: Int,
         printerPort: Int,
         printerAddress: String
     ): Resource<String> = withContext(Dispatchers.IO) {
-            try {
-                val printer =
-                    EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 42)
-                var total = 0
-                val ticket = StringBuilder()
-                for (product in order.productList) {
-                    val price = product.price.toInt() * product.amount.toInt()
-                    total += price
-                    val text =
-                        "[L]<b>x${product.amount}  ${product.product}</b> [R]$${product.price}.00\n"
-                    ticket.append(text)
-                }
-                ticket.append("[C]--------------------------\n")
-                ticket.append("[C]----ORDER $orderNumber----\n")
-                ticket.append(
-                    "[C]<u><font size='big'>Total: $total</font></u>\n\n\n\n\n\n" +
-                            "."
-                )
-                printer.printFormattedTextAndCut(
-                    "[L]${getCurrentDate(true)}\n" +
-                            "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(
-                        printer,
-                        context.resources.getDrawableForDensity(
-                            R.drawable.logo_papiz2,
-                            DisplayMetrics.DENSITY_MEDIUM
-                        )
-                    ) + "</img>\n\n" +
-                            "[C]================================\n" +
-                            ticket + "\n\n\n\n"
-                )
-                printer.disconnectPrinter()
-                Resource.success(null)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Resource.error(e.message.toString())
+        try {
+            val printer =
+                EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 42)
+            val ticket = StringBuilder()
+            val tableText = if (order.table == "-1") "Para llevar" else "Meza: ${order.table}"
+            ticket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
+            ticket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
+            ticket.append("[R]hora: ${getCurrentTime()}\n")
+            ticket.append("[C]================================================\n\n")
+
+            for (product in order.productList) {
+                val ingredientsText = if (product.ingredients.isEmpty()) "" else "-> ${product.ingredients.joinToString()}"
+                val extrasText =
+                    if (product.extras.isEmpty())
+                        ""
+                    else {
+                        val extrasList = product.extras.map { it.name }
+                        ", extras: ${extrasList.joinToString()}"
+                    }
+                val productText =
+                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText $extrasText</font>\n"
+                ticket.append(productText)
             }
+
+            ticket.append("\n\n\n\n" + ".")
+
+            printer.printFormattedTextAndCut("$ticket")
+            printer.disconnectPrinter()
+            Resource.success(null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.error(e.message.toString())
         }
+    }
 
 }
 

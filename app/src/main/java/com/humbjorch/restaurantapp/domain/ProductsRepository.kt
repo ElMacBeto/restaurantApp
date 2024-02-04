@@ -2,6 +2,7 @@ package com.humbjorch.restaurantapp.domain
 
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.core.utils.Constants.BONELESS_DOCUMENT
+import com.humbjorch.restaurantapp.core.utils.Constants.CHILIPOP_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Constants.DRINKS_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Constants.HAMBURGERS_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Constants.POTATOES_DOCUMENT
@@ -22,11 +23,12 @@ class ProductsRepository @Inject constructor(
 ) {
 
     suspend fun getAllProducts(): Resource<List<ProductListModel>> {
-        val drinksResponse = productsWebDS.getDrinks(DRINKS_DOCUMENT)
-        val hamburgerResponse = productsWebDS.getHamburgers(HAMBURGERS_DOCUMENT)
-        val bonelessResponse = productsWebDS.getBoneless(BONELESS_DOCUMENT)
-        val wingsResponse = productsWebDS.getWings(WINGS_DOCUMENT)
-        val potatoesResponse = productsWebDS.getPotatoes(POTATOES_DOCUMENT)
+        val drinksResponse = productsWebDS.getProduct(DRINKS_DOCUMENT)
+        val hamburgerResponse = productsWebDS.getProduct(HAMBURGERS_DOCUMENT)
+        val bonelessResponse = productsWebDS.getProduct(BONELESS_DOCUMENT)
+        val wingsResponse = productsWebDS.getProduct(WINGS_DOCUMENT)
+        val potatoesResponse = productsWebDS.getProduct(POTATOES_DOCUMENT)
+        val chiliPopResponse = productsWebDS.getProduct(CHILIPOP_DOCUMENT)
         val tableAvailableResponse = productsWebDS.getTablesAvailable()
 
         val responses = listOf(
@@ -35,7 +37,8 @@ class ProductsRepository @Inject constructor(
             bonelessResponse,
             wingsResponse,
             potatoesResponse,
-            tableAvailableResponse
+            tableAvailableResponse,
+            chiliPopResponse
         )
 
         responses.forEach {
@@ -49,7 +52,9 @@ class ProductsRepository @Inject constructor(
             ProductsMapper().map(bonelessResponse.data!!),
             ProductsMapper().map(wingsResponse.data!!),
             ProductsMapper().map(potatoesResponse.data!!),
+            ProductsMapper().map(chiliPopResponse.data!!),
         )
+
         App.tablesAvailable = tableAvailableResponse.data!!.list
         App.productListModel = allProducts
         return Resource.success(allProducts)
@@ -82,5 +87,11 @@ class ProductsRepository @Inject constructor(
 
     suspend fun getOrders(date: String) = ordersWebDS.getOrdersRegister(date)
 
+
+    suspend fun updateTables(): Resource<Boolean> {
+        return productsWebDS.updateTable(
+            TablesAvailableResponse(ArrayList(App.tablesAvailable))
+        )
+    }
 
 }

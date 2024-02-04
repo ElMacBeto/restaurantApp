@@ -2,27 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RestaurantApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/blue1</item>
+        <item name="colorSecondary">@color/blue3</item>
     </style>
 
     <style name="Theme.RestaurantApp" parent="Base.Theme.RestaurantApp" />
-
-    <style name="Button.GradientBorderRounded" parent="Widget.MaterialComponents.Button">
-        <item name="android:background">@drawable/selector_button</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/selector_txt_button</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="backgroundTint">@null</item>
-    </style>
-
-    <style name="Button.General" parent="Widget.MaterialComponents.Button">
-        <item name="android:textSize">18sp</item>
-        <item name="android:background">@drawable/selector_btn_primary_general</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="backgroundTint">@null</item>
-    </style>
 
     <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>

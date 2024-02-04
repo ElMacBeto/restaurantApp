@@ -28,7 +28,8 @@
     <string name="label_save_button">Guardar</string>
     <string name="label_edit">Editar</string>
     <string name="label_take_order">Cobrar</string>
-    <string name="label_print_order">Imprimir orden</string>
+    <string name="label_print_order">orden cocina</string>
+    <string name="label_cancel_order">Cancelar</string>
 
     <string name="dialog_title_pay_order">Confirmacion de pago</string>
     <string name="dialog_description_pay_order">esta seguro de continuar con el pago?</string>
@@ -41,6 +42,7 @@
     <string name="label_plus">+</string>
     <string name="label_minus">-</string>
     <string name="label_ingredients">Ingredientes</string>
+    <string name="label_extras">Extras</string>
     <string name="label_price">Precio</string>
     <string name="label_product">Producto</string>
     <string name="label_done_order">Finalizar orden</string>
@@ -50,8 +52,14 @@
     <string name="dialog_title_printer_ticket">Confirmacion de impresion</string>
     <string name="dialog_description_printer_ticket">esta seguro de imprimir orden?</string>
 
+    <string name="dialog_title_cancel_order">Confirmacion de impresion</string>
+    <string name="dialog_description_cancel_order">esta seguro de cancelar la orden?</string>
+
     <string name="dialog_title_confirmation_order">Confirmacion de Orden</string>
     <string name="dialog_description_confirmation_order">esta seguro de finalizar la orden?</string>
     <string name="share_preferences_session">my_share_preferences</string>
 
+    <string name="top_toolbar_home_title">HOME</string>
+    <string name="top_toolbar_new_order_title">NEW ORDER</string>
+    <string name="top_toolbar_settings_title">CONFIGURACIONES</string>
 </resources>

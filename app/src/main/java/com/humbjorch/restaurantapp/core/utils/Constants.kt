@@ -11,6 +11,7 @@ object Constants {
     const val BONELESS_DOCUMENT = "Boneless"
     const val WINGS_DOCUMENT = "Wings"
     const val POTATOES_DOCUMENT = "Potatoes"
+    const val CHILIPOP_DOCUMENT = "Chilipop"
 
     //preference
     const val SETTING_PREFERENCE = "SETTINGS_PREFERENCE"

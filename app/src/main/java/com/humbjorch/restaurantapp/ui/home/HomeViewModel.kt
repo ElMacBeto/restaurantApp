@@ -1,6 +1,5 @@
 package com.humbjorch.restaurantapp.ui.home
 
-import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
@@ -10,13 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.core.di.ModuleSharePreference
 import com.humbjorch.restaurantapp.core.utils.OrderStatus
+import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.printer.PrinterUtils
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderListModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
-import com.humbjorch.restaurantapp.domain.DataStorePreferencesRepository
 import com.humbjorch.restaurantapp.domain.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +26,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
-    private val dataStorePreferencesRepository: DataStorePreferencesRepository,
     private val printerUtils: PrinterUtils,
     private val sharePreference: ModuleSharePreference
 ) : ViewModel() {
@@ -60,8 +58,15 @@ class HomeViewModel @Inject constructor(
             val id = Tools.getCurrentDate()
             updateTable(order.table)
             order.status = OrderStatus.PAID.value
-            productsRepository.saveOrderRegister(id, order)
-            _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
+            val response = printerUtils.printNewTicket(
+                order,
+                App.printerPort,
+                App.printerAddress
+            )
+            if (response.status == Status.ERROR)
+                _printLiveData.value = response
+            else
+                _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
         }
     }
 
@@ -85,24 +90,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setTotal(order: OrderModel): Int {
-        var total = 0
-        order.productList.forEach {
-            val price = it.price.toInt() * it.amount.toInt()
-            total += price
-        }
-        return total
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun print(order: OrderModel) {
+    fun printOrder(order: OrderModel) {
         _printLiveData.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
             val currentOrderNumber = sharePreference.getOrderNumber()
 
             _printLiveData.postValue(
-                printerUtils.printNewTicket(
+                printerUtils.printOrder(
                     order,
                     currentOrderNumber,
                     App.printerPort,
@@ -112,9 +107,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun cancelOrder(order: OrderModel) {
+        _updateOrderLiveData.value = Resource.loading()
+        viewModelScope.launch {
+            val id = Tools.getCurrentDate()
+            updateTable(order.table)
+            order.status = OrderStatus.CANCEL.value
+            productsRepository.saveOrderRegister(id, order)
+            _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
+        }
+    }
+
     fun setPrinterSettings() {
         App.printerPort = sharePreference.getPrinterPort()
         App.printerAddress = sharePreference.getPrinterAddress() ?: ""
     }
+
 
 }

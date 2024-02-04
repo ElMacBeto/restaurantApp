@@ -2,6 +2,7 @@ package com.humbjorch.restaurantapp.core.utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.humbjorch.restaurantapp.data.model.OrderModel
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -26,9 +27,18 @@ object Tools {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentTime(): String {
         val currentTime = LocalTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
         return currentTime.format(formatter)
     }
 
     fun generateID() = UUID.randomUUID().toString()
+
+    fun getTotal(order: OrderModel): Int {
+        var total = 0
+        order.productList.forEach {
+            val price = it.price.toInt() * it.amount.toInt()
+            total += price
+        }
+        return total
+    }
 }

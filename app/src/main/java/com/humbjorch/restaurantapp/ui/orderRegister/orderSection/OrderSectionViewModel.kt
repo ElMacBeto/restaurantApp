@@ -8,13 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.core.di.ModuleSharePreference
-import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.printer.PrinterUtils
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
-import com.humbjorch.restaurantapp.domain.DataStorePreferencesRepository
 import com.humbjorch.restaurantapp.domain.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderSectionViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
-    private val dataStorePreferencesRepository: DataStorePreferencesRepository,
     private val printerUtils: PrinterUtils,
     private val sharePreference: ModuleSharePreference
 ) : ViewModel() {
@@ -54,7 +51,7 @@ class OrderSectionViewModel @Inject constructor(
             sharePreference.saveCurrentOrderNumber(newOrderNumber)
 
             _liveDataPrint.postValue(
-                printerUtils.printNewTicket(
+                printerUtils.printOrder(
                     order,
                     newOrderNumber,
                     App.printerPort,

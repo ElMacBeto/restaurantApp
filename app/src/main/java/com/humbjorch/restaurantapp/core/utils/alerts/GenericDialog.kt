@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.setSafeOnClickListener
 import com.humbjorch.restaurantapp.databinding.FragmentGenericDialogBinding
@@ -26,7 +28,7 @@ class GenericDialog : DialogFragment() {
     lateinit var txtMessageAlert: String
     var listener: OnClickListener? = null
 
-    @SuppressLint("UseGetLayoutInflater")
+    @SuppressLint("UseGetLayoutInflater", "RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,9 +37,11 @@ class GenericDialog : DialogFragment() {
         if (dialog != null && dialog?.window != null) {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(0) as Drawable)
             dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            dialog?.window?.setLayout(dpToPx(this.requireContext(),500).toInt(), WindowManager.LayoutParams.WRAP_CONTENT);
         }
         binding =
             FragmentGenericDialogBinding.inflate(LayoutInflater.from(context), container, false)
+
         return binding.root
     }
 

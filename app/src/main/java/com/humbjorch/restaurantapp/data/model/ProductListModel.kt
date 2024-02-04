@@ -6,5 +6,7 @@ data class ProductListModel(
     @field:JvmField
     val list: ArrayList<ProductsModel> = arrayListOf(),
     @field:JvmField
-    val name: String = ""
+    val name: String = "",
+    @field:JvmField
+    val extras: ArrayList<ExtraModel> = arrayListOf()
 )

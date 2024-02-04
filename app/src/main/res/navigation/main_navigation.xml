@@ -50,6 +50,11 @@
             app:argType="com.humbjorch.restaurantapp.data.model.OrderModel"
             android:name="order"
             app:nullable="true"/>
+        <argument
+            app:argType="boolean"
+            android:name="isEdict"
+            app:nullable="false"
+            android:defaultValue="false"/>
         <action
             android:id="@+id/action_orderSectionFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

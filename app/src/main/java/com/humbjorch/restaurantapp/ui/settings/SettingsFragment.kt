@@ -7,8 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.humbjorch.restaurantapp.R
+import com.humbjorch.restaurantapp.core.utils.Status
+import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.printer.PrinterUtils
 import com.humbjorch.restaurantapp.databinding.FragmentSettingsBinding
+import com.humbjorch.restaurantapp.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +36,35 @@ class SettingsFragment : Fragment() {
 
         setListeners()
         setView()
+        setObservers()
+    }
+
+    private fun setObservers() {
+        viewModel.updateOrderLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    (activity as MainActivity).showLoader()
+                }
+
+                Status.SUCCESS -> {
+                    (activity as MainActivity).dismissLoader()
+                    CustomToastWidget.show(
+                        requireActivity(),
+                        getString(R.string.message_exit),
+                        TypeToast.SUCCESS
+                    )
+                }
+
+                Status.ERROR -> {
+                    (activity as MainActivity).dismissLoader()
+                    CustomToastWidget.show(
+                        activity = requireActivity(),
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
+                }
+            }
+        }
     }
 
     private fun setView() {
@@ -47,6 +81,9 @@ class SettingsFragment : Fragment() {
            val action = SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()
            findNavController().navigate(action)
        }
+        binding.btnCleanTables.setOnClickListener {
+            viewModel.cleanTableAvailable()
+        }
     }
 
 }

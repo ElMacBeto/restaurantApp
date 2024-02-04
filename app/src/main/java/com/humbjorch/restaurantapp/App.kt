@@ -1,6 +1,7 @@
 package com.humbjorch.restaurantapp
 
 import android.app.Application
+import com.humbjorch.restaurantapp.data.model.ExtraModel
 import com.humbjorch.restaurantapp.data.model.OrderListModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.data.model.TableAvailableModel

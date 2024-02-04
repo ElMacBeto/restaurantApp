@@ -9,6 +9,7 @@
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:background="@drawable/bg_btn"
+        android:backgroundTint="@color/blue2"
         android:foreground="@drawable/foreground_nav_button"
         android:src="@drawable/ic_home"
         android:layout_margin="8dp"

@@ -21,12 +21,15 @@ import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.Tools.generateID
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
+import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.data.model.ExtraModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.data.model.ProductsModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentOrderSectionBinding
 import com.humbjorch.restaurantapp.ui.MainActivity
+import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ExtraAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.IngredientsAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductTypeAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsAdapter
@@ -43,16 +46,21 @@ class OrderSectionFragment : Fragment() {
     private lateinit var productTypeAdapter: ProductTypeAdapter
     private lateinit var productsOrderAdapter: ProductsOrderAdapter
     private lateinit var ingredientAdapter: IngredientsAdapter
+    private lateinit var extraAdapter: ExtraAdapter
     private var productsOrder = listOf<ProductsOrderModel>()
     private var tablePosition = -1
     private val args: OrderSectionFragmentArgs by navArgs()
     private lateinit var orderModel: OrderModel
+    private var ingredientList: List<String> = emptyList()
+    private var extras: List<ExtraModel> = emptyList()
+    private var fromEdict = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tablePosition = args.tablePosition
         orderModel = args.order ?: OrderModel()
         productsOrder = orderModel.productList
+        fromEdict = args.isEdict
     }
 
     override fun onCreateView(
@@ -86,7 +94,8 @@ class OrderSectionFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
-                    viewModel.printOrder(orderModel)
+                    if (!fromEdict)
+                        viewModel.printOrder(orderModel)
                     CustomToastWidget.show(
                         requireActivity(),
                         getString(R.string.message_exit),
@@ -118,6 +127,7 @@ class OrderSectionFragment : Fragment() {
                         message = it.message,
                         type = TypeToast.ERROR
                     )
+                    findNavController().navigate(R.id.action_orderSectionFragment_to_homeFragment)
                 }
                 else -> { }
             }
@@ -171,25 +181,32 @@ class OrderSectionFragment : Fragment() {
 
     private fun initAdapter() {
         val productList = App.productListModel
-        productAdapter = ProductsAdapter(productList) { product ->
-            updateProductTypeList(product)
+        productAdapter = ProductsAdapter(productList) { products ->
+            updateProductTypeList(products)
         }
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
         binding.rvProducts.adapter = productAdapter
         //---------------------------------------------------------------------------------
         val productTypeList = App.productListModel[0].list
         productTypeAdapter = ProductTypeAdapter(productTypeList) {
-            updateIngredients(it)
+           setOnProductSelected(it)
         }
         binding.rvProductTypes.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.rvProductTypes.adapter = productTypeAdapter
         //---------------------------------------------------------------------------------
-        val ingredientList = App.productListModel[0].list[0].ingredients!!
+        ingredientList = App.productListModel[0].list[0].ingredients!!
         ingredientAdapter = IngredientsAdapter(ingredientList) {
             updateIngredientsSelected()
         }
         binding.rvProductIngredients.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.rvProductIngredients.adapter = ingredientAdapter
+        //---------------------------------------------------------------------------------
+        extras = App.productListModel[0].extras
+        extraAdapter = ExtraAdapter(extras) {
+            updateExtraSelected()
+        }
+        binding.rvProductExtras.layoutManager = GridLayoutManager(requireContext(), 4)
+        binding.rvProductExtras.adapter = extraAdapter
         //---------------------------------------------------------------------------------
         productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
             actionListenersOrders(product, action)
@@ -198,21 +215,33 @@ class OrderSectionFragment : Fragment() {
         binding.rvProductsOrder.adapter = productsOrderAdapter
     }
 
-    private fun updateProductTypeList(product: ProductListModel) {
-        //update product order selected
-        binding.tvProductPrice.text = getString(R.string.label_price_product, product.list[0].price.toInt())
-        viewModel.productSelected.product = product.list[0].name
-        viewModel.productSelected.price = product.list[0].price
-        viewModel.productSelected.ingredients =
-            product.list[0].ingredients?.subList(0, 0) ?: emptyList()
-        //update productType list
-        viewModel.productSelected.amount = PRODUCT_DEFAULT_AMOUNT
-        binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
-        productTypeAdapter.clearSelectedPosition()
-        productTypeAdapter.updateList(product.list)
+    private fun updateExtraSelected() {
+        viewModel.productSelected.extras = extraAdapter.getExtras()
     }
 
-    private fun updateIngredients(product: ProductsModel) {
+    private fun updateProductTypeList(productList: ProductListModel) {
+        setPriceView(productList)
+        extras = productList.extras
+        extraAdapter.updateList(extras)
+
+        ingredientList = productList.list[0].ingredients ?: emptyList()
+        ingredientAdapter.updateList(ingredientList)
+
+        viewModel.productSelected.amount = PRODUCT_DEFAULT_AMOUNT
+        binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
+
+        productTypeAdapter.clearSelectedPosition()
+        productTypeAdapter.updateList(productList.list)
+        hideOrShowIngredientsAndExtras()
+    }
+
+    private fun setPriceView(productList: ProductListModel) {
+        binding.tvProductPrice.text = getString(R.string.label_price_product, productList.list[0].price.toInt())
+        viewModel.productSelected.product = productList.list[0].name
+        viewModel.productSelected.price = productList.list[0].price
+    }
+
+    private fun setOnProductSelected(product: ProductsModel) {
         //update product order selected
         binding.tvProductPrice.text = getString(R.string.label_price_product, product.price.toInt())
         viewModel.productSelected.product = product.name
@@ -220,10 +249,12 @@ class OrderSectionFragment : Fragment() {
         //update ingredients List
         viewModel.productSelected.amount = PRODUCT_DEFAULT_AMOUNT
         binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
-        ingredientAdapter.updateList(product.ingredients!!)
-        if (product.ingredients.isNotEmpty())
-            viewModel.productSelected.ingredients = listOf(product.ingredients[0])
+        ingredientList = product.ingredients!!
+        ingredientAdapter.updateList(ingredientList)
+        viewModel.productSelected.ingredients = ingredientAdapter.getIngredients()
+
         ingredientAdapter.clearCheckBoxes()
+        hideOrShowIngredientsAndExtras()
     }
 
     private fun updateIngredientsSelected() {
@@ -235,12 +266,14 @@ class OrderSectionFragment : Fragment() {
             product = viewModel.productSelected.product,
             amount = viewModel.productSelected.amount,
             ingredients = viewModel.productSelected.ingredients,
-            price = viewModel.productSelected.price
+            price = viewModel.productSelected.price,
+            extras = viewModel.productSelected.extras
         )
         var positionChanged = -1
         productsOrder.onEachIndexed { index, it ->
-            if (it.product == newProductOrder.product
-                && it.ingredients == newProductOrder.ingredients
+            if (it.product == newProductOrder.product &&
+                it.ingredients == newProductOrder.ingredients &&
+                it.extras == newProductOrder.extras
             ) {
                 positionChanged = index
                 it.amount = (it.amount.toInt() + newProductOrder.amount.toInt()).toString()
@@ -254,6 +287,8 @@ class OrderSectionFragment : Fragment() {
             productsOrderAdapter.updateList(productsOrder)
             productsOrderAdapter.notifyItemChanged(positionChanged)
         }
+        extraAdapter.clearCheckBoxes()
+        viewModel.productSelected.extras = emptyList()
         viewModel.productSelected.amount = "1"
         binding.tvLabelAmount.text = "1"
     }
@@ -289,6 +324,13 @@ class OrderSectionFragment : Fragment() {
             productsOrder = productsOrder.minus(itemChanged)
             productsOrderAdapter.updateList(productsOrder)
         }
+    }
+
+    private fun hideOrShowIngredientsAndExtras(){
+        binding.dividerIngredients.showHide(ingredientList.isNotEmpty())
+        binding.tvLabelIngredients.showHide(ingredientList.isNotEmpty())
+        binding.dividerExtras.showHide(extras.isNotEmpty())
+        binding.tvLabelExtras.showHide(extras.isNotEmpty())
     }
 
 }

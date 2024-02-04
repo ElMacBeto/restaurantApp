@@ -10,7 +10,8 @@ class ProductsMapper : Mapper<ProductResponse, ProductListModel> {
         return ProductListModel(
             imageUrl = input.imageUrl,
             list = input.list,
-            name = input.name
+            name = input.name,
+            extras = input.extras
         )
     }
 }

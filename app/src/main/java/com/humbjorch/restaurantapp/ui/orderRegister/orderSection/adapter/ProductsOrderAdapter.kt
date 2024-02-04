@@ -1,5 +1,6 @@
 package com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +32,21 @@ class ProductsOrderAdapter(
         private val ctx = view.context
         val binding = ItemOrderProductBinding.bind(view)
 
+
         fun bindView(product: ProductsOrderModel) {
             binding.tvProductName.text = product.product
             binding.tvProductAmount.text =
                 ctx.getString(R.string.label_text_amount_product, product.amount.toInt())
             val totalPrice = product.amount.toInt() * product.price.toInt()
             binding.tvPrice.text = ctx.getString(R.string.label_price_product, totalPrice)
-            binding.tvIngredients.text = product.ingredients.joinToString()
+
+            val ingredientText = StringBuilder()
+            ingredientText.append(product.ingredients.joinToString())
+
+            if (product.extras.isNotEmpty()){
+                ingredientText.append("\nextras: " + product.extras.joinToString { it.name })
+            }
+            binding.tvIngredients.text = ingredientText
         }
 
         fun hideOrShowButtons(hide:Boolean){

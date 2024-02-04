@@ -1,32 +1,44 @@
 package com.humbjorch.restaurantapp.ui
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.LoaderNBEXWidget
+import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.alerts.GenericDialog
+import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityMainBinding
     private val loader by lazy { LoaderNBEXWidget() }
     private lateinit var navController: NavController
+    private var settingNav: (() -> Unit)? = null
+    private var homeNav: (() -> Unit)? = null
 
-    val callback = object : OnBackPressedCallback(true) {
+    private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             val currentDestination = navController.currentDestination
-            when(currentDestination?.id) {
-                R.id.splashFragment ->{
+            when (currentDestination?.id) {
+                R.id.splashFragment -> {
                     finish()
                 }
-                R.id.homeFragment ->{
+
+                R.id.homeFragment -> {
                     genericAlert(
                         titleAlert = getString(R.string.dialog_title_confirmation),
                         descriptionAlert = getString(R.string.dialog_description_finish_app),
@@ -36,17 +48,105 @@ class MainActivity : AppCompatActivity() {
                         buttonNegativeAction = { }
                     )
                 }
-            else -> navController.navigateUp()
+
+                else -> navController.navigateUp()
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.fragmentContainer.id) as NavHostFragment
         navController = navHostFragment.navController
         onBackPressedDispatcher.addCallback(this, callback)
+        setListeners()
+        setNavigationChange()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setNavigationChange() {
+        navController.addOnDestinationChangedListener { _, fragment, _ ->
+            when (fragment.id) {
+                R.id.splashFragment -> {
+                    setTopToolbar(
+                        showMenu = false
+                    )
+                }
+
+                R.id.homeFragment -> {
+                    setTopToolbar(
+                        showMenu = true,
+                        title = R.string.top_toolbar_home_title,
+                        showSwitch = true
+                    )
+                    showLateralNavigation(true)
+                    settingNav = {
+                        navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+                    }
+                    homeNav = null
+                }
+
+                R.id.orderTypeSelectionFragment -> {
+                    setTopToolbar(
+                        showMenu = true,
+                        title = R.string.top_toolbar_new_order_title,
+                        showSwitch = false
+                    )
+                    showLateralNavigation(false)
+                }
+
+                R.id.orderSectionFragment -> {
+                    setTopToolbar(
+                        showMenu = true,
+                        title = R.string.top_toolbar_new_order_title,
+                        showSwitch = false
+                    )
+                    showLateralNavigation(false)
+                }
+
+                R.id.settingsFragment -> {
+                    setTopToolbar(
+                        showMenu = true,
+                        title = R.string.top_toolbar_settings_title,
+                        showSwitch = false
+                    )
+                    showLateralNavigation(true)
+                    settingNav = null
+                    homeNav = {
+                        navController.navigate(R.id.action_settingsFragment_to_homeFragment)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setListeners() {
+        binding.navBar.btnSettings.setOnClickListener {
+            settingNav?.invoke()
+
+            val colorFromResource = ContextCompat.getColor(this, R.color.blue2)
+            val colorSelected = ColorStateList.valueOf(colorFromResource)
+            binding.navBar.btnSettings.backgroundTintList = colorSelected
+
+            val colorStateList = ColorStateList.valueOf(Color.WHITE)
+            binding.navBar.btnHome.backgroundTintList = colorStateList
+            binding.navBar.btnInventory.backgroundTintList = colorStateList
+        }
+        binding.navBar.btnHome.setOnClickListener {
+            homeNav?.invoke()
+
+            val colorFromResource = ContextCompat.getColor(this, R.color.blue2)
+            val colorSelected = ColorStateList.valueOf(colorFromResource)
+            binding.navBar.btnHome.backgroundTintList = colorSelected
+
+            val colorStateList = ColorStateList.valueOf(Color.WHITE)
+            binding.navBar.btnSettings.backgroundTintList = colorStateList
+            binding.navBar.btnInventory.backgroundTintList = colorStateList
+        }
     }
 
     fun showLoader() {
@@ -111,4 +211,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setTopToolbar(
+        showMenu: Boolean = true,
+        showSwitch: Boolean = true,
+        title: Int? = null,
+    ) {
+        binding.topToolbar.showHide(showMenu)
+        binding.swDelivery.showHide(showSwitch)
+        if (title != null)
+            binding.tvLabelDate.text = "${getString(title)}     ${Tools.getCurrentDate(true)} "
+    }
+
+    fun showLateralNavigation(show: Boolean = true) {
+        binding.containerNavBar.showHide(show)
+    }
+
 }

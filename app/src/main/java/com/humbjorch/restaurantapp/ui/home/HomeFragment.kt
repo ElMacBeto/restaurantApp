@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.Status
-import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
+import com.humbjorch.restaurantapp.core.utils.Tools.getTotal
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
+import com.humbjorch.restaurantapp.core.utils.showHide
 import com.humbjorch.restaurantapp.data.model.OrderListModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentHomeBinding
@@ -54,7 +55,7 @@ class HomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initView() {
-        binding.tvLabelDate.text = getCurrentDate(true)
+        (activity as MainActivity).showLateralNavigation(true)
         viewModel.getCurrentDayOrders()
     }
 
@@ -68,12 +69,13 @@ class HomeFragment : Fragment() {
 
                 Status.SUCCESS -> {
                     (activity as MainActivity).dismissLoader()
-                    App.ordersList = it.data ?: OrderListModel()
+                    val orders = it.data ?: OrderListModel()
+                    App.ordersList = orders
                     orderList = viewModel.getTableOrders()
                     tableOrderAdapter.updateList(orderList)
                     orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
                     orderAdapter.updateList(orderSelected.productList)
-                    showHideLottie()
+                    binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
                     setView()
                 }
 
@@ -151,20 +153,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setView() {
-        val total = viewModel.setTotal(orderSelected)
+        val total = getTotal(orderSelected)
         binding.tvTotal.text = getString(R.string.label_price_product, total)
-
-        if (orderList.isEmpty())
-            binding.tvTableEmpty.visibility = View.VISIBLE
-        else
-            binding.tvTableEmpty.visibility = View.GONE
-    }
-
-    private fun showHideLottie() {
-        if (orderSelected.productList.isEmpty())
-            binding.lottieEmpty.visibility = View.VISIBLE
-        else
-            binding.lottieEmpty.visibility = View.GONE
+        binding.tvTableEmpty.showHide(orderList.isEmpty())
     }
 
     private fun initAdapters() {
@@ -172,7 +163,7 @@ class HomeFragment : Fragment() {
         tableOrderAdapter = OrderAdapter(orderList) {
             orderSelected = it
             orderAdapter.updateList(orderSelected.productList)
-            showHideLottie()
+            binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
             setView()
         }
         binding.rvTableOrders.layoutManager = LinearLayoutManager(requireContext())
@@ -195,7 +186,8 @@ class HomeFragment : Fragment() {
             validateOrder {
                 val action = HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
                     tablePosition = orderSelected.table.toInt(),
-                    order = orderSelected
+                    order = orderSelected,
+                    isEdict = true
                 )
                 findNavController().navigate(action)
             }
@@ -219,13 +211,25 @@ class HomeFragment : Fragment() {
                     descriptionAlert = getString(R.string.dialog_description_printer_ticket),
                     txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
                     txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = { viewModel.print(orderSelected) },
+                    buttonPositiveAction = { viewModel.printOrder(orderSelected) },
+                    buttonNegativeAction = { }
+                )
+            }
+        }
+        binding.btnCancelOrder.setOnClickListener {
+            validateOrder {
+                (activity as MainActivity).genericAlert(
+                    titleAlert = getString(R.string.dialog_title_cancel_order),
+                    descriptionAlert = getString(R.string.dialog_description_cancel_order),
+                    txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
+                    txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
+                    buttonPositiveAction = { viewModel.cancelOrder(orderSelected) },
                     buttonNegativeAction = { }
                 )
             }
         }
 
-        binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
+        (activity as MainActivity).binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
             orderList = if (isChecked){
                 binding.tvLabelOrderTitle.text = getString(R.string.label_delivery_orders)
                 viewModel.getDeliveryOrders()
@@ -236,11 +240,8 @@ class HomeFragment : Fragment() {
             tableOrderAdapter.updateList(orderList)
             orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
             orderAdapter.updateList(orderSelected.productList)
-            showHideLottie()
+            binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
             setView()
-        }
-        binding.navBar.btnSettings.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
         }
     }
 

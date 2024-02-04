@@ -37,7 +37,7 @@ class ProductsOrderAdapter(
             binding.tvProductName.text = product.product
             binding.tvProductAmount.text =
                 ctx.getString(R.string.label_text_amount_product, product.amount.toInt())
-            val totalPrice = product.amount.toInt() * product.price.toInt()
+            val totalPrice = product.amount.toInt() * (product.price.toInt() + product.extras.sumOf { it.price.toInt() })
             binding.tvPrice.text = ctx.getString(R.string.label_price_product, totalPrice)
 
             val ingredientText = StringBuilder()

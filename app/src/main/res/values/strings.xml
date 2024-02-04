@@ -62,4 +62,5 @@
     <string name="top_toolbar_home_title">HOME</string>
     <string name="top_toolbar_new_order_title">NEW ORDER</string>
     <string name="top_toolbar_settings_title">CONFIGURACIONES</string>
+    <string name="label_title_summary">Resumen del dia</string>
 </resources>

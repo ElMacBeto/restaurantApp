@@ -94,13 +94,17 @@ class OrderSectionFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
-                    if (!fromEdict)
+                    if (!fromEdict){
                         viewModel.printOrder(orderModel)
-                    CustomToastWidget.show(
-                        requireActivity(),
-                        getString(R.string.message_exit),
-                        TypeToast.SUCCESS
-                    )
+                    }else{
+                        (activity as MainActivity).dismissLoader()
+                        CustomToastWidget.show(
+                            requireActivity(),
+                            getString(R.string.message_exit),
+                            TypeToast.SUCCESS
+                        )
+                        findNavController().navigate(R.id.action_orderSectionFragment_to_homeFragment)
+                    }
                 }
 
                 Status.ERROR -> {

@@ -58,6 +58,14 @@ class HomeViewModel @Inject constructor(
             val id = Tools.getCurrentDate()
             updateTable(order.table)
             order.status = OrderStatus.PAID.value
+
+            _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun printTicket(order:OrderModel){
+        viewModelScope.launch {
             val response = printerUtils.printNewTicket(
                 order,
                 App.printerPort,
@@ -65,8 +73,6 @@ class HomeViewModel @Inject constructor(
             )
             if (response.status == Status.ERROR)
                 _printLiveData.value = response
-            else
-                _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
         }
     }
 

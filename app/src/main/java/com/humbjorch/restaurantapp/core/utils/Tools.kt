@@ -36,8 +36,9 @@ object Tools {
     fun getTotal(order: OrderModel): Int {
         var total = 0
         order.productList.forEach {
+            val extraPrice = it.extras.sumOf { extra -> extra.price.toInt() }
             val price = it.price.toInt() * it.amount.toInt()
-            total += price
+            total += price + extraPrice
         }
         return total
     }

@@ -10,5 +10,6 @@ data class OrderModel(
     var table: String = "",
     var productList: List<ProductsOrderModel> = emptyList(),
     var time: String = "",
-    var status: String = OrderStatus.WITHOUT_PAYING.value
+    var status: String = OrderStatus.WITHOUT_PAYING.value,
+    var total: String = ""
 ): Parcelable

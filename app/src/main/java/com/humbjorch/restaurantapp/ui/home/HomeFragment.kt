@@ -96,6 +96,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
+                    viewModel.printTicket(orderSelected)
                     viewModel.setAllProducts()
                 }
 
@@ -132,13 +133,6 @@ class HomeFragment : Fragment() {
         }
         viewModel.printLiveData.observe(viewLifecycleOwner){
             when (it.status) {
-                Status.LOADING -> {
-                    (activity as MainActivity).showLoader()
-                }
-
-                Status.SUCCESS -> {
-                    (activity as MainActivity).dismissLoader()
-                }
 
                 Status.ERROR -> {
                     (activity as MainActivity).dismissLoader()
@@ -148,12 +142,14 @@ class HomeFragment : Fragment() {
                         type = TypeToast.ERROR
                     )
                 }
+                else -> {}
             }
         }
     }
 
     private fun setView() {
         val total = getTotal(orderSelected)
+        orderSelected.total = total.toString()
         binding.tvTotal.text = getString(R.string.label_price_product, total)
         binding.tvTableEmpty.showHide(orderList.isEmpty())
     }

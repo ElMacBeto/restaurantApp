@@ -47,11 +47,10 @@ class ProductsAdapter(
 
         viewHolder.bindView(product, isSelected)
         viewHolder.itemView.setOnClickListener {
-            val oldPosition = selectedPosition
-            selectedPosition = viewHolder.adapterPosition
-            onClick.invoke(product)
-            notifyItemChanged(oldPosition)
-            notifyItemChanged(selectedPosition)
+            //val oldPosition = selectedPosition
+            //selectedPosition = viewHolder.adapterPosition
+            //notifyItemChanged(oldPosition)
+            //notifyItemChanged(selectedPosition)
             onClick.invoke(product)
         }
     }

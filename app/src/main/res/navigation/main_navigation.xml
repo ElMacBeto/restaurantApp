@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/summaryFragment"
-        android:name="com.humbjorch.restaurantapp.ui.SummaryFragment"
+        android:name="com.humbjorch.restaurantapp.ui.summary.SummaryFragment"
         android:label="fragment_summary"
         tools:layout="@layout/fragment_summary" >
         <action

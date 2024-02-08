@@ -21,6 +21,7 @@ import com.humbjorch.restaurantapp.core.utils.showHide
 import com.humbjorch.restaurantapp.databinding.ActivityMainBinding
 import com.humbjorch.restaurantapp.ui.home.HomeFragmentDirections
 import com.humbjorch.restaurantapp.ui.settings.SettingsFragmentDirections
+import com.humbjorch.restaurantapp.ui.summary.SummaryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

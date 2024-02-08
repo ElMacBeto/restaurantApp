@@ -68,8 +68,6 @@ class ExtraAdapter(
                 tempList = tempList.plus(dataSet[selectedPosition])
             }
         }
-        if (tempList.isEmpty() && dataSet.isNotEmpty())
-            tempList = tempList.plus(dataSet[0])
         return tempList
     }
 

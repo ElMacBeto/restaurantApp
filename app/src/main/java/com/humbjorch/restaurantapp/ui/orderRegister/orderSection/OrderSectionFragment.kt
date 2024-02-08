@@ -225,24 +225,26 @@ class OrderSectionFragment : Fragment() {
 
     private fun updateProductTypeList(productList: ProductListModel) {
         setPriceView(productList)
-        extras = productList.extras
-        extraAdapter.updateList(extras)
-
-        ingredientList = productList.list[0].ingredients ?: emptyList()
-        ingredientAdapter.updateList(ingredientList)
-
-        viewModel.productSelected.amount = PRODUCT_DEFAULT_AMOUNT
-        binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
 
         productTypeAdapter.clearSelectedPosition()
         productTypeAdapter.updateList(productList.list)
+
+        ingredientList = productList.list[0].ingredients ?: emptyList()
+        ingredientAdapter.clearCheckBoxes()
+        ingredientAdapter.updateList(ingredientList)
+        viewModel.productSelected.ingredients = ingredientAdapter.getIngredients()
+        extras = productList.extras
+        extraAdapter.updateList(extras)
+
         hideOrShowIngredientsAndExtras()
     }
 
     private fun setPriceView(productList: ProductListModel) {
         binding.tvProductPrice.text = getString(R.string.label_price_product, productList.list[0].price.toInt())
+        binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
         viewModel.productSelected.product = productList.list[0].name
         viewModel.productSelected.price = productList.list[0].price
+        viewModel.productSelected.amount = PRODUCT_DEFAULT_AMOUNT
     }
 
     private fun setOnProductSelected(product: ProductsModel) {
@@ -255,9 +257,11 @@ class OrderSectionFragment : Fragment() {
         binding.tvLabelAmount.text = PRODUCT_DEFAULT_AMOUNT
         ingredientList = product.ingredients!!
         ingredientAdapter.updateList(ingredientList)
-        viewModel.productSelected.ingredients = ingredientAdapter.getIngredients()
 
         ingredientAdapter.clearCheckBoxes()
+        viewModel.productSelected.ingredients = ingredientAdapter.getIngredients()
+
+        extraAdapter.clearCheckBoxes()
         hideOrShowIngredientsAndExtras()
     }
 

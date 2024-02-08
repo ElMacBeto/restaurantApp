@@ -1,4 +1,4 @@
-package com.humbjorch.restaurantapp.ui
+package com.humbjorch.restaurantapp.ui.summary
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.humbjorch.restaurantapp.App
-import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.OrderStatus
 import com.humbjorch.restaurantapp.core.utils.Tools.getTotal
 import com.humbjorch.restaurantapp.databinding.FragmentSummaryBinding

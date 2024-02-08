@@ -26,7 +26,6 @@ class IngredientsAdapter(
 
     fun clearCheckBoxes(){
         selectedPositions.clear()
-        selectedPositions.add(0)
         notifyDataSetChanged()
     }
 

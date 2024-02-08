@@ -183,7 +183,8 @@ class HomeFragment : Fragment() {
                 val action = HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
                     tablePosition = orderSelected.table.toInt(),
                     order = orderSelected,
-                    isEdict = true
+                    isEdict = true,
+                    address = orderSelected.address
                 )
                 findNavController().navigate(action)
             }

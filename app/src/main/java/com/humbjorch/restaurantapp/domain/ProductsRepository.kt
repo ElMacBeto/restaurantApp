@@ -68,6 +68,7 @@ class ProductsRepository @Inject constructor(
                 it.productList = order.productList
                 it.time = order.time
                 it.table = order.table
+                it.address = order.address
             }
         }
         if (!updateData){

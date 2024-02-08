@@ -26,52 +26,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:animateLayoutChanges="true"
-                android:padding="22dp">
-
-                <TextView
-                    android:id="@+id/tv_title_order_selection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_order_type"
-                    android:textAllCaps="true"
-                    android:textColor="@color/black1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_label_delivery_sw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/label_for_delivery"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/sw_delivery"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title_order_selection" />
+                android:padding="12dp">
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/sw_delivery"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_label_delivery_sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_for_delivery"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_label_delivery_sw" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/label_address"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/sw_delivery"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tv_label_table_selection"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/label_table_selection"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/sw_delivery" />
+                    app:layout_constraintTop_toBottomOf="@+id/ti_address" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_tables"
@@ -89,8 +84,8 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/lottie_delivery"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_marginLeft="75dp"
                     android:layout_marginRight="75dp"
                     android:visibility="gone"

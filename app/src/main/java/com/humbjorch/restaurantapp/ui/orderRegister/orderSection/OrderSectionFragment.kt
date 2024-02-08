@@ -54,6 +54,7 @@ class OrderSectionFragment : Fragment() {
     private var ingredientList: List<String> = emptyList()
     private var extras: List<ExtraModel> = emptyList()
     private var fromEdict = false
+    private var address: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,7 @@ class OrderSectionFragment : Fragment() {
         orderModel = args.order ?: OrderModel()
         productsOrder = orderModel.productList
         fromEdict = args.isEdict
+        address = args.address ?: ""
     }
 
     override fun onCreateView(
@@ -156,30 +158,7 @@ class OrderSectionFragment : Fragment() {
             }
         }
         binding.btnDone.setOnClickListener {
-            if (productsOrder.isNotEmpty()) {
-                (activity as MainActivity).genericAlert(
-                    titleAlert = getString(R.string.dialog_title_confirmation_order),
-                    descriptionAlert = getString(R.string.dialog_description_confirmation_order),
-                    txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
-                    txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = {
-                        orderModel = OrderModel(
-                            id = if (orderModel.id != "") orderModel.id else generateID(),
-                            table = tablePosition.toString(),
-                            productList = ArrayList(productsOrder),
-                            time = Tools.getCurrentTime()
-                        )
-                        viewModel.saveOrder(orderModel)
-                    },
-                    buttonNegativeAction = { }
-                )
-            } else {
-                CustomToastWidget.show(
-                    requireActivity(),
-                    getString(R.string.label_empty_order),
-                    TypeToast.WARNING
-                )
-            }
+            onDoneOrderListener()
         }
     }
 
@@ -233,9 +212,11 @@ class OrderSectionFragment : Fragment() {
         ingredientAdapter.clearCheckBoxes()
         ingredientAdapter.updateList(ingredientList)
         viewModel.productSelected.ingredients = ingredientAdapter.getIngredients()
+
         extras = productList.extras
         extraAdapter.updateList(extras)
-
+        extraAdapter.clearCheckBoxes()
+        viewModel.productSelected.extras = extraAdapter.getExtras()
         hideOrShowIngredientsAndExtras()
     }
 
@@ -339,6 +320,35 @@ class OrderSectionFragment : Fragment() {
         binding.tvLabelIngredients.showHide(ingredientList.isNotEmpty())
         binding.dividerExtras.showHide(extras.isNotEmpty())
         binding.tvLabelExtras.showHide(extras.isNotEmpty())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onDoneOrderListener() {
+        if (productsOrder.isNotEmpty()) {
+            (activity as MainActivity).genericAlert(
+                titleAlert = getString(R.string.dialog_title_confirmation_order),
+                descriptionAlert = getString(R.string.dialog_description_confirmation_order),
+                txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
+                txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
+                buttonPositiveAction = {
+                    orderModel = OrderModel(
+                        id = if (orderModel.id != "") orderModel.id else generateID(),
+                        table = tablePosition.toString(),
+                        productList = ArrayList(productsOrder),
+                        time = Tools.getCurrentTime(),
+                        address = address
+                    )
+                    viewModel.saveOrder(orderModel)
+                },
+                buttonNegativeAction = { }
+            )
+        } else {
+            CustomToastWidget.show(
+                requireActivity(),
+                getString(R.string.label_empty_order),
+                TypeToast.WARNING
+            )
+        }
     }
 
 }

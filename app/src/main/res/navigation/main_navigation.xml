@@ -58,6 +58,10 @@
             android:name="isEdict"
             app:nullable="false"
             android:defaultValue="false"/>
+        <argument
+            app:argType="string"
+            android:name="address"
+            app:nullable="true" />
         <action
             android:id="@+id/action_orderSectionFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

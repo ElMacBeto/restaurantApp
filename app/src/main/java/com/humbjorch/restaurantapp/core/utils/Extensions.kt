@@ -30,9 +30,16 @@ fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
     setOnClickListener(safeClickListener)
 }
 
-fun View.showHide(isVisible:Boolean) {
+fun View.showHide(isVisible: Boolean) {
     if (isVisible)
         this.visibility = View.VISIBLE
     else
        this.visibility = View.GONE
+}
+
+fun View.showOrInvisible(isVisible: Boolean) {
+    if (isVisible)
+        this.visibility = View.VISIBLE
+    else
+        this.visibility = View.INVISIBLE
 }

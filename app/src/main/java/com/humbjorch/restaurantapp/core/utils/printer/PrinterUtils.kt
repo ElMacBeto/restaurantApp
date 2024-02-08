@@ -94,6 +94,9 @@ class PrinterUtils @Inject constructor(val context: Context) {
             ticket.append("[C]************************************************\n")
             ticket.append("[L]cantidad [C]producto [R]precio\n")
 
+            if (order.address.isNotEmpty())
+                ticket.append("\n [C]<b>${order.address} </b>\n")
+
             for (product in order.productList) {
                 var extraPrice = 0
                 val extrasText =

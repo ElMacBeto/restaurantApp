@@ -12,6 +12,8 @@ import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
+import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.core.utils.showOrInvisible
 import com.humbjorch.restaurantapp.data.model.TableAvailableModel
 import com.humbjorch.restaurantapp.databinding.FragmentOrderTypeSelectionBinding
 import com.humbjorch.restaurantapp.ui.orderRegister.orderTypeSelection.adapter.TableAdapter
@@ -43,15 +45,10 @@ class OrderTypeSelectionFragment : Fragment() {
            navigateOrderSelection()
         }
         binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.tvLabelTableSelection.visibility = View.INVISIBLE
-                binding.rvTables.visibility = View.INVISIBLE
-                binding.lottieDelivery.visibility = View.VISIBLE
-            } else {
-                binding.tvLabelTableSelection.visibility = View.VISIBLE
-                binding.rvTables.visibility = View.VISIBLE
-                binding.lottieDelivery.visibility = View.GONE
-            }
+            binding.tvLabelTableSelection.showHide(!isChecked)
+            binding.rvTables.showOrInvisible(!isChecked)
+            binding.lottieDelivery.showHide(isChecked)
+            binding.tiAddress.showHide(isChecked)
         }
     }
 
@@ -60,7 +57,8 @@ class OrderTypeSelectionFragment : Fragment() {
             val action =
                 OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragmentToOrderSectionFragment(
                     tablePosition = -1,
-                    order = null
+                    order = null,
+                    address = binding.tiAddress.editText!!.text.toString()
                 )
             findNavController().navigate(action)
         } else {
@@ -73,7 +71,8 @@ class OrderTypeSelectionFragment : Fragment() {
             } else {
                 val action = OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragmentToOrderSectionFragment(
                     tablePosition = tablePosition,
-                    order = null
+                    order = null,
+                    address = null
                 )
                 viewModel.updateTableList(tablePosition)
                 findNavController().navigate(action)

@@ -8,5 +8,11 @@ data class ProductListModel(
     @field:JvmField
     val name: String = "",
     @field:JvmField
-    val extras: ArrayList<ExtraModel> = arrayListOf()
+    val extras: ArrayList<ExtraModel> = arrayListOf(),
+    @field:JvmField
+    val orderNum: Int = 0,
+    @field:JvmField
+    val other: String = "",
+    @field:JvmField
+    val otherList: ArrayList<String> = arrayListOf(),
 )

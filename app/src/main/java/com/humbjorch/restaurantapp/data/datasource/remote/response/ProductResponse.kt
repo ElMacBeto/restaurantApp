@@ -4,6 +4,7 @@ import com.humbjorch.restaurantapp.data.model.ExtraModel
 import com.humbjorch.restaurantapp.data.model.ProductsModel
 
 data class ProductResponse(
+    var id: String = "",
     @field:JvmField
     val imageUrl: String = "",
     @field:JvmField
@@ -11,5 +12,11 @@ data class ProductResponse(
     @field:JvmField
     val name: String = "",
     @field:JvmField
-    val extras: ArrayList<ExtraModel> = arrayListOf()
+    val extras: ArrayList<ExtraModel> = arrayListOf(),
+    @field:JvmField
+    val orderNum: String = "0",
+    @field:JvmField
+    val other: String = "",
+    @field:JvmField
+    val otherList: ArrayList<String> = arrayListOf(),
 )

@@ -6,13 +6,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <CheckBox
+    <RadioButton
         android:id="@+id/ch_selected"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_1"
         android:textColor="@color/black"
-        tools:text="sin cebolla"
+        tools:text="carne"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="product"
             type="com.humbjorch.restaurantapp.data.model.ProductListModel" />
@@ -24,13 +25,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@color/black1"
-                android:padding="4dp"
                 android:elevation="10dp"
+                android:orientation="vertical"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent">
+
                 <TextView
                     android:id="@+id/tv_product_name"
                     android:layout_width="match_parent"
@@ -38,11 +40,10 @@
                     android:text="@{product.name}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_2"
                     android:textStyle="bold"
                     tools:text="Hamburguesa" />
             </LinearLayout>
-
 
             <ImageView
                 android:id="@+id/img_product"
@@ -61,7 +62,7 @@
                 android:layout_marginTop="4dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="@dimen/text_size_3"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -71,5 +72,7 @@
                 tools:text="$85.00" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
+
 </layout>

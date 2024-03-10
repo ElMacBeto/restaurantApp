@@ -1,12 +1,6 @@
 package com.humbjorch.restaurantapp.domain
 
 import com.humbjorch.restaurantapp.App
-import com.humbjorch.restaurantapp.core.utils.Constants.BONELESS_DOCUMENT
-import com.humbjorch.restaurantapp.core.utils.Constants.CHILIPOP_DOCUMENT
-import com.humbjorch.restaurantapp.core.utils.Constants.DRINKS_DOCUMENT
-import com.humbjorch.restaurantapp.core.utils.Constants.HAMBURGERS_DOCUMENT
-import com.humbjorch.restaurantapp.core.utils.Constants.POTATOES_DOCUMENT
-import com.humbjorch.restaurantapp.core.utils.Constants.WINGS_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
@@ -23,22 +17,12 @@ class ProductsRepository @Inject constructor(
 ) {
 
     suspend fun getAllProducts(): Resource<List<ProductListModel>> {
-        val drinksResponse = productsWebDS.getProduct(DRINKS_DOCUMENT)
-        val hamburgerResponse = productsWebDS.getProduct(HAMBURGERS_DOCUMENT)
-        val bonelessResponse = productsWebDS.getProduct(BONELESS_DOCUMENT)
-        val wingsResponse = productsWebDS.getProduct(WINGS_DOCUMENT)
-        val potatoesResponse = productsWebDS.getProduct(POTATOES_DOCUMENT)
-        val chiliPopResponse = productsWebDS.getProduct(CHILIPOP_DOCUMENT)
         val tableAvailableResponse = productsWebDS.getTablesAvailable()
+        val allProductsResponse = productsWebDS.getAllProducts()
 
         val responses = listOf(
-            drinksResponse,
-            hamburgerResponse,
-            bonelessResponse,
-            wingsResponse,
-            potatoesResponse,
+            allProductsResponse,
             tableAvailableResponse,
-            chiliPopResponse
         )
 
         responses.forEach {
@@ -46,18 +30,14 @@ class ProductsRepository @Inject constructor(
                 return Resource.error(it.message)
         }
 
-        val allProducts = listOf(
-            ProductsMapper().map(hamburgerResponse.data!!),
-            ProductsMapper().map(drinksResponse.data!!),
-            ProductsMapper().map(bonelessResponse.data!!),
-            ProductsMapper().map(wingsResponse.data!!),
-            ProductsMapper().map(potatoesResponse.data!!),
-            ProductsMapper().map(chiliPopResponse.data!!),
-        )
+        val products = allProductsResponse.data!!.map { product ->
+            ProductsMapper().map(product)
+        }
+        val sortedProducts = products.sortedBy { it.orderNum }
 
         App.tablesAvailable = tableAvailableResponse.data!!.list
-        App.productListModel = allProducts
-        return Resource.success(allProducts)
+        App.productListModel = sortedProducts
+        return Resource.success(sortedProducts)
     }
 
     suspend fun saveOrderRegister(id: String, order: OrderModel): Resource<Boolean> {

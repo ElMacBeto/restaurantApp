@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_size_2"
                     android:gravity="center"
                     android:textStyle="bold"
                     tools:text="titulo"
@@ -64,7 +64,7 @@
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="24sp"
                     android:textColor="@color/gray2"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_2"
                     tools:text="esta seguro de salir de la app?"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +80,7 @@
                     android:layout_marginEnd="8dp"
                     android:textColor="@color/black1"
                     tools:text="Cancel"
+                    android:textSize="@dimen/text_size_2"
                     app:cornerRadius="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -91,6 +92,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:textSize="@dimen/text_size_2"
                     app:cornerRadius="12dp"
                     android:textColor="@color/white"
                     tools:text="Aceptar"
@@ -105,8 +107,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

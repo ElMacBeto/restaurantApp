@@ -6,12 +6,6 @@ object Constants {
     const val ORDERS_REGISTER_COLLECTION = "OrderRegister"
 
     const val TABLES_AVAILABLE_DOCUMENT = "TablesAvailable"
-    const val HAMBURGERS_DOCUMENT = "Hamburgers"
-    const val DRINKS_DOCUMENT = "Drinks"
-    const val BONELESS_DOCUMENT = "Boneless"
-    const val WINGS_DOCUMENT = "Wings"
-    const val POTATOES_DOCUMENT = "Potatoes"
-    const val CHILIPOP_DOCUMENT = "Chilipop"
 
     //preference
     const val SETTING_PREFERENCE = "SETTINGS_PREFERENCE"

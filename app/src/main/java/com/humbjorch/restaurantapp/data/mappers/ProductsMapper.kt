@@ -11,7 +11,10 @@ class ProductsMapper : Mapper<ProductResponse, ProductListModel> {
             imageUrl = input.imageUrl,
             list = input.list,
             name = input.name,
-            extras = input.extras
+            extras = input.extras,
+            orderNum = input.orderNum.toInt(),
+            other = input.other,
+            otherList = input.otherList
         )
     }
 }

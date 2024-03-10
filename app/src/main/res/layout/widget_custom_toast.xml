@@ -42,23 +42,26 @@
                     app:srcCompat="@drawable/ic_toast_status_correct"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
 
-                    <TextView
-                        android:id="@+id/tv_text_toast"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|start"
-                        android:minHeight="30dp"
-                        android:textColor="@color/gray3"
-                        android:textSize="18sp"
-                        tools:text="Alerta de prueba"
-                        app:layout_constraintStart_toEndOf="@id/imv_status_icon"
-                        app:layout_constraintTop_toTopOf="@id/imv_status_icon"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:ellipsize="end"
-                        app:layout_constraintBottom_toBottomOf="@id/imv_status_icon"/>
+                <TextView
+                    android:id="@+id/tv_text_toast"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:gravity="center|start"
+                    android:minHeight="30dp"
+                    android:textColor="@color/gray3"
+                    android:textSize="@dimen/text_size_1"
+                    app:layout_constraintBottom_toBottomOf="@id/imv_status_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/imv_status_icon"
+                    app:layout_constraintTop_toTopOf="@id/imv_status_icon"
+                    tools:text="Alerta de prueba" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

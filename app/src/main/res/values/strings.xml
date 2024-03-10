@@ -68,4 +68,7 @@
 
     <string name="label_description_image">refresh</string>
     <string name="label_start_date">fecha inicio</string>
+    <string name="printer_address">Printer address</string>
+    <string name="printer_port">Printer port</string>
+    <string name="label_table_btn">Hacer disponibles todas las mezas</string>
 </resources>

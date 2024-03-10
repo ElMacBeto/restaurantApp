@@ -13,10 +13,12 @@ import javax.inject.Inject
 
 class FirebaseApiService @Inject constructor(private val client: FirebaseClientModule) {
 
-    suspend fun getProduct(document: String) = makeCall {
-        client.productsCollection.document(document).get().await().let {
-            val response = it.toObject(ProductResponse::class.java)
-            response
+    suspend fun getAllProducts() = makeCall {
+        client.productsCollection.get().await().documents.mapNotNull {
+            val json = Gson().toJson(it.data)
+            val product = Gson().fromJson(json, ProductResponse::class.java)
+            product.id = it.id
+            product
         }
     }
 

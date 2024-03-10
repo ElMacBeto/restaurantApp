@@ -7,10 +7,11 @@ import javax.inject.Inject
 
 class ProductsWebDS @Inject constructor(private val service: FirebaseApiService) {
 
-    suspend fun getProduct(product: String) = service.getProduct(product)
+    suspend fun getAllProducts() = service.getAllProducts()
 
     suspend fun getTablesAvailable() = service.getAllTablesAvailable()
 
     suspend fun updateTable(tables: TablesAvailableResponse) = service.updateTable(tables)
+
 
 }

@@ -74,7 +74,6 @@ class OrderTypeSelectionFragment : Fragment() {
                     order = null,
                     address = null
                 )
-                viewModel.updateTableList(tablePosition)
                 findNavController().navigate(action)
             }
         }

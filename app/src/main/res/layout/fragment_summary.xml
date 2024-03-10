@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.summary.SummaryFragment"
     app:cardCornerRadius="12dp"
-    android:layout_margin="8dp">
+    android:layout_margin="18dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

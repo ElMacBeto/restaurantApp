@@ -92,10 +92,10 @@ class PrinterUtils @Inject constructor(val context: Context) {
             ticket.append("[L]<b>fecha: ${getCurrentDate(true)}</b>\n")
             ticket.append("Calle Dr. Lucas Vallarta #84 Colonia Dr. Lucas Vallarta Tepic, Mexico\n")
             ticket.append("[C]************************************************\n")
-            ticket.append("[L]cantidad [C]producto [R]precio\n")
-
-            if (order.address.isNotEmpty())
-                ticket.append("\n [C]<b>${order.address} </b>\n")
+            if (order.address.isNotEmpty()){
+                ticket.append("[L]<b>Dirección:${order.address} </b>\n")
+                ticket.append("[C]************************************************\n")
+            }
 
             for (product in order.productList) {
                 var extraPrice = 0

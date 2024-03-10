@@ -64,4 +64,8 @@
     <string name="top_toolbar_settings_title">CONFIGURACIONES</string>
     <string name="label_title_summary">Resumen del dia</string>
     <string name="label_address">direccion</string>
+    <string name="label_title_history">Historial</string>
+
+    <string name="label_description_image">refresh</string>
+    <string name="label_start_date">fecha inicio</string>
 </resources>

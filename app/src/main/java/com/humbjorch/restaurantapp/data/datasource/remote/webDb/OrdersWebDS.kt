@@ -9,6 +9,9 @@ class OrdersWebDS @Inject constructor(private val service: FirebaseApiService) {
     suspend fun setOrderRegister(id: String, order: OrderListModel) =
         service.sendRegisterProducts(id, order)
 
-    suspend fun getOrdersRegister(date:String) = service.getOrdersRegister(date)
+    suspend fun getOrdersRegister(date:String) = service.getOrdersRegisterByDate(date)
+
+    suspend fun getAllOrdersRegister() = service.getAllOrdersRegister()
+
 
 }

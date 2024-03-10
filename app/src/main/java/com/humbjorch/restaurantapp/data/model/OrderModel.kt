@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class OrderModel(
-    val id: String = "",
+    var id: String = "",
     var table: String = "",
     var productList: List<ProductsOrderModel> = emptyList(),
     var time: String = "",

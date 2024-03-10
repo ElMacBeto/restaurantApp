@@ -71,7 +71,7 @@ class ProductsRepository @Inject constructor(
                 it.address = order.address
             }
         }
-        if (!updateData){
+        if (!updateData) {
             val newList = App.ordersList.orders.plus(order)
             App.ordersList.orders = newList
         }
@@ -79,7 +79,7 @@ class ProductsRepository @Inject constructor(
             TablesAvailableResponse(ArrayList(App.tablesAvailable))
         )
 
-        if (tableResponse.status == Status.ERROR){
+        if (tableResponse.status == Status.ERROR) {
             return Resource.error(tableResponse.message)
         }
 
@@ -87,6 +87,24 @@ class ProductsRepository @Inject constructor(
     }
 
     suspend fun getOrders(date: String) = ordersWebDS.getOrdersRegister(date)
+
+    suspend fun getAllOrdersRegister(startDate: String, endDate: String): Resource<List<OrderModel>> {
+        val response = ordersWebDS.getAllOrdersRegister()
+
+        return if (response.status == Status.SUCCESS) {
+            val filterOrders = response.data?.filter {
+                it.id in startDate..endDate
+            }
+
+            val allOrders = filterOrders?.flatMap {
+                it.orders
+            } ?: emptyList()
+
+            Resource.success(allOrders)
+        }else{
+            Resource.error(response.message)
+        }
+    }
 
 
     suspend fun updateTables(): Resource<Boolean> {

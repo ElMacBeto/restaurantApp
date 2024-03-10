@@ -50,11 +50,12 @@ class HomeFragment : Fragment() {
         initAdapters()
         setObservers()
         initView()
-        viewModel.setPrinterSettings()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initView() {
+        viewModel.setPrinterSettings()
         (activity as MainActivity).showLateralNavigation(true)
         viewModel.getCurrentDayOrders()
     }
@@ -71,7 +72,12 @@ class HomeFragment : Fragment() {
                     (activity as MainActivity).dismissLoader()
                     val orders = it.data ?: OrderListModel()
                     App.ordersList = orders
-                    orderList = viewModel.getTableOrders()
+
+                    orderList = if ((activity as MainActivity).binding.swDelivery.isChecked)
+                        viewModel.getDeliveryOrders()
+                    else
+                        viewModel.getTableOrders()
+
                     tableOrderAdapter.updateList(orderList)
                     orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
                     orderAdapter.updateList(orderSelected.productList)
@@ -239,6 +245,9 @@ class HomeFragment : Fragment() {
             orderAdapter.updateList(orderSelected.productList)
             binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
             setView()
+        }
+        (activity as MainActivity).binding.btnRefresh.setOnClickListener {
+            viewModel.getCurrentDayOrders()
         }
     }
 

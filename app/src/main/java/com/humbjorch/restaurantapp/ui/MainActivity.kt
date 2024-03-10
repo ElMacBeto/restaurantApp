@@ -19,6 +19,7 @@ import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.alerts.GenericDialog
 import com.humbjorch.restaurantapp.core.utils.showHide
 import com.humbjorch.restaurantapp.databinding.ActivityMainBinding
+import com.humbjorch.restaurantapp.ui.history.HistoryFragmentDirections
 import com.humbjorch.restaurantapp.ui.home.HomeFragmentDirections
 import com.humbjorch.restaurantapp.ui.settings.SettingsFragmentDirections
 import com.humbjorch.restaurantapp.ui.summary.SummaryFragmentDirections
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var settingNav: (() -> Unit)? = null
     private var homeNav: (() -> Unit)? = null
     private var summaryNav: (() -> Unit)? = null
+    private var historyNav: (() -> Unit)? = null
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -88,13 +90,17 @@ class MainActivity : AppCompatActivity() {
                         showSwitch = true
                     )
                     showLateralNavigation(true)
+                    homeNav = null
                     settingNav = {
                         val action = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
                         navController.navigate(action)
                     }
-                    homeNav = null
                     summaryNav = {
                         val action = HomeFragmentDirections.actionHomeFragmentToSummaryFragment()
+                        navController.navigate(action)
+                    }
+                    historyNav = {
+                        val action = HomeFragmentDirections.actionHomeFragmentToHistoryFragment()
                         navController.navigate(action)
                     }
                 }
@@ -133,7 +139,12 @@ class MainActivity : AppCompatActivity() {
                         val action = SettingsFragmentDirections.actionSettingsFragmentToSummaryFragment()
                         navController.navigate(action)
                     }
+                    historyNav = {
+                        val action = SettingsFragmentDirections.actionSettingsFragmentToHistoryFragment()
+                        navController.navigate(action)
+                    }
                 }
+
                 R.id.summaryFragment -> {
                     setTopToolbar(
                         showMenu = true,
@@ -150,6 +161,32 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(action)
                     }
                     summaryNav = null
+                    historyNav = {
+                        val action = SummaryFragmentDirections.actionSummaryFragmentToHistoryFragment()
+                        navController.navigate(action)
+                    }
+                }
+
+                R.id.historyFragment -> {
+                    setTopToolbar(
+                        showMenu = true,
+                        title = R.string.label_title_history,
+                        showSwitch = false
+                    )
+                    showLateralNavigation(true)
+                    settingNav = {
+                        val action = HistoryFragmentDirections.actionHistoryFragmentToSettingsFragment()
+                        navController.navigate(action)
+                    }
+                    homeNav = {
+                        val action = HistoryFragmentDirections.actionHistoryFragmentToHomeFragment()
+                        navController.navigate(action)
+                    }
+                    summaryNav = {
+                        val action = HistoryFragmentDirections.actionHistoryFragmentToSummaryFragment()
+                        navController.navigate(action)
+                    }
+                    historyNav = null
                 }
             }
         }
@@ -166,6 +203,7 @@ class MainActivity : AppCompatActivity() {
             val colorStateList = ColorStateList.valueOf(Color.WHITE)
             binding.navBar.btnHome.backgroundTintList = colorStateList
             binding.navBar.btnInventory.backgroundTintList = colorStateList
+            binding.navBar.btnHistory.backgroundTintList = colorStateList
         }
         binding.navBar.btnHome.setOnClickListener {
             homeNav?.invoke()
@@ -177,6 +215,7 @@ class MainActivity : AppCompatActivity() {
             val colorStateList = ColorStateList.valueOf(Color.WHITE)
             binding.navBar.btnSettings.backgroundTintList = colorStateList
             binding.navBar.btnInventory.backgroundTintList = colorStateList
+            binding.navBar.btnHistory.backgroundTintList = colorStateList
         }
         binding.navBar.btnInventory.setOnClickListener {
             summaryNav?.invoke()
@@ -188,6 +227,19 @@ class MainActivity : AppCompatActivity() {
             val colorStateList = ColorStateList.valueOf(Color.WHITE)
             binding.navBar.btnHome.backgroundTintList = colorStateList
             binding.navBar.btnSettings.backgroundTintList = colorStateList
+            binding.navBar.btnHistory.backgroundTintList = colorStateList
+        }
+        binding.navBar.btnHistory.setOnClickListener {
+            historyNav?.invoke()
+
+            val colorFromResource = ContextCompat.getColor(this, R.color.blue2)
+            val colorSelected = ColorStateList.valueOf(colorFromResource)
+            binding.navBar.btnHistory.backgroundTintList = colorSelected
+
+            val colorStateList = ColorStateList.valueOf(Color.WHITE)
+            binding.navBar.btnHome.backgroundTintList = colorStateList
+            binding.navBar.btnSettings.backgroundTintList = colorStateList
+            binding.navBar.btnInventory.backgroundTintList = colorStateList
         }
     }
 
@@ -263,6 +315,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         binding.topToolbar.showHide(showMenu)
         binding.swDelivery.showHide(showSwitch)
+        binding.btnRefresh.showHide(showSwitch)
         if (title != null)
             binding.tvLabelDate.text = "${getString(title)}     ${Tools.getCurrentDate(true)} "
     }

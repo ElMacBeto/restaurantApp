@@ -2,10 +2,8 @@ package com.humbjorch.restaurantapp.data.datasource.remote.api
 
 import com.google.gson.Gson
 import com.humbjorch.restaurantapp.core.di.FirebaseClientModule
-import com.humbjorch.restaurantapp.core.utils.Constants
 import com.humbjorch.restaurantapp.core.utils.Constants.TABLES_AVAILABLE_DOCUMENT
 import com.humbjorch.restaurantapp.data.datasource.remote.makeCall
-import com.humbjorch.restaurantapp.data.datasource.remote.response.ExtrasResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.ProductResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
 import com.humbjorch.restaurantapp.data.model.OrderListModel
@@ -42,10 +40,19 @@ class FirebaseApiService @Inject constructor(private val client: FirebaseClientM
             }
         }
 
-    suspend fun getOrdersRegister(id: String) = makeCall {
-        client.orderRegisterCollection.document(id).get().await().let {
+    suspend fun getOrdersRegisterByDate(date: String) = makeCall {
+        client.orderRegisterCollection.document(date).get().await().let {
             val json = Gson().toJson(it.data)
             Gson().fromJson(json, OrderListModel::class.java)
+        }
+    }
+
+    suspend fun getAllOrdersRegister() = makeCall {
+        client.orderRegisterCollection.get().await().documents.mapNotNull {
+            val json = Gson().toJson(it.data)
+            val orderList = Gson().fromJson(json, OrderListModel::class.java)
+            orderList.id = it.id
+            orderList
         }
     }
 

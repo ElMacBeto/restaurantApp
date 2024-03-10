@@ -6,6 +6,7 @@ import com.humbjorch.restaurantapp.data.model.OrderModel
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -31,6 +32,29 @@ object Tools {
         return currentTime.format(formatter)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDateForHistory(): String {
+        val dateFormat = SimpleDateFormat("d-MMMM-yyyy", Locale("es", "ES"))
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
+
+    fun getDateFormatted(
+        dayOfMonth: Int,
+        monthOfYear: Int,
+        year: Int,
+        isFormat: Boolean = false
+    ): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, monthOfYear, dayOfMonth)
+        val dateFormat = if (isFormat) {
+            SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        } else
+            SimpleDateFormat("d-MMMM-yyyy", Locale("es", "ES"))
+
+        return dateFormat.format(calendar.time)
+    }
+
     fun generateID() = UUID.randomUUID().toString()
 
     fun getTotal(order: OrderModel): Int {
@@ -39,6 +63,19 @@ object Tools {
             val extraPrice = it.extras.sumOf { extra -> extra.price.toInt() }
             val price = it.price.toInt() * it.amount.toInt()
             total += price + extraPrice
+        }
+        return total
+    }
+
+    fun getTotalForList(orders: List<OrderModel>): Int {
+        var total = 0
+        for (order in orders) {
+            if (order.status == OrderStatus.PAID.value)
+                order.productList.forEach {
+                    val extraPrice = it.extras.sumOf { extra -> extra.price.toInt() }
+                    val price = it.price.toInt() * it.amount.toInt()
+                    total += price + extraPrice
+                }
         }
         return total
     }

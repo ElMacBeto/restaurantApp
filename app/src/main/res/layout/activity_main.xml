@@ -38,12 +38,24 @@
             android:textSize="20sp"
             tools:text="HOME          Miercoles 16 de noviembre de 2023" />
 
+        <ImageButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/label_description_image"
+            android:src="@drawable/ic_refresh"
+            app:tint="@color/white"
+            tools:ignore="TouchTargetSizeCheck" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sw_delivery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="@string/label_delivery_orders" />
+            android:minHeight="48dp"
+            android:text="@string/label_delivery_orders"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

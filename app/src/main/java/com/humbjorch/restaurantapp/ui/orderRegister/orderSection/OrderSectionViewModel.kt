@@ -38,6 +38,7 @@ class OrderSectionViewModel @Inject constructor(
     fun saveOrder(order: OrderModel) {
         _liveDataRegisterOrder.value = Resource.loading(null)
         viewModelScope.launch {
+            updateTableList(order.table.toInt())
             val date = Tools.getCurrentDate()
             _liveDataRegisterOrder.value = productsRepository.saveOrderRegister(date, order)
         }
@@ -58,6 +59,14 @@ class OrderSectionViewModel @Inject constructor(
                     App.printerAddress
                 )
             )
+        }
+    }
+
+    fun updateTableList(tablePosition: Int) {
+        App.tablesAvailable.onEach {
+            if (it.position == tablePosition.toString()) {
+                it.available = false
+            }
         }
     }
 

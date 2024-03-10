@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_homeFragment_to_summaryFragment"
             app:destination="@id/summaryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderTypeSelectionFragment"
@@ -77,6 +80,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_summaryFragment"
             app:destination="@id/summaryFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/summaryFragment"
@@ -89,5 +95,24 @@
         <action
             android:id="@+id/action_summaryFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.humbjorch.restaurantapp.ui.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_historyFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_historyFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment" />
+    </fragment>
+
 </navigation>

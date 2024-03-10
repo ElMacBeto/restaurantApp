@@ -31,6 +31,7 @@ import com.humbjorch.restaurantapp.databinding.FragmentOrderSectionBinding
 import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ExtraAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.IngredientsAdapter
+import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.OtherAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductTypeAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsOrderAdapter
@@ -47,12 +48,14 @@ class OrderSectionFragment : Fragment() {
     private lateinit var productsOrderAdapter: ProductsOrderAdapter
     private lateinit var ingredientAdapter: IngredientsAdapter
     private lateinit var extraAdapter: ExtraAdapter
+    private lateinit var otherAdapter: OtherAdapter
     private var productsOrder = listOf<ProductsOrderModel>()
     private var tablePosition = -1
     private val args: OrderSectionFragmentArgs by navArgs()
     private lateinit var orderModel: OrderModel
     private var ingredientList: List<String> = emptyList()
     private var extras: List<ExtraModel> = emptyList()
+    private var others: List<String> = emptyList()
     private var fromEdict = false
     private var address: String = ""
 
@@ -196,10 +199,21 @@ class OrderSectionFragment : Fragment() {
         }
         binding.rvProductsOrder.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProductsOrder.adapter = productsOrderAdapter
+        //---------------------------------------------------------------------------------
+        others = App.productListModel[0].otherList
+        otherAdapter = OtherAdapter(others) {
+            updateOtherSelected()
+        }
+        binding.rvProductOthers.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvProductOthers.adapter = otherAdapter
     }
 
     private fun updateExtraSelected() {
         viewModel.productSelected.extras = extraAdapter.getExtras()
+    }
+
+    private fun updateOtherSelected() {
+        viewModel.productSelected.other = otherAdapter.getOtherValue()
     }
 
     private fun updateProductTypeList(productList: ProductListModel) {
@@ -217,6 +231,14 @@ class OrderSectionFragment : Fragment() {
         extraAdapter.updateList(extras)
         extraAdapter.clearCheckBoxes()
         viewModel.productSelected.extras = extraAdapter.getExtras()
+
+        others = productList.otherList
+        otherAdapter.updateList(others)
+        otherAdapter.clearCheckBoxes()
+        binding.tvLabelOthers.text = productList.other
+        viewModel.productSelected.other = otherAdapter.getOtherValue()
+        viewModel.productSelected.otherName = productList.other
+
         hideOrShowIngredientsAndExtras()
     }
 
@@ -256,13 +278,17 @@ class OrderSectionFragment : Fragment() {
             amount = viewModel.productSelected.amount,
             ingredients = viewModel.productSelected.ingredients,
             price = viewModel.productSelected.price,
-            extras = viewModel.productSelected.extras
+            extras = viewModel.productSelected.extras,
+            otherName = viewModel.productSelected.otherName,
+            other = viewModel.productSelected.other
         )
+
         var positionChanged = -1
         productsOrder.onEachIndexed { index, it ->
             if (it.product == newProductOrder.product &&
                 it.ingredients == newProductOrder.ingredients &&
-                it.extras == newProductOrder.extras
+                it.extras == newProductOrder.extras &&
+                it.other == newProductOrder.other
             ) {
                 positionChanged = index
                 it.amount = (it.amount.toInt() + newProductOrder.amount.toInt()).toString()
@@ -320,6 +346,8 @@ class OrderSectionFragment : Fragment() {
         binding.tvLabelIngredients.showHide(ingredientList.isNotEmpty())
         binding.dividerExtras.showHide(extras.isNotEmpty())
         binding.tvLabelExtras.showHide(extras.isNotEmpty())
+        binding.dividerOthers.showHide(others.isNotEmpty())
+        binding.tvLabelOthers.showHide(others.isNotEmpty())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

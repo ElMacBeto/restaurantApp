@@ -9,5 +9,7 @@ data class ProductsOrderModel(
     var amount: String = "1",
     var ingredients: List<String> = emptyList(),
     var price: String = "0",
-    var extras: List<ExtraModel> = emptyList()
+    var extras: List<ExtraModel> = emptyList(),
+    var otherName: String = "",
+    var other: String = ""
 ): Parcelable

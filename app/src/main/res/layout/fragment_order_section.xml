@@ -140,13 +140,47 @@
                         tools:listitem="@layout/item_ingredient" />
 
                     <View
-                        android:id="@+id/divider_extras"
+                        android:id="@+id/divider_others"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/black1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rv_product_ingredients" />
+
+                    <TextView
+                        android:id="@+id/tv_label_others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Otros"
+                        android:textColor="@color/black1"
+                        android:textSize="@dimen/text_size_2"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_others" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_product_others"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_label_others"
+                        app:layout_constraintVertical_bias="0"
+                        app:spanCount="2"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_radio_btn" />
+
+                    <View
+                        android:id="@+id/divider_extras"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rv_product_others" />
 
                     <TextView
                         android:id="@+id/tv_label_extras"

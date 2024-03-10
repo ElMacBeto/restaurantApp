@@ -1,11 +1,7 @@
 package com.humbjorch.restaurantapp.core.utils.printer
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
-import android.print.PrintJobId
-import android.print.PrintManager
 import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
 import com.dantsu.escposprinter.EscPosPrinter
@@ -16,12 +12,8 @@ import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
 import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentTime
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.Socket
@@ -153,7 +145,9 @@ class PrinterUtils @Inject constructor(val context: Context) {
                         ", extras: ${extrasList.joinToString()}"
                     }
                 val productText =
-                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText $extrasText</font>\n"
+                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText" +
+                            "\n ${product.otherName}: ${product.other}" +
+                            "\n Extras: $extrasText</font>\n"
                 ticket.append(productText)
             }
 

@@ -144,10 +144,16 @@ class PrinterUtils @Inject constructor(val context: Context) {
                         val extrasList = product.extras.map { it.name }
                         ", extras: ${extrasList.joinToString()}"
                     }
+
+                val otherText =
+                    if (product.extras.isEmpty())
+                        ""
+                    else
+                        "${product.otherName}: ${product.other}"
+
                 val productText =
-                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText" +
-                            "\n ${product.otherName}: ${product.other}" +
-                            "\n Extras: $extrasText</font>\n"
+                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText $otherText $extrasText</font>\n"
+
                 ticket.append(productText)
             }
 

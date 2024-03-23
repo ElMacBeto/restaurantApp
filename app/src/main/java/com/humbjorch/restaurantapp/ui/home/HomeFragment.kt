@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -181,17 +182,27 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.btnAddOrder.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment()
+            val action = HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(order = null, tablePosition = 0)
             findNavController().navigate(action)
         }
         binding.btnEditOrder.setOnClickListener {
             validateOrder {
-                val action = HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
-                    tablePosition = orderSelected.table.toInt(),
-                    order = orderSelected,
-                    isEdict = true,
-                    address = orderSelected.address
-                )
+                val action = if (orderSelected.table.toInt() < 0){
+                    HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(
+                        tablePosition = orderSelected.table.toInt(),
+                        order = orderSelected,
+                        isEdict = true,
+                        address = orderSelected.address
+                    )
+                }else{
+                    HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
+                        tablePosition = orderSelected.table.toInt(),
+                        order = orderSelected,
+                        isEdict = true,
+                        address = orderSelected.address
+                    )
+                }
+
                 findNavController().navigate(action)
             }
         }

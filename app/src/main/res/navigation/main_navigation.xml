@@ -9,16 +9,17 @@
         android:id="@+id/splashFragment"
         android:name="com.humbjorch.restaurantapp.ui.splash.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.humbjorch.restaurantapp.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_orderTypeSelectionFragment"
             app:destination="@id/orderTypeSelectionFragment" />
@@ -35,45 +36,66 @@
             android:id="@+id/action_homeFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/orderTypeSelectionFragment"
         android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderTypeSelection.OrderTypeSelectionFragment"
         android:label="fragment_order_type_selection"
-        tools:layout="@layout/fragment_order_type_selection" >
+        tools:layout="@layout/fragment_order_type_selection">
+        <argument
+            android:name="tablePosition"
+            android:defaultValue="-1"
+            app:argType="integer"
+            app:nullable="false" />
+        <argument
+            android:name="order"
+            app:argType="com.humbjorch.restaurantapp.data.model.OrderModel"
+            app:nullable="true" />
+        <argument
+            android:name="isEdict"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="address"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="false" />
         <action
             android:id="@+id/action_orderTypeSelectionFragment_to_orderSectionFragment"
             app:destination="@id/orderSectionFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/orderSectionFragment"
         android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderSection.OrderSectionFragment"
         android:label="fragment_order_section"
-        tools:layout="@layout/fragment_order_section" >
+        tools:layout="@layout/fragment_order_section">
         <argument
             android:name="tablePosition"
-            app:argType="integer"/>
+            app:argType="integer" />
         <argument
-            app:argType="com.humbjorch.restaurantapp.data.model.OrderModel"
             android:name="order"
-            app:nullable="true"/>
+            app:argType="com.humbjorch.restaurantapp.data.model.OrderModel"
+            app:nullable="true" />
         <argument
-            app:argType="boolean"
             android:name="isEdict"
-            app:nullable="false"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            app:argType="boolean"
+            app:nullable="false" />
         <argument
-            app:argType="string"
             android:name="address"
+            app:argType="string"
             app:nullable="true" />
         <action
             android:id="@+id/action_orderSectionFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.humbjorch.restaurantapp.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -84,11 +106,12 @@
             android:id="@+id/action_settingsFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/summaryFragment"
         android:name="com.humbjorch.restaurantapp.ui.summary.SummaryFragment"
         android:label="fragment_summary"
-        tools:layout="@layout/fragment_summary" >
+        tools:layout="@layout/fragment_summary">
         <action
             android:id="@+id/action_summaryFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -99,11 +122,12 @@
             android:id="@+id/action_summaryFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.humbjorch.restaurantapp.ui.history.HistoryFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" >
+        tools:layout="@layout/fragment_history">
         <action
             android:id="@+id/action_historyFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

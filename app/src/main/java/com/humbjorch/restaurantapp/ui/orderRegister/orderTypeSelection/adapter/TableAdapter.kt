@@ -17,6 +17,10 @@ class TableAdapter(
 
     private var selectedPosition = -1
 
+    fun setSelectedPosition(newPosition: Int) {
+        selectedPosition = newPosition
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val ctx = view.context
@@ -52,7 +56,7 @@ class TableAdapter(
 
         viewHolder.bindView(table, isSelected)
         viewHolder.itemView.setOnClickListener {
-            if (table.available){
+            if (table.available) {
                 val oldPosition = selectedPosition
                 selectedPosition = viewHolder.adapterPosition
                 onClick.invoke(table)

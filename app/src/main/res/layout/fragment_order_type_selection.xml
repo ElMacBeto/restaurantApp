@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/label_for_delivery"
                     android:textColor="@color/black"
-                    android:checked="true"
+                    android:checked="false"
                     android:textSize="@dimen/text_size_4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -8,10 +8,12 @@ import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.tcp.TcpConnection
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import com.humbjorch.restaurantapp.R
+import com.humbjorch.restaurantapp.core.utils.ProductType
 import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
 import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentTime
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
+import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -84,7 +86,7 @@ class PrinterUtils @Inject constructor(val context: Context) {
             ticket.append("[L]<b>fecha: ${getCurrentDate(true)}</b>\n")
             ticket.append("Calle Dr. Lucas Vallarta #84 Colonia Dr. Lucas Vallarta Tepic, Mexico\n")
             ticket.append("[C]************************************************\n")
-            if (order.address.isNotEmpty()){
+            if (order.address.isNotEmpty()) {
                 ticket.append("[L]<b>Dirección:${order.address} </b>\n")
                 ticket.append("[C]************************************************\n")
             }
@@ -105,7 +107,7 @@ class PrinterUtils @Inject constructor(val context: Context) {
                 val text =
                     "[L]<b>x${product.amount} ${product.product} </b> [R]$$price.00\n"
                 ticket.append(text)
-                ticket.append(extrasText+"\n")
+                ticket.append(extrasText + "\n")
             }
             ticket.append("[C]************************************************\n")
             ticket.append("[R]<u><font size='big'>Total: $total</font></u>\n\n\n\n\n\n.")
@@ -125,18 +127,22 @@ class PrinterUtils @Inject constructor(val context: Context) {
         printerPort: Int,
         printerAddress: String
     ): Resource<String> = withContext(Dispatchers.IO) {
+        val beverageList = order.productList.filter { it.productType == ProductType.BEVERAGE.value }
+        val foodList = order.productList.filter { it.productType == ProductType.FOOD.value }
+
         try {
             val printer =
                 EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 42)
-            val ticket = StringBuilder()
+            val foodTicket = StringBuilder()
             val tableText = if (order.table == "-1") "Para llevar" else "Meza: ${order.table}"
-            ticket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
-            ticket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
-            ticket.append("[R]hora: ${getCurrentTime()}\n")
-            ticket.append("[C]================================================\n\n")
+            foodTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
+            foodTicket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
+            foodTicket.append("[R]hora: ${getCurrentTime()}\n")
+            foodTicket.append("[C]================================================\n\n")
 
-            for (product in order.productList) {
-                val ingredientsText = if (product.ingredients.isEmpty()) "" else "-> ${product.ingredients.joinToString()}"
+            for (product in foodList) {
+                val ingredientsText =
+                    if (product.ingredients.isEmpty()) "" else "-> ${product.ingredients.joinToString()}"
                 val extrasText =
                     if (product.extras.isEmpty())
                         ""
@@ -154,18 +160,54 @@ class PrinterUtils @Inject constructor(val context: Context) {
                 val productText =
                     "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText $otherText $extrasText</font>\n"
 
-                ticket.append(productText)
+                foodTicket.append(productText)
+            }
+            foodTicket.append("\n\n\n\n" + ".")
+
+            printer.printFormattedTextAndCut("$foodTicket")
+
+            if (beverageList.isNotEmpty()) {
+                val beverageTicket =
+                    getBeverageTicket(
+                        beverageList = beverageList,
+                        tableNumber = order.table,
+                        orderNumber = orderNumber
+                    )
+                printer.printFormattedTextAndCut("$beverageTicket")
             }
 
-            ticket.append("\n\n\n\n" + ".")
-
-            printer.printFormattedTextAndCut("$ticket")
             printer.disconnectPrinter()
             Resource.success(null)
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.error(e.message.toString())
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getBeverageTicket(
+        beverageList: List<ProductsOrderModel>,
+        tableNumber: String,
+        orderNumber: Int,
+    ): StringBuilder {
+        val beverageTicket = StringBuilder()
+        val tableText = if (tableNumber == "-1") "Para llevar" else "Meza: $tableNumber"
+
+        beverageTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
+        beverageTicket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
+        beverageTicket.append("[R]hora: ${getCurrentTime()}\n")
+        beverageTicket.append("[C]================================================\n\n")
+
+        for (product in beverageList) {
+            val ingredientsText =
+                if (product.ingredients.isEmpty()) "" else "-> ${product.ingredients.joinToString()}"
+
+            val productText =
+                "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText</font>\n"
+            beverageTicket.append(productText)
+        }
+        beverageTicket.append("\n\n\n\n" + ".")
+        return beverageTicket
     }
 
 }

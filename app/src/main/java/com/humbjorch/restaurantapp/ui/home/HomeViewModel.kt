@@ -120,7 +120,6 @@ class HomeViewModel @Inject constructor(
             val id = Tools.getCurrentDate()
             updateTable(order.table)
             order.status = OrderStatus.CANCEL.value
-            productsRepository.saveOrderRegister(id, order)
             _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
         }
     }

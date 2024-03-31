@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
+import com.humbjorch.restaurantapp.core.utils.OrderStatus
 import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.Tools.getTotal
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
@@ -35,6 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var orderAdapter: ProductsOrderAdapter
     private var orderList = emptyList<OrderModel>()
     private var orderSelected = OrderModel()
+    private var updateType = OrderStatus.WITHOUT_PAYING.value
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +105,8 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.SUCCESS -> {
-                    viewModel.printTicket(orderSelected)
+                    if (updateType != OrderStatus.CANCEL.value)
+                        viewModel.printTicket(orderSelected)
                     viewModel.setAllProducts()
                 }
 
@@ -138,7 +141,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.printLiveData.observe(viewLifecycleOwner){
+        viewModel.printLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
 
                 Status.ERROR -> {
@@ -182,19 +185,22 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.btnAddOrder.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(order = null, tablePosition = 0)
+            val action = HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(
+                order = null,
+                tablePosition = 0
+            )
             findNavController().navigate(action)
         }
         binding.btnEditOrder.setOnClickListener {
             validateOrder {
-                val action = if (orderSelected.table.toInt() < 0){
+                val action = if (orderSelected.table.toInt() < 0) {
                     HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(
                         tablePosition = orderSelected.table.toInt(),
                         order = orderSelected,
                         isEdict = true,
                         address = orderSelected.address
                     )
-                }else{
+                } else {
                     HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
                         tablePosition = orderSelected.table.toInt(),
                         order = orderSelected,
@@ -213,7 +219,10 @@ class HomeFragment : Fragment() {
                     descriptionAlert = getString(R.string.dialog_description_pay_order),
                     txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
                     txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = { viewModel.changePaidOrder(orderSelected) },
+                    buttonPositiveAction = {
+                        updateType = OrderStatus.PAID.value
+                        viewModel.changePaidOrder(orderSelected)
+                    },
                     buttonNegativeAction = { }
                 )
             }
@@ -237,17 +246,20 @@ class HomeFragment : Fragment() {
                     descriptionAlert = getString(R.string.dialog_description_cancel_order),
                     txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
                     txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = { viewModel.cancelOrder(orderSelected) },
+                    buttonPositiveAction = {
+                        updateType = OrderStatus.CANCEL.value
+                        viewModel.cancelOrder(orderSelected)
+                    },
                     buttonNegativeAction = { }
                 )
             }
         }
 
         (activity as MainActivity).binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
-            orderList = if (isChecked){
+            orderList = if (isChecked) {
                 binding.tvLabelOrderTitle.text = getString(R.string.label_delivery_orders)
                 viewModel.getDeliveryOrders()
-            }else{
+            } else {
                 binding.tvLabelOrderTitle.text = getString(R.string.label_table_orders)
                 viewModel.getTableOrders()
             }

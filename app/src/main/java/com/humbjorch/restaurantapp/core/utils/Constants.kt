@@ -27,3 +27,8 @@ enum class OrderStatus(val value: String) {
     CANCEL("CANCEL")
 }
 
+enum class ProductType(val value:String){
+    BEVERAGE("BEVERAGE"),
+    FOOD("FOOD")
+}
+

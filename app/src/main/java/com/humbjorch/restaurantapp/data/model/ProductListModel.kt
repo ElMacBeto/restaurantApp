@@ -1,5 +1,7 @@
 package com.humbjorch.restaurantapp.data.model
 
+import com.humbjorch.restaurantapp.core.utils.ProductType
+
 data class ProductListModel(
     @field:JvmField
     val imageUrl: String = "",
@@ -15,4 +17,6 @@ data class ProductListModel(
     val other: String = "",
     @field:JvmField
     val otherList: ArrayList<String> = arrayListOf(),
+    @field:JvmField
+    val productType: String = ProductType.FOOD.value//nuevo
 )

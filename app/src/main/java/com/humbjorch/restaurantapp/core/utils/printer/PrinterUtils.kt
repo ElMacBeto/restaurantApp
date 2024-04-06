@@ -34,9 +34,9 @@ class PrinterUtils @Inject constructor(val context: Context) {
             val sock = Socket("192.168.100.123", 9100)
             val oStream = PrintWriter(sock.getOutputStream())
 
-            oStream.println("***** Ticket de Compra *****")
+            oStream.println("** Ticket de Compra **")
             oStream.println(getCurrentDate())
-            oStream.println("****************************")
+            oStream.println("**********")
             var total = 0
             for (product in order.productList) {
                 val price = product.price.toInt() * product.amount.toInt()
@@ -85,10 +85,10 @@ class PrinterUtils @Inject constructor(val context: Context) {
             )
             ticket.append("[L]<b>fecha: ${getCurrentDate(true)}</b>\n")
             ticket.append("Calle Dr. Lucas Vallarta #84 Colonia Dr. Lucas Vallarta Tepic, Mexico\n")
-            ticket.append("[C]************************************************\n")
+            ticket.append("[C]****************\n")
             if (order.address.isNotEmpty()) {
                 ticket.append("[L]<b>Dirección:${order.address} </b>\n")
-                ticket.append("[C]************************************************\n")
+                ticket.append("[C]****************\n")
             }
 
             for (product in order.productList) {
@@ -109,7 +109,7 @@ class PrinterUtils @Inject constructor(val context: Context) {
                 ticket.append(text)
                 ticket.append(extrasText + "\n")
             }
-            ticket.append("[C]************************************************\n")
+            ticket.append("[C]****************\n")
             ticket.append("[R]<u><font size='big'>Total: $total</font></u>\n\n\n\n\n\n.")
             printer.printFormattedTextAndCut("$ticket")
             printer.disconnectPrinter()
@@ -136,7 +136,7 @@ class PrinterUtils @Inject constructor(val context: Context) {
             val foodTicket = StringBuilder()
             val tableText = if (order.table == "-1") "Para llevar" else "Meza: ${order.table}"
             foodTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
-            foodTicket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
+            foodTicket.append("[C]<u><font size='big'>ORDER #$orderNumber Cocina</font></u>\n\n")
             foodTicket.append("[R]hora: ${getCurrentTime()}\n")
             foodTicket.append("[C]================================================\n\n")
 
@@ -194,7 +194,7 @@ class PrinterUtils @Inject constructor(val context: Context) {
         val tableText = if (tableNumber == "-1") "Para llevar" else "Meza: $tableNumber"
 
         beverageTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
-        beverageTicket.append("[C]<u><font size='big'>ORDER #$orderNumber</font></u>\n\n")
+        beverageTicket.append("[C]<u><font size='big'>ORDER #$orderNumber Bebidas</font></u>\n\n")
         beverageTicket.append("[R]hora: ${getCurrentTime()}\n")
         beverageTicket.append("[C]================================================\n\n")
 
@@ -211,4 +211,3 @@ class PrinterUtils @Inject constructor(val context: Context) {
     }
 
 }
-

@@ -175,7 +175,7 @@ class OrderSectionFragment : Fragment() {
         //---------------------------------------------------------------------------------
         val productTypeList = App.productListModel[0].list
         productTypeAdapter = ProductTypeAdapter(productTypeList) {
-           setOnProductSelected(it)
+            setOnProductSelected(it)
         }
         binding.rvProductTypes.layoutManager = GridLayoutManager(requireContext(), 4)
         binding.rvProductTypes.adapter = productTypeAdapter
@@ -238,7 +238,7 @@ class OrderSectionFragment : Fragment() {
         binding.tvLabelOthers.text = productList.other
         viewModel.productSelected.other = otherAdapter.getOtherValue()
         viewModel.productSelected.otherName = productList.other
-
+        viewModel.productSelected.productType = productList.productType //nuevo
         hideOrShowIngredientsAndExtras()
     }
 
@@ -280,7 +280,8 @@ class OrderSectionFragment : Fragment() {
             price = viewModel.productSelected.price,
             extras = viewModel.productSelected.extras,
             otherName = viewModel.productSelected.otherName,
-            other = viewModel.productSelected.other
+            other = viewModel.productSelected.other,
+            productType = viewModel.productSelected.productType //nuevo
         )
 
         var positionChanged = -1

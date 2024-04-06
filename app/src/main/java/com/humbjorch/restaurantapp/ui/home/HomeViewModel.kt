@@ -83,10 +83,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getTableOrders() =
-        App.ordersList.orders.filter { it.table.toInt() > 0 && it.status == OrderStatus.WITHOUT_PAYING.value }
+        App.ordersList.orders.filter {
+            it.table.toInt() > 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+        }
 
     fun getDeliveryOrders() =
-        App.ordersList.orders.filter { it.table.toInt() < 0 && it.status == OrderStatus.WITHOUT_PAYING.value }
+        App.ordersList.orders.filter {
+            it.table.toInt() <= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+        }
 
     private fun updateTable(position: String) {
         if (position.toInt() < 1) return

@@ -72,4 +72,6 @@
     <string name="printer_port">Printer port</string>
     <string name="label_table_btn">Hacer disponibles todas las mezas</string>
     <string name="description_clock">clock</string>
+    <string name="label_type">tipo</string>
+    <string name="label_other">Papas</string>
 </resources>

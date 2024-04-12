@@ -81,14 +81,16 @@ class OrderTypeSelectionFragment : Fragment() {
 
     private fun navigateOrderSelection() {
         if (binding.swDelivery.isChecked) {
-            val action =
+            /*val action =
                 OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragmentToOrderSectionFragment(
                     tablePosition = -1,
                     order = orderModel,
                     address = binding.tiAddress.editText!!.text.toString(),
                     isEdict = fromEdict
                 )
-            findNavController().navigate(action)
+
+             */
+            findNavController().navigate(R.id.action_orderTypeSelectionFragment_to_newOrderSelectionFragment2)
         } else {
             if (tablePosition < 0) {
                 CustomToastWidget.show(

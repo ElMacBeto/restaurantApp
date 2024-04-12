@@ -189,6 +189,7 @@ class HomeFragment : Fragment() {
                 order = null,
                 tablePosition = 0
             )
+
             findNavController().navigate(action)
         }
         binding.btnEditOrder.setOnClickListener {

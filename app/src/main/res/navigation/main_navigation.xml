@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_orderTypeSelectionFragment_to_orderSectionFragment"
             app:destination="@id/orderSectionFragment" />
+        <action
+            android:id="@+id/action_orderTypeSelectionFragment_to_newOrderSelectionFragment2"
+            app:destination="@id/newOrderSelectionFragment2" />
     </fragment>
 
     <fragment
@@ -138,5 +141,11 @@
             android:id="@+id/action_historyFragment_to_summaryFragment"
             app:destination="@id/summaryFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/newOrderSelectionFragment2"
+        android:name="com.humbjorch.restaurantapp.ui.orderRegister.orderSection.NewOrderSelectionFragment"
+        android:label="fragment_new_order_selection"
+        tools:layout="@layout/fragment_new_order_selection" />
 
 </navigation>

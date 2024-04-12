@@ -3,7 +3,6 @@ package com.humbjorch.restaurantapp.core.utils
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.humbjorch.restaurantapp.data.model.OrderModel
-import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -31,6 +30,13 @@ object Tools {
         val currentTime = LocalTime.now()
         val formatter = DateTimeFormatter.ofPattern("hh:mm a")
         return currentTime.format(formatter)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDateWithTime(): String {
+        val dateFormat = SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

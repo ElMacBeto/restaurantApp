@@ -62,7 +62,7 @@ class OrderSectionViewModel @Inject constructor(
         }
     }
 
-    fun updateTableList(tablePosition: Int) {
+    private fun updateTableList(tablePosition: Int) {
         App.tablesAvailable.onEach {
             if (it.position == tablePosition.toString()) {
                 it.available = false

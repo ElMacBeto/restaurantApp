@@ -4,13 +4,14 @@ import android.content.Context
 import android.os.Build
 import android.util.DisplayMetrics
 import androidx.annotation.RequiresApi
+import com.dantsu.escposprinter.EscPosCharsetEncoding
 import com.dantsu.escposprinter.EscPosPrinter
 import com.dantsu.escposprinter.connection.tcp.TcpConnection
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.ProductType
 import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
-import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentTime
+import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDateWithTime
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
@@ -70,7 +71,8 @@ class PrinterUtils @Inject constructor(val context: Context) {
     ): Resource<String> = withContext(Dispatchers.IO) {
         try {
             val printer =
-                EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 48)
+                EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 48,  EscPosCharsetEncoding("windows-1252", 16))
+
             var total = 0
             val ticket = StringBuilder()
 
@@ -134,33 +136,47 @@ class PrinterUtils @Inject constructor(val context: Context) {
             val printer =
                 EscPosPrinter(TcpConnection(printerAddress, printerPort, 1500), 203, 80f, 42)
             val foodTicket = StringBuilder()
-            val tableText = if (order.table == "-1") "Para llevar" else "Meza: ${order.table}"
-            foodTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
+            val tableText =
+                if (order.table == "-1") "==Para llevar==" else "==Meza: ${order.table}=="
+            foodTicket.append("[C]<u><font size='big'>$tableText</font></u>\n\n")
             foodTicket.append("[C]<u><font size='big'>ORDER #$orderNumber Cocina</font></u>\n\n")
-            foodTicket.append("[R]hora: ${getCurrentTime()}\n")
-            foodTicket.append("[C]================================================\n\n")
+            foodTicket.append("[C]${getCurrentDateWithTime()}\n")
+            foodTicket.append("[C]<font size='big'>========================</font>\n\n")
 
             for (product in foodList) {
                 val ingredientsText =
-                    if (product.ingredients.isEmpty()) "" else "-> ${product.ingredients.joinToString()}"
+                    if (product.ingredients.isEmpty())
+                        ""
+                    else
+                        product.ingredients.joinToString()
                 val extrasText =
                     if (product.extras.isEmpty())
                         ""
                     else {
                         val extrasList = product.extras.map { it.name }
-                        ", extras: ${extrasList.joinToString()}"
+                        "extras: ${extrasList.joinToString()}"
                     }
 
                 val otherText =
-                    if (product.extras.isEmpty())
+                    if (product.other.isEmpty())
                         ""
                     else
-                        "${product.otherName}: ${product.other}"
+                        product.otherName + " " + product.other
+
+                val endProductText =
+                    "[C]<font size='normal'>================================================</font>\n"
 
                 val productText =
-                    "[L]<font size='big'><b>x${product.amount}  ${product.product}</b> $ingredientsText $otherText $extrasText</font>\n"
+                    "[L]<font size='big'>${product.amount}  ${product.product}</font>\n"
 
                 foodTicket.append(productText)
+                if (ingredientsText.isNotEmpty()) foodTicket.append(
+                    "${addOffsetToEachLine(ingredientsText)}"
+                )
+                if (otherText.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(otherText)}")
+
+                if (extrasText.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(extrasText)}\n")
+                //foodTicket.append(endProductText)
             }
             foodTicket.append("\n\n\n\n" + ".")
 
@@ -191,12 +207,11 @@ class PrinterUtils @Inject constructor(val context: Context) {
         orderNumber: Int,
     ): StringBuilder {
         val beverageTicket = StringBuilder()
-        val tableText = if (tableNumber == "-1") "Para llevar" else "Meza: $tableNumber"
-
-        beverageTicket.append("[R]<u><font size='big-2'>$tableText</font></u>\n\n")
-        beverageTicket.append("[C]<u><font size='big'>ORDER #$orderNumber Bebidas</font></u>\n\n")
-        beverageTicket.append("[R]hora: ${getCurrentTime()}\n")
-        beverageTicket.append("[C]================================================\n\n")
+        val tableText = if (tableNumber == "-1") "==Para llevar==" else "==Meza: $tableNumber=="
+        beverageTicket.append("[C]<u><font size='big'>$tableText</font></u>\n\n")
+        beverageTicket.append("[C]<u><font size='big'>ORDER #$orderNumber Cocina</font></u>\n\n")
+        beverageTicket.append("[C]${getCurrentDateWithTime()}\n")
+        beverageTicket.append("[C]<font size='big'>========================</font>\n\n")
 
         for (product in beverageList) {
             val ingredientsText =
@@ -210,4 +225,16 @@ class PrinterUtils @Inject constructor(val context: Context) {
         return beverageTicket
     }
 
+    private fun addOffsetToEachLine(text: String, maxLength: Int = 40): String {
+        var result = ""
+
+        var i = 0
+        while (i < text.length) {
+            var newText = text.substring(i, minOf(i + maxLength, text.length))
+            if (newText[0] == ' ') newText = newText.substring(1)
+            result = result + " ".repeat(6)+newText+"\n"
+            i += maxLength
+        }
+        return result
+    }
 }

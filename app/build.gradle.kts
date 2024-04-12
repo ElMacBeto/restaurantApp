@@ -62,6 +62,7 @@ dependencies {
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //viewmodel
     implementation("androidx.fragment:fragment-ktx:1.6.2")
@@ -86,4 +87,16 @@ dependencies {
 
     //glade
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    //lottie
+    implementation("com.airbnb.android:lottie:5.2.0")
+
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //printer
+    implementation ("com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.3.0")
 }

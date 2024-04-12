@@ -1,3 +1,75 @@
 <resources>
     <string name="app_name">RestaurantApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="label_text_amount_product">x%d</string>
+    <string name="label_price_product">$%d</string>
+
+    <!-- Custom toast labels -->
+    <string name="label_success">Exito</string>
+    <string name="label_error">Error</string>
+    <string name="label_information">Informacion</string>
+    <string name="label_warning">Cuidado</string>
+    <string name="message_exit">Accion exitosa.</string>
+    <string name="message_without_table">Selecciona una meza.</string>
+    <string name="label_papiz">Papi\'z</string>
+    <string name="label_table_orders">Orden mezas</string>
+    <string name="label_delivery_orders">Envios</string>
+    <string name="label_new_order">Nueva orden</string>
+    <string name="label_empty_order">la orden esta vacia</string>
+    <string name="label_order_type">Tipo de orden</string>
+    <string name="label_for_delivery">Para entregar a domicilio</string>
+    <string name="label_table_selection">Seleccion de meza</string>
+    <string name="label_next">CONTINUAR</string>
+    <string name="label_order">Order</string>
+    <string name="label_order_not_selected">order no seleccionada</string>
+    <string name="label_save_button">Guardar</string>
+    <string name="label_edit">Editar</string>
+    <string name="label_take_order">Cobrar</string>
+    <string name="label_print_order">orden cocina</string>
+    <string name="label_cancel_order">Cancelar</string>
+
+    <string name="dialog_title_pay_order">Confirmacion de pago</string>
+    <string name="dialog_description_pay_order">esta seguro de continuar con el pago?</string>
+    <string name="dialog_cancel_button">Cancelar</string>
+    <string name="dialog_positive_button">Aceptar</string>
+    <string name="label_total">Total</string>
+    <string name="label_empty_list">lista vacia</string>
+    <string name="label_orden">Orden</string>
+    <string name="label_add">Agregar</string>
+    <string name="label_plus">+</string>
+    <string name="label_minus">-</string>
+    <string name="label_ingredients">Ingredientes</string>
+    <string name="label_extras">Extras</string>
+    <string name="label_price">Precio</string>
+    <string name="label_product">Producto</string>
+    <string name="label_done_order">Finalizar orden</string>
+    <string name="dialog_description_finish_app">esta seguro de querer salir de la aplicacion?</string>
+    <string name="dialog_title_confirmation">Confirmacion</string>
+
+    <string name="dialog_title_printer_ticket">Confirmacion de impresion</string>
+    <string name="dialog_description_printer_ticket">esta seguro de imprimir orden?</string>
+
+    <string name="dialog_title_cancel_order">Confirmacion de impresion</string>
+    <string name="dialog_description_cancel_order">esta seguro de cancelar la orden?</string>
+
+    <string name="dialog_title_confirmation_order">Confirmacion de Orden</string>
+    <string name="dialog_description_confirmation_order">esta seguro de finalizar la orden?</string>
+    <string name="share_preferences_session">my_share_preferences</string>
+
+    <string name="top_toolbar_home_title">HOME</string>
+    <string name="top_toolbar_new_order_title">NEW ORDER</string>
+    <string name="top_toolbar_settings_title">CONFIGURACIONES</string>
+    <string name="label_title_summary">Resumen del dia</string>
+    <string name="label_address">direccion</string>
+    <string name="label_title_history">Historial</string>
+
+    <string name="label_description_image">refresh</string>
+    <string name="label_start_date">fecha inicio</string>
+    <string name="printer_address">Printer address</string>
+    <string name="printer_port">Printer port</string>
+    <string name="label_table_btn">Hacer disponibles todas las mezas</string>
+    <string name="description_clock">clock</string>
 </resources>

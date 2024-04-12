@@ -1,84 +1,66 @@
 package com.humbjorch.restaurantapp.data.datasource.remote.api
 
+import com.google.gson.Gson
 import com.humbjorch.restaurantapp.core.di.FirebaseClientModule
-import com.humbjorch.restaurantapp.data.datasource.model.ProductModel
-import com.humbjorch.restaurantapp.data.datasource.model.ProductTypeModel
+import com.humbjorch.restaurantapp.core.utils.Constants.TABLES_AVAILABLE_DOCUMENT
 import com.humbjorch.restaurantapp.data.datasource.remote.makeCall
+import com.humbjorch.restaurantapp.data.datasource.remote.response.ProductResponse
+import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
+import com.humbjorch.restaurantapp.data.model.OrderListModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
 class FirebaseApiService @Inject constructor(private val client: FirebaseClientModule) {
 
-//    suspend fun getAllUsers() = makeCall {
-//        client.userCollection.get().await().documents.mapNotNull {
-//            it.toObject(UserHomeResponse::class.java)
-//        }
-//    }
-suspend fun sendRegisterProducts() =
-    makeCall {
-        client.userCollection.document("Hamburger").set(
-            ProductModel(
-                name = "Hamburguesa",
-                types = listOf(
-                    ProductTypeModel(
-                        type = "Papi Burger",
-                        description = "150gr de carne de res con jitomate, cebolla y queso gouda",
-                        price = 85,
-                        image = "agregar",
-                        ingredients = listOf(
-                            "con todo",
-                            "sin jitomate",
-                            "sin cebolla",
-                            "sin lechuga"
-                        )
-                    ),ProductTypeModel(
-                        type = "Papi Champi",
-                        description = "150gr de carne de res con champiñones sasonados a la papi, jitomate, cebolla y queso gouda",
-                        price = 95,
-                        image = "agregar",
-                        ingredients = listOf(
-                            "con todo",
-                            "sin jitomate",
-                            "sin cebolla",
-                            "sin lechuga"
-                        )
-                    ),
-                    ProductTypeModel(
-                        type = "Papi Chiken",
-                        description = "150gr de carne de pollo con adereso de cool morada, jitomate, cebolla",
-                        price = 95,
-                        image = "agregar",
-                        ingredients = listOf(
-                            "con todo",
-                            "sin adereso"
-                        )
-                    ),
-                    ProductTypeModel(
-                        type = "Papi Bacon",
-                        description = "150gr de carne de res con tocino, jitomate, cebolla y queso gouda",
-                        price = 95,
-                        image = "agregar",
-                        ingredients = listOf(
-                            "con todo",
-                            "sin jitomate",
-                            "sin cebolla",
-                            "sin lechuga"
-                        )
-                    ),
-                    ProductTypeModel(
-                        type = "Papi del Mar",
-                        description = "100gr de camaron con pimientos sasonados a la papi gratinado con queso gouda, cebolla",
-                        price = 95,
-                        image = "agregar",
-                        ingredients = listOf(
-                            "con todo",
-                            "sin queso",
-                            "sin pimientos",
-                        )
-                    )
-                )
-            )
+    suspend fun getAllProducts() = makeCall {
+        client.productsCollection.get().await().documents.mapNotNull {
+            val json = Gson().toJson(it.data)
+            val product = Gson().fromJson(json, ProductResponse::class.java)
+            product.id = it.id
+            product
+        }
+    }
+
+    suspend fun getAllTablesAvailable() = makeCall {
+        client.tableCollection.document(TABLES_AVAILABLE_DOCUMENT).get().await().let {
+            val tableList = it.toObject(TablesAvailableResponse::class.java)
+            tableList
+        }
+    }
+
+    suspend fun sendRegisterProducts(id: String, orderList: OrderListModel) =
+        makeCall {
+            client.orderRegisterCollection.document(id).set(
+                orderList
+            ).let { it ->
+                var isSuccess = false
+                it.addOnCompleteListener {
+                    isSuccess = it.isSuccessful
+                }.await()
+                isSuccess
+            }
+        }
+
+    suspend fun getOrdersRegisterByDate(date: String) = makeCall {
+        client.orderRegisterCollection.document(date).get().await().let {
+            val json = Gson().toJson(it.data)
+            Gson().fromJson(json, OrderListModel::class.java)
+        }
+    }
+
+    suspend fun getAllOrdersRegister() = makeCall {
+        client.orderRegisterCollection.get().await().documents.mapNotNull {
+            val json = Gson().toJson(it.data)
+            val orderList = Gson().fromJson(json, OrderListModel::class.java)
+            orderList.id = it.id
+            orderList
+        }
+    }
+
+    suspend fun updateTable(tables: TablesAvailableResponse) = makeCall {
+        client.tableCollection.document(TABLES_AVAILABLE_DOCUMENT).set(
+            tables
         ).let { it ->
             var isSuccess = false
             it.addOnCompleteListener {
@@ -87,18 +69,4 @@ suspend fun sendRegisterProducts() =
             isSuccess
         }
     }
-//    @RequiresApi(Build.VERSION_CODES.O)
-//   suspend fun getAllProducts() = makeCall {
-//        var products = ProductsResponse
-//        client.userCollection.get().await().documents.let {
-//                it.forEach { j ->
-//                    products = ProductsResponse(
-//                        j.get("email") as ArrayList<String>,
-//                        j.get("currentDay") as String
-//                    )
-//                }
-//            products.emails
-//        }
-//    }
-
 }

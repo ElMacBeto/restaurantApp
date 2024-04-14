@@ -105,24 +105,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                R.id.orderTypeSelectionFragment -> {
-                    setTopToolbar(
-                        showMenu = true,
-                        title = R.string.top_toolbar_new_order_title,
-                        showSwitch = false
-                    )
-                    showLateralNavigation(false)
-                }
-
-                R.id.orderSectionFragment -> {
-                    setTopToolbar(
-                        showMenu = true,
-                        title = R.string.top_toolbar_new_order_title,
-                        showSwitch = false
-                    )
-                    showLateralNavigation(false)
-                }
-
                 R.id.settingsFragment -> {
                     setTopToolbar(
                         showMenu = true,

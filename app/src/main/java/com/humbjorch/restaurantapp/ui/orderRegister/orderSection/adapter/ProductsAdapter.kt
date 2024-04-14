@@ -14,6 +14,7 @@ import com.humbjorch.restaurantapp.databinding.ItemProductsBinding
 
 class ProductsAdapter(
     private var dataSet: List<ProductListModel>,
+    private var isLanscape: Boolean = true,
     private val onClick: (ProductListModel) -> Unit
 ) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
@@ -24,13 +25,21 @@ class ProductsAdapter(
         private val ctx = view.context
         private val binding = ItemProductsBinding.bind(view)
 
-        fun bindView(product: ProductListModel, isSelected:Boolean) {
+        fun bindView(product: ProductListModel, isSelected:Boolean, isLanscape: Boolean) {
             binding.product = product
             binding.imgProduct.loadImageUrl(product.imageUrl)
+
             if (isSelected)
                 binding.container.setBackgroundColor(ctx.getColor(R.color.blue2))
             else
                 binding.container.setBackgroundColor(ctx.getColor(R.color.white))
+
+            if (!isLanscape){
+                val layoutParams = binding.container.layoutParams
+                layoutParams.width = 150
+                layoutParams.height = 100
+                binding.container.layoutParams = layoutParams
+            }
         }
     }
 
@@ -45,12 +54,12 @@ class ProductsAdapter(
         val product = dataSet[position]
         val isSelected = viewHolder.adapterPosition == selectedPosition
 
-        viewHolder.bindView(product, isSelected)
+        viewHolder.bindView(product, isSelected, isLanscape)
         viewHolder.itemView.setOnClickListener {
-            //val oldPosition = selectedPosition
-            //selectedPosition = viewHolder.adapterPosition
-            //notifyItemChanged(oldPosition)
-            //notifyItemChanged(selectedPosition)
+            val oldPosition = selectedPosition
+            selectedPosition = viewHolder.adapterPosition
+            notifyItemChanged(oldPosition)
+            notifyItemChanged(selectedPosition)
             onClick.invoke(product)
         }
     }

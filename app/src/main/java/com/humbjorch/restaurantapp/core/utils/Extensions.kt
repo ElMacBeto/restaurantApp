@@ -1,5 +1,8 @@
 package com.humbjorch.restaurantapp.core.utils
 
+import android.content.Intent
+import android.os.Build.VERSION.SDK_INT
+import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -43,3 +46,9 @@ fun View.showOrInvisible(isVisible: Boolean) {
     else
         this.visibility = View.INVISIBLE
 }
+
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+    SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+}
+

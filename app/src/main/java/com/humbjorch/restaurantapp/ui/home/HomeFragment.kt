@@ -1,15 +1,14 @@
 package com.humbjorch.restaurantapp.ui.home
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
@@ -24,6 +23,10 @@ import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentHomeBinding
 import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.ui.home.adapter.OrderAdapter
+import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity
+import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity.Companion.ORDER_ADDRESS_EXTRA_KEY
+import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity.Companion.ORDER_EXTRA_KEY
+import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity.Companion.TABLE_POSITION_EXTRA_KEY
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsOrderAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -185,32 +188,16 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.btnAddOrder.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(
-                order = null,
-                tablePosition = 0
-            )
-
-            findNavController().navigate(action)
+            startActivity(Intent(requireContext(), OrderRegisterActivity::class.java))
         }
         binding.btnEditOrder.setOnClickListener {
             validateOrder {
-                val action = if (orderSelected.table.toInt() < 0) {
-                    HomeFragmentDirections.actionHomeFragmentToOrderTypeSelectionFragment(
-                        tablePosition = orderSelected.table.toInt(),
-                        order = orderSelected,
-                        isEdict = true,
-                        address = orderSelected.address
-                    )
-                } else {
-                    HomeFragmentDirections.actionHomeFragmentToOrderSectionFragment(
-                        tablePosition = orderSelected.table.toInt(),
-                        order = orderSelected,
-                        isEdict = true,
-                        address = orderSelected.address
-                    )
+                val intent = Intent(requireContext(), OrderRegisterActivity::class.java).apply {
+                    putExtra(TABLE_POSITION_EXTRA_KEY, orderSelected.table.toInt())
+                    putExtra(ORDER_ADDRESS_EXTRA_KEY, orderSelected.address)
+                    putExtra(ORDER_EXTRA_KEY , orderSelected)
                 }
-
-                findNavController().navigate(action)
+                startActivity(intent)
             }
         }
         binding.btnTakeOrder.setOnClickListener {

@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.App
@@ -29,6 +28,7 @@ import com.humbjorch.restaurantapp.data.model.ProductsModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentOrderSectionBinding
 import com.humbjorch.restaurantapp.ui.MainActivity
+import com.humbjorch.restaurantapp.ui.orderRegister.RegisterOrderViewModel
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ExtraAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.IngredientsAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.OtherAdapter
@@ -42,6 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class OrderSectionFragment : Fragment() {
 
     private val viewModel: OrderSectionViewModel by viewModels()
+    private val activityViewModel: RegisterOrderViewModel by activityViewModels()
     private lateinit var binding: FragmentOrderSectionBinding
     private lateinit var productAdapter: ProductsAdapter
     private lateinit var productTypeAdapter: ProductTypeAdapter
@@ -51,7 +52,6 @@ class OrderSectionFragment : Fragment() {
     private lateinit var otherAdapter: OtherAdapter
     private var productsOrder = listOf<ProductsOrderModel>()
     private var tablePosition = -1
-    private val args: OrderSectionFragmentArgs by navArgs()
     private lateinit var orderModel: OrderModel
     private var ingredientList: List<String> = emptyList()
     private var extras: List<ExtraModel> = emptyList()
@@ -61,11 +61,11 @@ class OrderSectionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tablePosition = args.tablePosition
-        orderModel = args.order ?: OrderModel()
+        tablePosition = activityViewModel.tableSelected.value ?: -1
+        orderModel =  OrderModel() // hacer funcion de buscqueda por productID
         productsOrder = orderModel.productList
-        fromEdict = args.isEdict
-        address = args.address ?: ""
+        fromEdict = activityViewModel.order.value != null
+        address = activityViewModel.orderAddress.value ?: ""
     }
 
     override fun onCreateView(
@@ -108,7 +108,7 @@ class OrderSectionFragment : Fragment() {
                             getString(R.string.message_exit),
                             TypeToast.SUCCESS
                         )
-                        findNavController().navigate(R.id.action_orderSectionFragment_to_homeFragment)
+                        requireActivity().finish()
                     }
                 }
 
@@ -126,7 +126,7 @@ class OrderSectionFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     (activity as MainActivity).dismissLoader()
-                    findNavController().navigate(R.id.action_orderSectionFragment_to_homeFragment)
+                    requireActivity().finish()
                 }
 
                 Status.ERROR -> {
@@ -136,7 +136,7 @@ class OrderSectionFragment : Fragment() {
                         message = it.message,
                         type = TypeToast.ERROR
                     )
-                    findNavController().navigate(R.id.action_orderSectionFragment_to_homeFragment)
+                    requireActivity().finish()
                 }
                 else -> { }
             }

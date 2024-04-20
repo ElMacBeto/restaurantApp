@@ -12,10 +12,10 @@ import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.printer.PrinterUtils
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.OrderModel
-import com.humbjorch.restaurantapp.data.model.ProductsModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import com.humbjorch.restaurantapp.domain.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,7 +34,12 @@ class RegisterOrderViewModel @Inject constructor(
     var order = MutableLiveData<OrderModel>()
 
     var productSelection = MutableLiveData(ProductsOrderModel())
-    var productList = MutableLiveData<List<ProductsOrderModel>>(emptyList())
+    var productList = MutableLiveData<List<ProductsOrderModel>>()
+
+    private var _liveDataPrint = MutableLiveData<Resource<String>>()
+    val liveDataPrint: LiveData<Resource<String>> get() = _liveDataPrint
+
+    var isEditOrder = false
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -48,14 +53,13 @@ class RegisterOrderViewModel @Inject constructor(
             time = Tools.getCurrentTime(),
             address = orderAddress.value ?: ""
         )
-        println("lista de productos: $orderModel")
-        /* viewModelScope.launch {
+        order.value = orderModel
+
+        viewModelScope.launch {
             updateTableList(orderModel.table.toInt())
             val date = Tools.getCurrentDate()
             _liveDataRegisterOrder.value = productsRepository.saveOrderRegister(date, orderModel)
         }
-
-         */
     }
 
     private fun updateTableList(tablePosition: Int) {
@@ -66,4 +70,21 @@ class RegisterOrderViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun printOrder() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentOrderNumber = sharePreference.getOrderNumber()
+            val newOrderNumber = currentOrderNumber + 1
+            sharePreference.saveCurrentOrderNumber(newOrderNumber)
+            val newOrder = order.value!!
+            _liveDataPrint.postValue(
+                printerUtils.printOrder(
+                    newOrder,
+                    newOrderNumber,
+                    App.printerPort,
+                    App.printerAddress
+                )
+            )
+        }
+    }
 }

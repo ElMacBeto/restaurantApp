@@ -12,7 +12,7 @@ import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
-import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.core.utils.showOrInvisible
 import com.humbjorch.restaurantapp.data.model.TableAvailableModel
 import com.humbjorch.restaurantapp.databinding.FragmentOrderTypeSelectionBinding
@@ -88,10 +88,10 @@ class OrderTypeSelectionFragment : Fragment() {
     }
 
     private fun setDeliveryView(isDelivery: Boolean) {
-        binding.tvLabelTableSelection.showHide(!isDelivery)
+        binding.tvLabelTableSelection.isVisible(!isDelivery)
         binding.rvTables.showOrInvisible(!isDelivery)
-        binding.lottieDelivery.showHide(isDelivery)
-        binding.tiAddress.showHide(isDelivery)
+        binding.lottieDelivery.isVisible(isDelivery)
+        binding.tiAddress.isVisible(isDelivery)
     }
 
     private fun validateTable(action: () -> Unit) {

@@ -7,8 +7,14 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.humbjorch.restaurantapp.R
+import com.humbjorch.restaurantapp.core.utils.LoaderNBEXWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
+import com.humbjorch.restaurantapp.core.utils.extDismissLoader
+import com.humbjorch.restaurantapp.core.utils.extShowLoader
 import com.humbjorch.restaurantapp.core.utils.parcelable
 import com.humbjorch.restaurantapp.data.model.OrderModel
+import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,11 +22,13 @@ class OrderRegisterActivity : AppCompatActivity() {
 
     private val activityViewModel: RegisterOrderViewModel by viewModels()
     private lateinit var navController: NavController
+    private val loader by lazy { LoaderNBEXWidget() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order_register)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController = navHostFragment.navController
 
         setOrderValues()
@@ -42,10 +50,20 @@ class OrderRegisterActivity : AppCompatActivity() {
         activityViewModel.tableSelected.value = intent.getIntExtra(TABLE_POSITION_EXTRA_KEY, 0)
         activityViewModel.order.value = intent.parcelable(ORDER_EXTRA_KEY)
         activityViewModel.orderAddress.value = intent.getStringExtra(ORDER_ADDRESS_EXTRA_KEY) ?: ""
-        activityViewModel.productList.value =  activityViewModel.order.value?.productList
+        activityViewModel.productList.value =
+            activityViewModel.order.value?.productList ?: emptyList()
+        activityViewModel.isEditOrder = activityViewModel.order.value != null
     }
 
-    companion object{
+    fun showLoader() {
+        extShowLoader(loader)
+    }
+
+    fun dismissLoader() {
+        extDismissLoader(loader)
+    }
+
+    companion object {
         const val TABLE_POSITION_EXTRA_KEY = "table_position"
         const val ORDER_EXTRA_KEY = "order"
         const val ORDER_ADDRESS_EXTRA_KEY = "order_address"

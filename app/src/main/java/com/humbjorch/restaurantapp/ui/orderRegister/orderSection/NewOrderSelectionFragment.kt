@@ -15,11 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.ProductActionListener
+import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
+import com.humbjorch.restaurantapp.core.utils.genericAlert
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentNewOrderSelectionBinding
 import com.humbjorch.restaurantapp.ui.MainActivity
+import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity
 import com.humbjorch.restaurantapp.ui.orderRegister.RegisterOrderViewModel
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsOrderAdapter
@@ -50,13 +53,67 @@ class NewOrderSelectionFragment : Fragment() {
         initAdapter()
         setListeners()
         setInitView()
+        setObservers()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setObservers() {
+        activityViewModel.liveDataRegisterOrder.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.LOADING -> {
+                    (activity as OrderRegisterActivity).showLoader()
+                }
+
+                Status.SUCCESS -> {
+                    if (!activityViewModel.isEditOrder) {
+                        activityViewModel.printOrder()
+                    } else {
+                        (activity as OrderRegisterActivity).dismissLoader()
+                        CustomToastWidget.show(
+                            requireActivity(),
+                            getString(R.string.message_exit),
+                            TypeToast.SUCCESS
+                        )
+                        requireActivity().finish()
+                    }
+                }
+
+                Status.ERROR -> {
+                    (activity as OrderRegisterActivity).dismissLoader()
+                    CustomToastWidget.show(
+                        activity = requireActivity(),
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
+                }
+            }
+        }
+        activityViewModel.liveDataPrint.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    (activity as OrderRegisterActivity).dismissLoader()
+                    requireActivity().finish()
+                }
+
+                Status.ERROR -> {
+                    (activity as OrderRegisterActivity).dismissLoader()
+                    CustomToastWidget.show(
+                        activity = requireActivity(),
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
+                    requireActivity().finish()
+                }
+                else -> { }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.imgCar.setOnClickListener {
             binding.lyDrawer.openDrawer(GravityCompat.END)
-            productsOrder = activityViewModel.productList.value!!
+            productsOrder = activityViewModel.productList.value ?: emptyList()
             productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
                 actionListenersOrders(product, action)
             }
@@ -65,7 +122,6 @@ class NewOrderSelectionFragment : Fragment() {
 
         }
         binding.btnDone.setOnClickListener {
-           binding.lyDrawer.closeDrawer(GravityCompat.END)
             onDoneOrderListener()
         }
     }
@@ -76,7 +132,8 @@ class NewOrderSelectionFragment : Fragment() {
             val modal = ModalBottomSheetProductDialog(products)
             modal.show(parentFragmentManager, ModalBottomSheetProductDialog.TAG)
         }
-        val spanColumn = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 5 else 3
+        val spanColumn =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 5 else 3
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), spanColumn)
         binding.rvProducts.adapter = productAdapter
         //order products------------------------------------------------------------------------------
@@ -100,13 +157,14 @@ class NewOrderSelectionFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onDoneOrderListener() {
         if (activityViewModel.productList.value!!.isNotEmpty()) {
-            (activity as MainActivity).genericAlert(
+            (activity as OrderRegisterActivity).genericAlert(
                 titleAlert = getString(R.string.dialog_title_confirmation_order),
                 descriptionAlert = getString(R.string.dialog_description_confirmation_order),
                 txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
                 txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
                 buttonPositiveAction = {
                     activityViewModel.saveOrder()
+                    binding.lyDrawer.closeDrawer(GravityCompat.END)
                 },
                 buttonNegativeAction = { }
             )
@@ -119,37 +177,37 @@ class NewOrderSelectionFragment : Fragment() {
         }
     }
 
-    private fun actionListenersOrders(product: ProductsOrderModel, action: ProductActionListener) = run {
-        var position = 0
-        productsOrder = when (action) {
-            ProductActionListener.ADD_PRODUCT -> {
-                productsOrder.onEachIndexed { index, it ->
-                    if (it.product == product.product && it.ingredients == product.ingredients) {
-                        position = index
-                        it.amount = (it.amount.toInt() + 1).toString()
+    private fun actionListenersOrders(product: ProductsOrderModel, action: ProductActionListener) =
+        run {
+            var position = 0
+            productsOrder = when (action) {
+                ProductActionListener.ADD_PRODUCT -> {
+                    productsOrder.onEachIndexed { index, it ->
+                        if (it.product == product.product && it.ingredients == product.ingredients) {
+                            position = index
+                            it.amount = (it.amount.toInt() + 1).toString()
+                        }
+                    }
+                }
+
+                ProductActionListener.REMOVE_PRODUCT -> {
+                    productsOrder.onEachIndexed { index, it ->
+                        if (it.product == product.product && it.ingredients == product.ingredients) {
+                            position = index
+                            it.amount = (it.amount.toInt() - 1).toString()
+                        }
                     }
                 }
             }
 
-            ProductActionListener.REMOVE_PRODUCT -> {
-                productsOrder.onEachIndexed { index, it ->
-                    if (it.product == product.product && it.ingredients == product.ingredients) {
-                        position = index
-                        it.amount = (it.amount.toInt() - 1).toString()
-                    }
-                }
+            val itemChanged = productsOrder[position]
+            if (itemChanged.amount.toInt() >= 1) {
+                productsOrderAdapter.updateList(productsOrder)
+                productsOrderAdapter.notifyItemChanged(position)
+            } else {
+                productsOrder = productsOrder.minus(itemChanged)
+                productsOrderAdapter.updateList(productsOrder)
             }
         }
-
-        val itemChanged = productsOrder[position]
-        if (itemChanged.amount.toInt() >= 1){
-            productsOrderAdapter.updateList(productsOrder)
-            productsOrderAdapter.notifyItemChanged(position)
-        }
-        else{
-            productsOrder = productsOrder.minus(itemChanged)
-            productsOrderAdapter.updateList(productsOrder)
-        }
-    }
 
 }

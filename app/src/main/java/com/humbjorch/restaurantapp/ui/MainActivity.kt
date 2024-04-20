@@ -16,8 +16,10 @@ import androidx.navigation.fragment.NavHostFragment
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.LoaderNBEXWidget
 import com.humbjorch.restaurantapp.core.utils.Tools
-import com.humbjorch.restaurantapp.core.utils.alerts.GenericDialog
-import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.core.utils.extDismissLoader
+import com.humbjorch.restaurantapp.core.utils.extShowLoader
+import com.humbjorch.restaurantapp.core.utils.genericAlert
+import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.databinding.ActivityMainBinding
 import com.humbjorch.restaurantapp.ui.history.HistoryFragmentDirections
 import com.humbjorch.restaurantapp.ui.home.HomeFragmentDirections
@@ -226,66 +228,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showLoader() {
-        try {
-            val loaderDialog = supportFragmentManager.findFragmentByTag("Loader")
-            val isShowing = loader.dialog?.isShowing ?: false
-            if (loaderDialog != null && loaderDialog.isAdded) {
-                return
-            }
-
-            if (!loader.isAdded && !loader.isVisible && !isShowing) {
-                loader.show(supportFragmentManager, "Loader")
-                supportFragmentManager.executePendingTransactions()
-            }
-        } catch (e: Exception) {
-            //ERROR
-        }
+        extShowLoader(loader)
     }
 
     fun dismissLoader() {
-        if (loader.isAdded) {
-            if (loader.isResumed) {
-                loader.dismiss()
-            } else {
-                loader.dismissAllowingStateLoss()
-            }
-        }
-    }
-
-    fun genericAlert(
-        imageAlert: Int = R.drawable.generic_icon_warning,
-        titleAlert: String,
-        descriptionAlert: String,
-        txtBtnPositiveAlert: String,
-        txtBtnNegativeAlert: String,
-        isCancelableAlert: Boolean = false,
-        buttonPositiveAction: (() -> Unit)? = null,
-        buttonNegativeAction: (() -> Unit)? = null,
-    ) {
-        lifecycleScope.launchWhenResumed {
-            GenericDialog().apply {
-                imgDialog = imageAlert
-                txtConfirm = txtBtnPositiveAlert
-                txtCancel = txtBtnNegativeAlert
-                txtTitle = titleAlert
-                txtMessageAlert = descriptionAlert
-                isCancelable = isCancelableAlert
-                listener = object : GenericDialog.OnClickListener {
-                    override fun onClick(which: Int) {
-                        when (which) {
-                            DialogInterface.BUTTON_POSITIVE -> {
-                                buttonPositiveAction?.invoke()
-                            }
-
-                            else -> {
-                                buttonNegativeAction?.invoke()
-                            }
-                        }
-                    }
-                }
-                this.show(supportFragmentManager, System.currentTimeMillis().toString())
-            }
-        }
+        extDismissLoader(loader)
     }
 
     @SuppressLint("SetTextI18n")
@@ -295,15 +242,15 @@ class MainActivity : AppCompatActivity() {
         showSwitch: Boolean = true,
         title: Int? = null,
     ) {
-        binding.topToolbar.showHide(showMenu)
-        binding.swDelivery.showHide(showSwitch)
-        binding.btnRefresh.showHide(showSwitch)
+        binding.topToolbar.isVisible(showMenu)
+        binding.swDelivery.isVisible(showSwitch)
+        binding.btnRefresh.isVisible(showSwitch)
         if (title != null)
             binding.tvLabelDate.text = "${getString(title)}     ${Tools.getCurrentDate(true)} "
     }
 
     fun showLateralNavigation(show: Boolean = true) {
-        binding.containerNavBar.showHide(show)
+        binding.containerNavBar.isVisible(show)
     }
 
 }

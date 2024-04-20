@@ -20,7 +20,8 @@ import com.humbjorch.restaurantapp.core.utils.Tools
 import com.humbjorch.restaurantapp.core.utils.Tools.generateID
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
-import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.core.utils.genericAlert
+import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.data.model.ExtraModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
@@ -343,12 +344,12 @@ class OrderSectionFragment : Fragment() {
     }
 
     private fun hideOrShowIngredientsAndExtras(){
-        binding.dividerIngredients.showHide(ingredientList.isNotEmpty())
-        binding.tvLabelIngredients.showHide(ingredientList.isNotEmpty())
-        binding.dividerExtras.showHide(extras.isNotEmpty())
-        binding.tvLabelExtras.showHide(extras.isNotEmpty())
-        binding.dividerOthers.showHide(others.isNotEmpty())
-        binding.tvLabelOthers.showHide(others.isNotEmpty())
+        binding.dividerIngredients.isVisible(ingredientList.isNotEmpty())
+        binding.tvLabelIngredients.isVisible(ingredientList.isNotEmpty())
+        binding.dividerExtras.isVisible(extras.isNotEmpty())
+        binding.tvLabelExtras.isVisible(extras.isNotEmpty())
+        binding.dividerOthers.isVisible(others.isNotEmpty())
+        binding.tvLabelOthers.isVisible(others.isNotEmpty())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

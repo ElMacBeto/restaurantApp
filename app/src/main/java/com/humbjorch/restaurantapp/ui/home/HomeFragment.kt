@@ -17,7 +17,8 @@ import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.Tools.getTotal
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
-import com.humbjorch.restaurantapp.core.utils.showHide
+import com.humbjorch.restaurantapp.core.utils.genericAlert
+import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.data.model.OrderListModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentHomeBinding
@@ -87,7 +88,7 @@ class HomeFragment : Fragment() {
                     tableOrderAdapter.updateList(orderList)
                     orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
                     orderAdapter.updateList(orderSelected.productList)
-                    binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
+                    binding.lottieEmpty.isVisible(orderSelected.productList.isEmpty())
                     setView()
                 }
 
@@ -164,7 +165,7 @@ class HomeFragment : Fragment() {
         val total = getTotal(orderSelected)
         orderSelected.total = total.toString()
         binding.tvTotal.text = getString(R.string.label_price_product, total)
-        binding.tvTableEmpty.showHide(orderList.isEmpty())
+        binding.tvTableEmpty.isVisible(orderList.isEmpty())
     }
 
     private fun initAdapters() {
@@ -172,7 +173,7 @@ class HomeFragment : Fragment() {
         tableOrderAdapter = OrderAdapter(orderList) {
             orderSelected = it
             orderAdapter.updateList(orderSelected.productList)
-            binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
+            binding.lottieEmpty.isVisible(orderSelected.productList.isEmpty())
             setView()
         }
         binding.rvTableOrders.layoutManager = LinearLayoutManager(requireContext())
@@ -254,7 +255,7 @@ class HomeFragment : Fragment() {
             tableOrderAdapter.updateList(orderList)
             orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
             orderAdapter.updateList(orderSelected.productList)
-            binding.lottieEmpty.showHide(orderSelected.productList.isEmpty())
+            binding.lottieEmpty.isVisible(orderSelected.productList.isEmpty())
             setView()
         }
         (activity as MainActivity).binding.btnRefresh.setOnClickListener {

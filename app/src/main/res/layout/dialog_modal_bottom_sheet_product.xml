@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="12dp"
+        android:paddingBottom="20dp"
         android:minHeight="200dp">
 
         <TextView
@@ -63,6 +64,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_label_ingredients"
             app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="4dp"
             app:spanCount="3"
             tools:itemCount="6"
             tools:listitem="@layout/item_ingredient" />
@@ -73,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/label_other"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_product_ingredients">
@@ -108,6 +111,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_label_extras"
             app:layout_constraintVertical_bias="0"
+            android:layout_marginBottom="8dp"
             app:spanCount="3"
             tools:itemCount="6"
             tools:listitem="@layout/item_extra" />
@@ -126,6 +130,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_2"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="TouchTargetSizeCheck" />
@@ -167,8 +172,10 @@
             android:layout_marginEnd="12dp"
             android:backgroundTint="@color/blue1"
             android:text="@string/label_add"
-            android:textSize="@dimen/text_size_2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_1"
             app:cornerRadius="12dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

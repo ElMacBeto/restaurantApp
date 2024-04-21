@@ -1,7 +1,6 @@
 package com.humbjorch.restaurantapp.ui
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
@@ -10,7 +9,6 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.humbjorch.restaurantapp.R
@@ -42,9 +40,6 @@ class MainActivity : AppCompatActivity() {
         override fun handleOnBackPressed() {
             val currentDestination = navController.currentDestination
             when (currentDestination?.id) {
-                R.id.splashFragment -> {
-                    finish()
-                }
 
                 R.id.homeFragment -> {
                     genericAlert(
@@ -79,12 +74,6 @@ class MainActivity : AppCompatActivity() {
     private fun setNavigationChange() {
         navController.addOnDestinationChangedListener { _, fragment, _ ->
             when (fragment.id) {
-                R.id.splashFragment -> {
-                    setTopToolbar(
-                        showMenu = false
-                    )
-                }
-
                 R.id.homeFragment -> {
                     setTopToolbar(
                         showMenu = true,

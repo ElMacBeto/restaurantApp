@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.data.model.OrderModel
+import com.humbjorch.restaurantapp.databinding.ItemNewOrderBinding
 import com.humbjorch.restaurantapp.databinding.ItemOrderBinding
 
 class OrderAdapter(
@@ -29,7 +30,7 @@ class OrderAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val ctx = view.context
-        private val binding = ItemOrderBinding.bind(view)
+        private val binding = ItemNewOrderBinding.bind(view)
 
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bindView(order: OrderModel, isSelected: Boolean) {
@@ -53,7 +54,7 @@ class OrderAdapter(
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_order, viewGroup, false)
+            .inflate(R.layout.item_new_order, viewGroup, false)
         return ViewHolder(view)
     }
 

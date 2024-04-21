@@ -40,6 +40,7 @@ class ModalBottomSheetProductDialog(private val products: ProductListModel) : Bo
         binding = DialogModalBottomSheetProductBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onStart() {
         super.onStart()
         val behavior = BottomSheetBehavior.from(requireView().parent as View)

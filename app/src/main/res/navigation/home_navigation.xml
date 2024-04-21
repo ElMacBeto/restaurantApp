@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation"
+    app:startDestination="@id/newHomeFragment">
+
+    <fragment
+        android:id="@+id/newHomeFragment"
+        android:name="com.humbjorch.restaurantapp.ui.home.NewHomeFragment"
+        android:label="fragment_new_home"
+        tools:layout="@layout/fragment_new_home" />
+
+</navigation>

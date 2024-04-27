@@ -20,7 +20,6 @@ import com.humbjorch.restaurantapp.core.utils.genericAlert
 import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.databinding.ActivityMainBinding
 import com.humbjorch.restaurantapp.ui.history.HistoryFragmentDirections
-import com.humbjorch.restaurantapp.ui.home.HomeFragmentDirections
 import com.humbjorch.restaurantapp.ui.settings.SettingsFragmentDirections
 import com.humbjorch.restaurantapp.ui.summary.SummaryFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,17 +39,6 @@ class MainActivity : AppCompatActivity() {
         override fun handleOnBackPressed() {
             val currentDestination = navController.currentDestination
             when (currentDestination?.id) {
-
-                R.id.homeFragment -> {
-                    genericAlert(
-                        titleAlert = getString(R.string.dialog_title_confirmation),
-                        descriptionAlert = getString(R.string.dialog_description_finish_app),
-                        txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
-                        txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                        buttonPositiveAction = { finish() },
-                        buttonNegativeAction = { }
-                    )
-                }
 
                 else -> navController.navigateUp()
             }
@@ -74,27 +62,6 @@ class MainActivity : AppCompatActivity() {
     private fun setNavigationChange() {
         navController.addOnDestinationChangedListener { _, fragment, _ ->
             when (fragment.id) {
-                R.id.homeFragment -> {
-                    setTopToolbar(
-                        showMenu = true,
-                        title = R.string.top_toolbar_home_title,
-                        showSwitch = true
-                    )
-                    showLateralNavigation(true)
-                    homeNav = null
-                    settingNav = {
-                        val action = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
-                        navController.navigate(action)
-                    }
-                    summaryNav = {
-                        val action = HomeFragmentDirections.actionHomeFragmentToSummaryFragment()
-                        navController.navigate(action)
-                    }
-                    historyNav = {
-                        val action = HomeFragmentDirections.actionHomeFragmentToHistoryFragment()
-                        navController.navigate(action)
-                    }
-                }
 
                 R.id.settingsFragment -> {
                     setTopToolbar(
@@ -104,10 +71,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     showLateralNavigation(true)
                     settingNav = null
-                    homeNav = {
-                        val action = SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()
-                        navController.navigate(action)
-                    }
+
                     summaryNav = {
                         val action = SettingsFragmentDirections.actionSettingsFragmentToSummaryFragment()
                         navController.navigate(action)
@@ -129,10 +93,6 @@ class MainActivity : AppCompatActivity() {
                         val action = SummaryFragmentDirections.actionSummaryFragmentToSettingsFragment()
                         navController.navigate(action)
                     }
-                    homeNav = {
-                        val action = SummaryFragmentDirections.actionSummaryFragmentToHomeFragment()
-                        navController.navigate(action)
-                    }
                     summaryNav = null
                     historyNav = {
                         val action = SummaryFragmentDirections.actionSummaryFragmentToHistoryFragment()
@@ -149,10 +109,6 @@ class MainActivity : AppCompatActivity() {
                     showLateralNavigation(true)
                     settingNav = {
                         val action = HistoryFragmentDirections.actionHistoryFragmentToSettingsFragment()
-                        navController.navigate(action)
-                    }
-                    homeNav = {
-                        val action = HistoryFragmentDirections.actionHistoryFragmentToHomeFragment()
                         navController.navigate(action)
                     }
                     summaryNav = {

@@ -260,4 +260,10 @@ class NewHomeFragment : Fragment() {
             action()
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCurrentDayOrders()
+    }
 }

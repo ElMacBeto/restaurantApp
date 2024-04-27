@@ -39,10 +39,10 @@ class ModuleSharePreference @Inject constructor(private val context: Context) {
     }
 
     fun getPrinterPort() = shareSessionPreferences.getInt(
-        Constants.PRINTER_PORT_KEY, 0)
+        Constants.PRINTER_PORT_KEY, 9100)
 
     fun getPrinterAddress() = shareSessionPreferences.getString(
-        Constants.PRINTER_ADDRESS_KEY, "")
+        Constants.PRINTER_ADDRESS_KEY, "192.168.100.123")
 
     fun getOrderNumber() = shareSessionPreferences.getInt(
         Constants.ORDER_NUMBER_KEY, 0)

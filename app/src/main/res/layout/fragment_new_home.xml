@@ -1,167 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ly_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    tools:context=".ui.home.NewHomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/ly_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.NewHomeFragment">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_orders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="8"
-            tools:listitem="@layout/item_new_order" />
-
-        <ImageView
-            android:id="@+id/tv_table_empty"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/ic_chef"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="TODO" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="end">
+        android:fitsSystemWindows="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:background="@color/gray2">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_label_order"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_orden"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_4"
-                android:textStyle="bold"
+            <include
+                android:id="@+id/container_top_toolbar"
+                layout="@layout/custom_topbar"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_label_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:text="@string/label_total"
-                android:textColor="@color/black1"
-                android:textSize="@dimen/text_size_4"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_total"
-                app:layout_constraintEnd_toStartOf="@+id/tv_total"
-                app:layout_constraintTop_toTopOf="@+id/tv_total" />
-
-            <TextView
-                android:id="@+id/tv_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black1"
-                android:textSize="@dimen/text_size_4"
-               app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="$1500.00" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_products_order"
-                android:layout_width="0dp"
+                android:id="@+id/rv_orders"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/container_btns"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_order"
-                app:layout_constraintVertical_bias="0.0"
-                tools:itemCount="6"
-                tools:listitem="@layout/item_order_product" />
-
-            <LinearLayout
-                android:id="@+id/container_btns"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/btn_print_order"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_edit_order"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/black"
-                    android:text="@string/label_edit"
-                    app:cornerRadius="12dp"
-                    android:textSize="@dimen/text_size_2"
-                    app:icon="@drawable/ic_edit"
-                    app:iconGravity="textStart"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_print_order"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_cancel_order"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="@color/red1"
-                    android:text="@string/label_cancel_order"
-                    android:textSize="@dimen/text_size_2"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_cancel"
-                    app:iconGravity="textStart"
-                    app:layout_constraintTop_toTopOf="@+id/btn_edit_order"
-                    app:layout_constraintBottom_toBottomOf="@id/btn_edit_order"
-                    app:layout_constraintStart_toEndOf="@id/btn_edit_order" />
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_print_order"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/blue3"
-                android:textSize="@dimen/text_size_2"
-                android:text="@string/label_print_order"
-                app:cornerRadius="12dp"
-                app:icon="@drawable/ic_print"
-                app:iconGravity="textStart"
-                app:layout_constraintBottom_toTopOf="@+id/btn_take_order"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_take_order"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/green1"
-                android:text="@string/label_take_order"
-                app:cornerRadius="12dp"
-                android:textSize="@dimen/text_size_2"
-                app:icon="@drawable/ic_money"
-                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar"
+                tools:itemCount="8"
+                tools:listitem="@layout/item_new_order" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/tv_table_empty"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_chef"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/anim_empty"
+                tools:visibility="visible" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:contentDescription="@string/description_clock"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/green2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.navigation.NavigationView>
+        <include
+            android:id="@+id/nv_drawer"
+            layout="@layout/view_drawer"/>
 
-</androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

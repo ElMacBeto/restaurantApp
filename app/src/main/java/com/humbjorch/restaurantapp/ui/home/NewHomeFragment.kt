@@ -59,7 +59,10 @@ class NewHomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
-        (activity as NewHomeActivity).binding.containerTopToolbar.swDelivery.setOnCheckedChangeListener { _, isChecked ->
+        binding.fabAdd.setOnClickListener {
+            startActivity(Intent(requireActivity(), OrderRegisterActivity::class.java))
+        }
+        binding.containerTopToolbar.swDelivery.setOnCheckedChangeListener { _, isChecked ->
             orderList = if (isChecked) {
                 viewModel.getDeliveryOrders()
             } else {
@@ -69,23 +72,7 @@ class NewHomeFragment : Fragment() {
             orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
             binding.tvTableEmpty.isVisible(orderList.isEmpty())
         }
-        binding.lyDrawer.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-
-            override fun onDrawerOpened(drawerView: View) {
-                (activity as NewHomeActivity).isEnableSwitch(false)
-                (activity as NewHomeActivity).binding.fabAdd.isVisible(false)
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-                (activity as NewHomeActivity).isEnableSwitch(true)
-                (activity as NewHomeActivity).binding.fabAdd.isVisible(true)
-            }
-
-            override fun onDrawerStateChanged(newState: Int) {}
-
-        })
-        binding.btnEditOrder.setOnClickListener {
+        binding.nvDrawer.btnEditOrder.setOnClickListener {
             validateOrder {
                 val intent = Intent(requireContext(), OrderRegisterActivity::class.java).apply {
                     putExtra(OrderRegisterActivity.TABLE_POSITION_EXTRA_KEY, orderSelected.table.toInt())
@@ -95,7 +82,7 @@ class NewHomeFragment : Fragment() {
                 startActivity(intent)
             }
         }
-        binding.btnPrintOrder.setOnClickListener {
+        binding.nvDrawer.btnPrintOrder.setOnClickListener {
             validateOrder {
                 (activity as NewHomeActivity).genericAlert(
                     titleAlert = getString(R.string.dialog_title_printer_ticket),
@@ -107,7 +94,7 @@ class NewHomeFragment : Fragment() {
                 )
             }
         }
-        binding.btnTakeOrder.setOnClickListener {
+        binding.nvDrawer.btnTakeOrder.setOnClickListener {
             validateOrder {
                 (activity as NewHomeActivity).genericAlert(
                     titleAlert = getString(R.string.dialog_title_pay_order),
@@ -162,7 +149,7 @@ class NewHomeFragment : Fragment() {
                 else -> {}
             }
         }
-        binding.btnCancelOrder.setOnClickListener {
+        binding.nvDrawer.btnCancelOrder.setOnClickListener {
             validateOrder {
                 (activity as NewHomeActivity).genericAlert(
                     titleAlert = getString(R.string.dialog_title_cancel_order),
@@ -230,7 +217,7 @@ class NewHomeFragment : Fragment() {
             binding.lyDrawer.openDrawer(GravityCompat.END)
             val total = Tools.getTotal(orderSelected)
             orderSelected.total = total.toString()
-            binding.tvTotal.text = getString(R.string.label_price_product, total)
+            binding.nvDrawer.tvTotal.text = getString(R.string.label_price_product, total)
         }
         binding.rvOrders.layoutManager = LinearLayoutManager(requireContext())
         binding.rvOrders.adapter = tableOrderAdapter
@@ -238,20 +225,22 @@ class NewHomeFragment : Fragment() {
         orderSelected = OrderModel()
         orderAdapter = ProductsOrderAdapter(orderSelected.productList)
         orderAdapter.hideButtons = true
-        binding.rvProductsOrder.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvProductsOrder.adapter = orderAdapter
+        binding.nvDrawer.rvProductsOrder.layoutManager = LinearLayoutManager(requireContext())
+        binding.nvDrawer.rvProductsOrder.adapter = orderAdapter
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setView() {
         binding.tvTableEmpty.isVisible(orderList.isEmpty())
+        binding.lyDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        binding.containerTopToolbar.tvDate.text = Tools.getCurrentDate(true)
         viewModel.getCurrentDayOrders()
     }
 
     private fun updateOrderList(orders: OrderListModel) {
         App.ordersList = orders
 
-        orderList = if ((activity as NewHomeActivity).binding.containerTopToolbar.swDelivery.isChecked)
+        orderList = if (binding.containerTopToolbar.swDelivery.isChecked)
             viewModel.getDeliveryOrders()
         else
             viewModel.getTableOrders()

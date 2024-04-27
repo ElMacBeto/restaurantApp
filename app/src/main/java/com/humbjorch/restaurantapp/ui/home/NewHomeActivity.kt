@@ -41,7 +41,7 @@ class NewHomeActivity : AppCompatActivity() {
     }
 
     fun isEnableSwitch(value: Boolean){
-        binding.swDelivery.isEnabled = value
+        binding.containerTopToolbar.swDelivery.isEnabled = value
     }
 
 }

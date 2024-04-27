@@ -4,55 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.NewHomeActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/container_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    tools:context=".ui.home.NewHomeActivity"
+    android:background="@color/white">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/gray2"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/white">
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/sw_delivery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:textSize="@dimen/text_size_4"
-                android:textColor="@color/white"
-                android:layout_gravity="end"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_delivery"
-                app:tint="@color/white"
-                android:layout_gravity="end"/>
-
-            <ImageButton
-                android:id="@+id/btn_refresh"
-                android:layout_width="58dp"
-                android:layout_height="58dp"
-                android:layout_marginEnd="8dp"
-                android:visibility="gone"
-                android:backgroundTint="@android:color/transparent"
-                android:contentDescription="@string/label_description_image"
-                android:src="@drawable/ic_refresh"
-                app:tint="@color/white"
-                tools:ignore="TouchTargetSizeCheck"
-                android:layout_gravity="end"/>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <include
+        android:id="@+id/container_top_toolbar"
+        layout="@layout/custom_topbar"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
@@ -65,11 +22,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar"
         app:layout_constraintVertical_bias="0.0"
         app:navGraph="@navigation/home_navigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        style="@style/BottomNavigationView"
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,10 +42,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/blue3"
+        app:backgroundTint="@color/green2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:tint="@color/white"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:contentDescription="@string/description_clock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

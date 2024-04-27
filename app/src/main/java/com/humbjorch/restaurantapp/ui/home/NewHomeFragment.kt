@@ -59,7 +59,7 @@ class NewHomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
-        (activity as NewHomeActivity).binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
+        (activity as NewHomeActivity).binding.containerTopToolbar.swDelivery.setOnCheckedChangeListener { _, isChecked ->
             orderList = if (isChecked) {
                 viewModel.getDeliveryOrders()
             } else {
@@ -251,7 +251,7 @@ class NewHomeFragment : Fragment() {
     private fun updateOrderList(orders: OrderListModel) {
         App.ordersList = orders
 
-        orderList = if ((activity as NewHomeActivity).binding.swDelivery.isChecked)
+        orderList = if ((activity as NewHomeActivity).binding.containerTopToolbar.swDelivery.isChecked)
             viewModel.getDeliveryOrders()
         else
             viewModel.getTableOrders()

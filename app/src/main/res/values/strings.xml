@@ -75,4 +75,6 @@
     <string name="label_type">tipo</string>
     <string name="label_other">Papas</string>
     <string name="label_empty_table">No hay pedidos :c</string>
+    <string name="top_logo_store">logo</string>
+    <string name="todo">TODO</string>
 </resources>

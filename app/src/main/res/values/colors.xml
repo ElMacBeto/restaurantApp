@@ -14,10 +14,14 @@
     <color name="blue1">#2196F3</color>
     <color name="blue2">#8069BCFF</color>
     <color name="blue3">#006FB9</color>
+    <color name="blue4">#45B5FF</color>
+    <color name="blue5">#002035</color>
 
     <color name="green1">#4CAF50</color>
+    <color name="green2">#3A9800</color>
 
     <color name="red1">#F44336</color>
+    <color name="red2">#D65B51</color>
 
     <!-- Custom toast colors -->
     <color name="toast_success">#4CAF50</color>

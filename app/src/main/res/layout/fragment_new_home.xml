@@ -5,8 +5,7 @@
     android:id="@+id/ly_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    tools:openDrawer="end">
+    android:fitsSystemWindows="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,17 +23,16 @@
             tools:itemCount="8"
             tools:listitem="@layout/item_new_order" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_table_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_empty_table"
-            android:textColor="@color/blue3"
-            android:textSize="@dimen/text_size_3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_chef"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="TODO" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

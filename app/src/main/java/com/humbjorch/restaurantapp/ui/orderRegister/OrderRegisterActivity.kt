@@ -2,6 +2,7 @@ package com.humbjorch.restaurantapp.ui.orderRegister
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -23,6 +24,7 @@ class OrderRegisterActivity : AppCompatActivity() {
     private val activityViewModel: RegisterOrderViewModel by viewModels()
     private lateinit var navController: NavController
     private val loader by lazy { LoaderNBEXWidget() }
+    private lateinit var imgBtn: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +32,20 @@ class OrderRegisterActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController = navHostFragment.navController
+        imgBtn = findViewById(R.id.back_btn)
 
         setOrderValues()
         setStartDestination()
+        setListeners()
+    }
+
+    private fun setListeners() {
+        imgBtn.setOnClickListener {
+            if (navController.currentDestination!!.id == R.id.orderTypeSelectionFragment2)
+                finish()
+            else
+                navController.popBackStack()
+        }
     }
 
     private fun setStartDestination() {

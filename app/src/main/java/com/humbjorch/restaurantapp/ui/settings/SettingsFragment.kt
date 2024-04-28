@@ -78,8 +78,8 @@ class SettingsFragment : Fragment() {
            val printerAddress = binding.tiPrinterAddress.editText!!.text.toString()
            val printerPort = binding.tiPrinterPort.editText!!.text.toString()
            viewModel.savePrinter(printerAddress, printerPort)
-           val action = SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()
-           findNavController().navigate(action)
+           //val action = SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()
+           //findNavController().navigate(action)
        }
         binding.btnCleanTables.setOnClickListener {
             viewModel.cleanTableAvailable()

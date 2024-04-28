@@ -47,8 +47,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/anim_empty"
-                tools:visibility="visible" />
+                app:lottie_rawRes="@raw/anim_empty" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add"

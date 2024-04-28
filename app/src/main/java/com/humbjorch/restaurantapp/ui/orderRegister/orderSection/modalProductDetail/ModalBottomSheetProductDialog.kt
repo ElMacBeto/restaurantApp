@@ -24,10 +24,12 @@ import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.NewOrderSection
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ExtraAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.IngredientsAdapter
 
-class ModalBottomSheetProductDialog(private val products: ProductListModel) : BottomSheetDialogFragment() {
+class ModalBottomSheetProductDialog() : BottomSheetDialogFragment() {
 
     private val activityViewModel: RegisterOrderViewModel by activityViewModels()
     private val viewModel: NewOrderSectionViewModel by viewModels()
+    var products: ProductListModel = ProductListModel()
+
     private lateinit var binding : DialogModalBottomSheetProductBinding
     private lateinit var productsAdapter: ArrayAdapter<String>
     private lateinit var otherAdapter: ArrayAdapter<String>

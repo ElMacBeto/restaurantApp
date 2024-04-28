@@ -21,7 +21,6 @@ import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.genericAlert
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentNewOrderSelectionBinding
-import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity
 import com.humbjorch.restaurantapp.ui.orderRegister.RegisterOrderViewModel
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsAdapter
@@ -36,6 +35,7 @@ class NewOrderSelectionFragment : Fragment() {
     private lateinit var binding: FragmentNewOrderSelectionBinding
     private lateinit var productAdapter: ProductsAdapter
     private lateinit var productsOrderAdapter: ProductsOrderAdapter
+    private val modal by lazy { ModalBottomSheetProductDialog() }
 
     private var productsOrder = listOf<ProductsOrderModel>()
 
@@ -129,7 +129,7 @@ class NewOrderSelectionFragment : Fragment() {
     private fun initAdapter() {
         val productList = App.productListModel
         productAdapter = ProductsAdapter(productList) { products ->
-            val modal = ModalBottomSheetProductDialog(products)
+            modal.products = products
             modal.show(parentFragmentManager, ModalBottomSheetProductDialog.TAG)
         }
         val spanColumn =

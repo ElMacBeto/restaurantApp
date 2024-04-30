@@ -13,7 +13,7 @@ import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.printer.PrinterUtils
 import com.humbjorch.restaurantapp.databinding.FragmentSettingsBinding
-import com.humbjorch.restaurantapp.ui.MainActivity
+import com.humbjorch.restaurantapp.ui.home.NewHomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,11 +43,11 @@ class SettingsFragment : Fragment() {
         viewModel.updateOrderLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
-                    (activity as MainActivity).showLoader()
+                    (activity as NewHomeActivity).showLoader()
                 }
 
                 Status.SUCCESS -> {
-                    (activity as MainActivity).dismissLoader()
+                    (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
                         requireActivity(),
                         getString(R.string.message_exit),
@@ -56,7 +56,7 @@ class SettingsFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    (activity as MainActivity).dismissLoader()
+                    (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
                         activity = requireActivity(),
                         message = it.message,
@@ -78,8 +78,8 @@ class SettingsFragment : Fragment() {
            val printerAddress = binding.tiPrinterAddress.editText!!.text.toString()
            val printerPort = binding.tiPrinterPort.editText!!.text.toString()
            viewModel.savePrinter(printerAddress, printerPort)
-           //val action = SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()
-           //findNavController().navigate(action)
+           val action = SettingsFragmentDirections.actionSettingsFragment2ToNewHomeFragment()
+           findNavController().navigate(action)
        }
         binding.btnCleanTables.setOnClickListener {
             viewModel.cleanTableAvailable()

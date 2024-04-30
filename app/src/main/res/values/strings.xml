@@ -77,4 +77,5 @@
     <string name="label_empty_table">No hay pedidos :c</string>
     <string name="top_logo_store">logo</string>
     <string name="todo">TODO</string>
+    <string name="label_end_date">fecha final</string>
 </resources>

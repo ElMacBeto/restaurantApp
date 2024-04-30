@@ -107,12 +107,12 @@
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_print"
             app:iconGravity="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/btn_take_order"
+            app:layout_constraintBottom_toTopOf="@+id/pay_order_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_take_order"
+            android:id="@+id/pay_order_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green1"

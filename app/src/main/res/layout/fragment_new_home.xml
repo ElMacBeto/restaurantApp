@@ -38,7 +38,7 @@
                 android:id="@+id/tv_table_empty"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/todo"
                 android:src="@drawable/ic_chef"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"

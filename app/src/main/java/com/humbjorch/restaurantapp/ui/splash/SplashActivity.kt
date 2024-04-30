@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.LoaderNBEXWidget
 import com.humbjorch.restaurantapp.core.utils.Status
@@ -16,7 +14,6 @@ import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.extDismissLoader
 import com.humbjorch.restaurantapp.core.utils.extShowLoader
-import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.ui.home.NewHomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,11 +62,11 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    fun showLoader() {
+    private fun showLoader() {
         extShowLoader(loader)
     }
 
-    fun dismissLoader() {
+    private fun dismissLoader() {
         extDismissLoader(loader)
     }
 }

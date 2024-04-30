@@ -29,9 +29,9 @@ class RegisterOrderViewModel @Inject constructor(
     private var _liveDataRegisterOrder = MutableLiveData<Resource<Boolean>>()
     val liveDataRegisterOrder: LiveData<Resource<Boolean>> get() = _liveDataRegisterOrder
 
-    var tableSelected = MutableLiveData(0)
-    var orderAddress = MutableLiveData<String>()
-    var order = MutableLiveData<OrderModel>()
+    var tableSelected: Int = 1
+    var orderAddress: String = ""
+    var order: OrderModel? = null
 
     var productSelection = MutableLiveData(ProductsOrderModel())
     var productList = MutableLiveData<List<ProductsOrderModel>>()
@@ -45,15 +45,15 @@ class RegisterOrderViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun saveOrder() {
         _liveDataRegisterOrder.value = Resource.loading(null)
-        val currentOrder = order.value ?: OrderModel()
+        val currentOrder = order ?: OrderModel()
         val orderModel = OrderModel(
             id = if (currentOrder.id != "") currentOrder.id else Tools.generateID(),
-            table = tableSelected.value.toString(),
+            table = tableSelected.toString(),
             productList = productList.value!!,
             time = Tools.getCurrentTime(),
-            address = orderAddress.value ?: ""
+            address = orderAddress
         )
-        order.value = orderModel
+        order = orderModel
 
         viewModelScope.launch {
             updateTableList(orderModel.table.toInt())
@@ -76,7 +76,8 @@ class RegisterOrderViewModel @Inject constructor(
             val currentOrderNumber = sharePreference.getOrderNumber()
             val newOrderNumber = currentOrderNumber + 1
             sharePreference.saveCurrentOrderNumber(newOrderNumber)
-            val newOrder = order.value!!
+            val newOrder = order!!
+
             _liveDataPrint.postValue(
                 printerUtils.printOrder(
                     newOrder,

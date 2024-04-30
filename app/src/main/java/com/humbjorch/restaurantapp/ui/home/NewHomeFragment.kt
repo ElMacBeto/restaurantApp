@@ -75,8 +75,6 @@ class NewHomeFragment : Fragment() {
         binding.nvDrawer.btnEditOrder.setOnClickListener {
             validateOrder {
                 val intent = Intent(requireContext(), OrderRegisterActivity::class.java).apply {
-                    putExtra(OrderRegisterActivity.TABLE_POSITION_EXTRA_KEY, orderSelected.table.toInt())
-                    putExtra(OrderRegisterActivity.ORDER_ADDRESS_EXTRA_KEY, orderSelected.address)
                     putExtra(OrderRegisterActivity.ORDER_EXTRA_KEY, orderSelected)
                 }
                 startActivity(intent)
@@ -94,7 +92,7 @@ class NewHomeFragment : Fragment() {
                 )
             }
         }
-        binding.nvDrawer.btnTakeOrder.setOnClickListener {
+        binding.nvDrawer.payOrderBtn.setOnClickListener {
             validateOrder {
                 (activity as NewHomeActivity).genericAlert(
                     titleAlert = getString(R.string.dialog_title_pay_order),
@@ -104,6 +102,21 @@ class NewHomeFragment : Fragment() {
                     buttonPositiveAction = {
                         updateType = OrderStatus.PAID.value
                         viewModel.changePaidOrder(orderSelected)
+                    },
+                    buttonNegativeAction = { }
+                )
+            }
+        }
+        binding.nvDrawer.btnCancelOrder.setOnClickListener {
+            validateOrder {
+                (activity as NewHomeActivity).genericAlert(
+                    titleAlert = getString(R.string.dialog_title_cancel_order),
+                    descriptionAlert = getString(R.string.dialog_description_cancel_order),
+                    txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
+                    txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
+                    buttonPositiveAction = {
+                        updateType = OrderStatus.CANCEL.value
+                        viewModel.cancelOrder(orderSelected)
                     },
                     buttonNegativeAction = { }
                 )
@@ -149,21 +162,6 @@ class NewHomeFragment : Fragment() {
                 else -> {}
             }
         }
-        binding.nvDrawer.btnCancelOrder.setOnClickListener {
-            validateOrder {
-                (activity as NewHomeActivity).genericAlert(
-                    titleAlert = getString(R.string.dialog_title_cancel_order),
-                    descriptionAlert = getString(R.string.dialog_description_cancel_order),
-                    txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
-                    txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = {
-                        updateType = OrderStatus.CANCEL.value
-                        viewModel.cancelOrder(orderSelected)
-                    },
-                    buttonNegativeAction = { }
-                )
-            }
-        }
         viewModel.updateOrderLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
@@ -173,6 +171,7 @@ class NewHomeFragment : Fragment() {
                 Status.SUCCESS -> {
                     if (updateType != OrderStatus.CANCEL.value)
                         viewModel.printTicket(orderSelected)
+                    binding.lyDrawer.closeDrawer(GravityCompat.END)
                     viewModel.setAllProducts()
                 }
 

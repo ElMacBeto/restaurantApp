@@ -146,11 +146,11 @@ class NewOrderSelectionFragment : Fragment() {
     }
 
     private fun setInitView() {
-        if (activityViewModel.order.value == null)
+        if (activityViewModel.order == null)
             return
 
         binding.btnDone.text = getString(R.string.label_save_button)
-        productsOrder = activityViewModel.order.value!!.productList
+        productsOrder = activityViewModel.order!!.productList
         productsOrderAdapter.updateList(productsOrder)
     }
 

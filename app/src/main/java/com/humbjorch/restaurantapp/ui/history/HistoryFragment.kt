@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.humbjorch.restaurantapp.core.utils.Status
-import com.humbjorch.restaurantapp.core.utils.Tools.getCurrentDate
 import com.humbjorch.restaurantapp.core.utils.Tools.getDateForHistory
 import com.humbjorch.restaurantapp.core.utils.Tools.getDateFormatted
 import com.humbjorch.restaurantapp.core.utils.Tools.getTotalForList
@@ -19,9 +18,10 @@ import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentHistoryBinding
-import com.humbjorch.restaurantapp.ui.MainActivity
 import com.humbjorch.restaurantapp.ui.history.adapter.HistoryAdapter
+import com.humbjorch.restaurantapp.ui.home.NewHomeActivity
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -32,11 +32,8 @@ class HistoryFragment : Fragment() {
     private lateinit var orderAdapter: HistoryAdapter
     private var orderList: List<OrderModel> = emptyList()
     private var orderSelected: OrderModel? = null
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private var startDate = getCurrentDate()
-    @RequiresApi(Build.VERSION_CODES.O)
-    private var endDate = getCurrentDate()
+    private var startDate: LocalDate = LocalDate.now()
+    private var endDate: LocalDate = LocalDate.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +64,7 @@ class HistoryFragment : Fragment() {
         binding.tiStartDate.editText!!.setOnClickListener{
             showDatePickerDialog{ dayOfMonth, monthOfYear, year ->
                 val selectedDate = getDateFormatted(dayOfMonth, monthOfYear, year)
-                startDate = getDateFormatted(dayOfMonth, monthOfYear, year, true)
+                startDate =  LocalDate.of(year, monthOfYear+1, dayOfMonth)
                 viewModel.getAllDayOrders(startDate, endDate)
                 binding.tiStartDate.editText!!.setText(selectedDate)
             }
@@ -75,7 +72,7 @@ class HistoryFragment : Fragment() {
         binding.tiEndDate.editText!!.setOnClickListener{
             showDatePickerDialog{dayOfMonth, monthOfYear, year ->
                 val selectedDate = getDateFormatted(dayOfMonth, monthOfYear, year)
-                endDate = getDateFormatted(dayOfMonth, monthOfYear, year, true)
+                endDate = LocalDate.of(year, monthOfYear+1, dayOfMonth)
                 viewModel.getAllDayOrders(startDate, endDate)
                 binding.tiEndDate.editText!!.setText(selectedDate)
             }
@@ -86,18 +83,18 @@ class HistoryFragment : Fragment() {
         viewModel.getAllOrdersLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.LOADING -> {
-                    (activity as MainActivity).showLoader()
+                    (activity as NewHomeActivity).showLoader()
                 }
 
                 Status.SUCCESS -> {
-                    (activity as MainActivity).dismissLoader()
+                    (activity as NewHomeActivity).dismissLoader()
                     orderList = it.data ?: emptyList()
                     orderAdapter.updateList(orderList)
                     setTotal()
                 }
 
                 Status.ERROR -> {
-                    (activity as MainActivity).dismissLoader()
+                    (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
                         activity = requireActivity(),
                         message = it.message,
@@ -110,7 +107,7 @@ class HistoryFragment : Fragment() {
             when (it.status) {
 
                 Status.ERROR -> {
-                    (activity as MainActivity).dismissLoader()
+                    (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
                         activity = requireActivity(),
                         message = it.message,

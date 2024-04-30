@@ -14,6 +14,7 @@ import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.domain.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -44,7 +45,7 @@ class HistoryViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getAllDayOrders(startDate: String, endDate: String) {
+    fun getAllDayOrders(startDate: LocalDate, endDate: LocalDate) {
         _getAllOrdersLiveData.value = Resource.loading()
         viewModelScope.launch {
             _getAllOrdersLiveData.value = productsRepository.getAllOrdersRegister(startDate, endDate)

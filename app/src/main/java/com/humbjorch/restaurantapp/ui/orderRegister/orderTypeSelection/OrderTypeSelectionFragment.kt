@@ -25,8 +25,7 @@ class OrderTypeSelectionFragment : Fragment() {
     private val activityViewModel: RegisterOrderViewModel by activityViewModels()
     private lateinit var binding: FragmentOrderTypeSelectionBinding
     private lateinit var adapter: TableAdapter
-    private var tablePosition = 0
-    private var address: String = ""
+    private var tableSelected:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +38,9 @@ class OrderTypeSelectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tablePosition = activityViewModel.tableSelected.value ?: 0
-        address = activityViewModel.orderAddress.value ?: ""
-
         setAdapter()
         setListeners()
-        if (tablePosition < 0) setView()
+        if (activityViewModel.tableSelected < 0) setView()
     }
 
     private fun setView() {
@@ -53,7 +49,7 @@ class OrderTypeSelectionFragment : Fragment() {
         binding.rvTables.visibility = View.INVISIBLE
         binding.lottieDelivery.visibility = View.VISIBLE
         binding.tiAddress.visibility = View.VISIBLE
-        binding.tiAddress.editText!!.setText(address)
+        binding.tiAddress.editText!!.setText(activityViewModel.orderAddress)
     }
 
     private fun setListeners() {
@@ -67,6 +63,12 @@ class OrderTypeSelectionFragment : Fragment() {
 
     private fun navigateOrderSelection() {
         validateTable {
+            activityViewModel.orderAddress = binding.tiAddress.editText!!.text.toString()
+            if (binding.swDelivery.isChecked)
+                activityViewModel.tableSelected = -1
+            else
+                activityViewModel.tableSelected =  tableSelected
+
             val action =
                 OrderTypeSelectionFragmentDirections.actionOrderTypeSelectionFragment2ToNewOrderSelectionFragment()
             findNavController().navigate(action)
@@ -78,13 +80,13 @@ class OrderTypeSelectionFragment : Fragment() {
         adapter = TableAdapter(tableList) {
             updatePositionSelected(it)
         }
-        adapter.setSelectedPosition(tablePosition)
+        adapter.setSelectedPosition(activityViewModel.tableSelected)
         binding.rvTables.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvTables.adapter = adapter
     }
 
     private fun updatePositionSelected(table: TableAvailableModel) {
-        tablePosition = table.position.toInt()
+        tableSelected = table.position.toInt()
     }
 
     private fun setDeliveryView(isDelivery: Boolean) {
@@ -95,7 +97,7 @@ class OrderTypeSelectionFragment : Fragment() {
     }
 
     private fun validateTable(action: () -> Unit) {
-        if (tablePosition < 0 && !binding.swDelivery.isChecked) {
+        if (activityViewModel.tableSelected < 0 && !binding.swDelivery.isChecked) {
             CustomToastWidget.show(
                 activity = requireActivity(),
                 message = getString(R.string.message_without_table),

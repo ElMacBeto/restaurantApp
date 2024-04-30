@@ -20,10 +20,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.orderRegister.OrderRegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"

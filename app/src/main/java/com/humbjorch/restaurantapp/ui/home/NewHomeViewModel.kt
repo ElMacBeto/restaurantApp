@@ -44,12 +44,12 @@ class NewHomeViewModel @Inject constructor(
 
     fun getTableOrders() =
         App.ordersList.orders.filter {
-            it.table.toInt() > 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+            it.table.toInt() >= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
         }
 
     fun getDeliveryOrders() =
         App.ordersList.orders.filter {
-            it.table.toInt() <= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+            it.table.toInt() < 0 && it.status == OrderStatus.WITHOUT_PAYING.value
         }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -100,11 +100,10 @@ class NewHomeViewModel @Inject constructor(
     fun changePaidOrder(order: OrderModel) {
         _updateOrderLiveData.value = Resource.loading()
         viewModelScope.launch {
-            val id = Tools.getCurrentDate()
+            val day = Tools.getCurrentDate()
             updateTable(order.table)
             order.status = OrderStatus.PAID.value
-
-            _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
+            _updateOrderLiveData.value = productsRepository.saveOrderRegister(day, order)
         }
     }
 

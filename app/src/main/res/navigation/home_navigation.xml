@@ -9,6 +9,39 @@
         android:id="@+id/newHomeFragment"
         android:name="com.humbjorch.restaurantapp.ui.home.NewHomeFragment"
         android:label="fragment_new_home"
-        tools:layout="@layout/fragment_new_home" />
+        tools:layout="@layout/fragment_new_home" >
+        <action
+            android:id="@+id/action_newHomeFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+        <action
+            android:id="@+id/action_newHomeFragment_to_historyFragment2"
+            app:destination="@id/historyFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment2"
+        android:name="com.humbjorch.restaurantapp.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment2_to_newHomeFragment"
+            app:destination="@id/newHomeFragment" />
+        <action
+            android:id="@+id/action_settingsFragment2_to_historyFragment2"
+            app:destination="@id/historyFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment2"
+        android:name="com.humbjorch.restaurantapp.ui.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment2_to_newHomeFragment"
+            app:destination="@id/newHomeFragment" />
+        <action
+            android:id="@+id/action_historyFragment2_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+
 
 </navigation>

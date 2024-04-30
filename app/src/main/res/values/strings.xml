@@ -78,4 +78,7 @@
     <string name="top_logo_store">logo</string>
     <string name="todo">TODO</string>
     <string name="label_end_date">fecha final</string>
+    <string name="label_welcome">Bienvenido Papiz!</string>
+    <string name="label_add_product">Producto agregado!</string>
+    <string name="label_order_list_empty">En espera de pedidos</string>
 </resources>

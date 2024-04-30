@@ -94,6 +94,16 @@ class ProductsRepository @Inject constructor(
         }
     }
 
+    suspend fun getTables():Resource<Unit>{
+        val tableAvailableResponse = productsWebDS.getTablesAvailable()
+
+        return if (tableAvailableResponse.status == Status.ERROR)
+            return Resource.error(tableAvailableResponse.message)
+        else{
+            App.tablesAvailable = tableAvailableResponse.data!!.list
+            Resource.success(null)
+        }
+    }
 
     suspend fun updateTables(): Resource<Boolean> {
         return productsWebDS.updateTable(

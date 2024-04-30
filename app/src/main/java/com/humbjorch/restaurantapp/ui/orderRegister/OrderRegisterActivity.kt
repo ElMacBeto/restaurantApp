@@ -8,6 +8,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.LoaderNBEXWidget
+import com.humbjorch.restaurantapp.core.utils.Status
+import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.extDismissLoader
 import com.humbjorch.restaurantapp.core.utils.extShowLoader
 import com.humbjorch.restaurantapp.core.utils.parcelable
@@ -29,10 +32,32 @@ class OrderRegisterActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController = navHostFragment.navController
 
+        setObservers()
         setListeners()
         setOrderValues()
-        setStartDestination()
+        activityViewModel.setTables()
+    }
 
+    private fun setObservers() {
+        activityViewModel.liveDataSetTables.observe(this){
+            when (it.status) {
+                Status.LOADING -> {
+                    showLoader()
+                }
+                Status.SUCCESS -> {
+                    dismissLoader()
+                    setStartDestination()
+                }
+                Status.ERROR -> {
+                    dismissLoader()
+                    CustomToastWidget.show(
+                        activity = this,
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
+                }
+            }
+        }
     }
 
     private fun setListeners() {

@@ -104,7 +104,8 @@ class NewOrderSelectionFragment : Fragment() {
                     )
                     requireActivity().finish()
                 }
-                else -> { }
+
+                else -> {}
             }
         }
     }
@@ -112,6 +113,14 @@ class NewOrderSelectionFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.imgCar.setOnClickListener {
+            if (activityViewModel.productList.value!!.isEmpty()) {
+                CustomToastWidget.show(
+                    requireActivity(),
+                    getString(R.string.label_empty_order),
+                    TypeToast.WARNING
+                )
+                return@setOnClickListener
+            }
             binding.lyDrawer.openDrawer(GravityCompat.END)
             productsOrder = activityViewModel.productList.value ?: emptyList()
             productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
@@ -156,25 +165,18 @@ class NewOrderSelectionFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onDoneOrderListener() {
-        if (activityViewModel.productList.value!!.isNotEmpty()) {
-            (activity as OrderRegisterActivity).genericAlert(
-                titleAlert = getString(R.string.dialog_title_confirmation_order),
-                descriptionAlert = getString(R.string.dialog_description_confirmation_order),
-                txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
-                txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                buttonPositiveAction = {
-                    activityViewModel.saveOrder()
-                    binding.lyDrawer.closeDrawer(GravityCompat.END)
-                },
-                buttonNegativeAction = { }
-            )
-        } else {
-            CustomToastWidget.show(
-                requireActivity(),
-                getString(R.string.label_empty_order),
-                TypeToast.WARNING
-            )
-        }
+
+        (activity as OrderRegisterActivity).genericAlert(
+            titleAlert = getString(R.string.dialog_title_confirmation_order),
+            descriptionAlert = getString(R.string.dialog_description_confirmation_order),
+            txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
+            txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
+            buttonPositiveAction = {
+                activityViewModel.saveOrder()
+                binding.lyDrawer.closeDrawer(GravityCompat.END)
+            },
+            buttonNegativeAction = { }
+        )
     }
 
     private fun actionListenersOrders(product: ProductsOrderModel, action: ProductActionListener) =

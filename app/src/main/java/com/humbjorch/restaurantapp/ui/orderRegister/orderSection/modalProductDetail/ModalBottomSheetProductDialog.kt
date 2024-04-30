@@ -14,6 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.core.utils.Constants
+import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
+import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.isVisible
 import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.data.model.ProductsModel
@@ -94,7 +96,11 @@ class ModalBottomSheetProductDialog() : BottomSheetDialogFragment() {
     private fun setListeners() {
         binding.btnAddProduct.setOnClickListener {
             updateOrder()
-            this@ModalBottomSheetProductDialog.dismiss()
+            CustomToastWidget.show(
+                requireActivity(),
+                getString(R.string.label_add_product),
+                TypeToast.SUCCESS
+            )
         }
         (binding.tiProductType.editText as AutoCompleteTextView).setOnItemClickListener { _, _, position, _ ->
             val product = products.list[position]

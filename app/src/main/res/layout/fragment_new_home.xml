@@ -34,20 +34,34 @@
                 tools:itemCount="8"
                 tools:listitem="@layout/item_new_order" />
 
-            <com.airbnb.lottie.LottieAnimationView
+            <LinearLayout
                 android:id="@+id/tv_table_empty"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/ic_chef"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:visibility="gone"
+                tools:visibility="visible"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/anim_empty" />
+                app:layout_constraintTop_toBottomOf="@+id/container_top_toolbar">
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/cocina1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_order_list_empty"
+                    android:textColor="@color/black1"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add"
@@ -56,7 +70,7 @@
                 android:layout_margin="16dp"
                 android:contentDescription="@string/description_clock"
                 android:src="@drawable/ic_add"
-                app:backgroundTint="@color/green2"
+                app:backgroundTint="@color/blue4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:tint="@color/white"

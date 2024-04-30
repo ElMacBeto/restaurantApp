@@ -29,6 +29,9 @@ class RegisterOrderViewModel @Inject constructor(
     private var _liveDataRegisterOrder = MutableLiveData<Resource<Boolean>>()
     val liveDataRegisterOrder: LiveData<Resource<Boolean>> get() = _liveDataRegisterOrder
 
+    private var _liveDataSetTables = MutableLiveData<Resource<Unit>>()
+    val liveDataSetTables: LiveData<Resource<Unit>> get() = _liveDataSetTables
+
     var tableSelected: Int = 1
     var orderAddress: String = ""
     var order: OrderModel? = null
@@ -88,4 +91,12 @@ class RegisterOrderViewModel @Inject constructor(
             )
         }
     }
+
+    fun setTables(){
+        _liveDataSetTables.value = Resource.loading(null)
+        viewModelScope.launch {
+            _liveDataSetTables.value = productsRepository.getTables()
+        }
+    }
+
 }

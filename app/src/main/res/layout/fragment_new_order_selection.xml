@@ -5,7 +5,8 @@
     android:id="@+id/ly_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    tools:openDrawer="end">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -51,14 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
-            android:background="@color/gray2">
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/tv_label_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_orden"
-                android:textColor="@color/white"
+                android:textColor="@color/black1"
                 android:textSize="@dimen/text_size_4"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"

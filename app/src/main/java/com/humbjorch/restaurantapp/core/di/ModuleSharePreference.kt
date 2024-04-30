@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ModuleSharePreference @Inject constructor(private val context: Context) {
+class ModuleSharePreference @Inject constructor(context: Context) {
     private val shareSessionPreferences = context.getSharedPreferences(
         context.getString(R.string.share_preferences_session),
         Context.MODE_PRIVATE

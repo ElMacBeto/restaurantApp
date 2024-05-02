@@ -74,6 +74,7 @@ class NewHomeFragment : Fragment() {
         }
         binding.nvDrawer.btnEditOrder.setOnClickListener {
             validateOrder {
+                binding.lyDrawer.closeDrawer(GravityCompat.END)
                 val intent = Intent(requireContext(), OrderRegisterActivity::class.java).apply {
                     putExtra(OrderRegisterActivity.ORDER_EXTRA_KEY, orderSelected)
                 }

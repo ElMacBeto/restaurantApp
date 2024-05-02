@@ -183,7 +183,7 @@ class ModalBottomSheetProductDialog() : BottomSheetDialogFragment() {
             activityViewModel.productList.value = it
         }
         extraAdapter.clearCheckBoxes()
-        activityViewModel.productSelection.value = ProductsOrderModel()
+        //activityViewModel.productSelection.value = ProductsOrderModel()
         binding.tvLabelAmount.text = "1"
     }
 

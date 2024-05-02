@@ -48,6 +48,12 @@ class ProductsRepository @Inject constructor(
             if (it.id == order.id) {
                 updateData = true
                 it.status = order.status
+                it.table = order.table
+                it.productList = order.productList
+                it.time = order.time
+                it.status = order.status
+                it.total = order.total
+                it.address = order.address
             }
         }
         if (!updateData) {

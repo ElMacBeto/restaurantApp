@@ -42,6 +42,9 @@ class NewHomeViewModel @Inject constructor(
     private var _setProductsLiveData = MutableLiveData<Resource<List<ProductListModel>>>()
     val setProductsLiveData: LiveData<Resource<List<ProductListModel>>> get() = _setProductsLiveData
 
+    private var _cleanTablesLiveData = MutableLiveData<Resource<Boolean>>()
+    val cleanTablesLiveData: LiveData<Resource<Boolean>> get() = _cleanTablesLiveData
+
     fun getTableOrders() =
         App.ordersList.orders.filter {
             it.table.toInt() >= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
@@ -123,6 +126,16 @@ class NewHomeViewModel @Inject constructor(
     fun setAllProducts() {
         viewModelScope.launch {
             _setProductsLiveData.value = productsRepository.getAllProducts()
+        }
+    }
+
+    fun cleanTableAvailable(){
+        _cleanTablesLiveData.value = Resource.loading()
+        viewModelScope.launch {
+            App.tablesAvailable.onEach {
+                it.available = true
+            }
+            _cleanTablesLiveData.value = productsRepository.updateTables()
         }
     }
 }

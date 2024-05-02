@@ -131,13 +131,11 @@ class NewHomeFragment : Fragment() {
                 Status.LOADING -> {
                     (activity as NewHomeActivity).showLoader()
                 }
-
                 Status.SUCCESS -> {
                     (activity as NewHomeActivity).dismissLoader()
                     val orders = it.data ?: OrderListModel()
                     updateOrderList(orders)
                 }
-
                 Status.ERROR -> {
                     (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
@@ -150,7 +148,6 @@ class NewHomeFragment : Fragment() {
         }
         viewModel.printLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
-
                 Status.ERROR -> {
                     (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
@@ -167,14 +164,12 @@ class NewHomeFragment : Fragment() {
                 Status.LOADING -> {
                     (activity as NewHomeActivity).showLoader()
                 }
-
                 Status.SUCCESS -> {
                     if (updateType != OrderStatus.CANCEL.value)
                         viewModel.printTicket(orderSelected)
                     binding.lyDrawer.closeDrawer(GravityCompat.END)
                     viewModel.setAllProducts()
                 }
-
                 Status.ERROR -> {
                     (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(
@@ -193,6 +188,24 @@ class NewHomeFragment : Fragment() {
                 Status.SUCCESS -> {
                     (activity as NewHomeActivity).dismissLoader()
                     viewModel.getCurrentDayOrders()
+                }
+                Status.ERROR -> {
+                    (activity as NewHomeActivity).dismissLoader()
+                    CustomToastWidget.show(
+                        activity = requireActivity(),
+                        message = it.message,
+                        type = TypeToast.ERROR
+                    )
+                }
+            }
+        }
+        viewModel.cleanTablesLiveData.observe(viewLifecycleOwner){
+            when (it.status) {
+                Status.LOADING -> {
+                    (activity as NewHomeActivity).showLoader()
+                }
+                Status.SUCCESS -> {
+                    (activity as NewHomeActivity).dismissLoader()
                 }
                 Status.ERROR -> {
                     (activity as NewHomeActivity).dismissLoader()
@@ -243,7 +256,10 @@ class NewHomeFragment : Fragment() {
             viewModel.getTableOrders()
         tableOrderAdapter.updateList(orderList)
         orderSelected = if (orderList.isNotEmpty()) orderList[0] else OrderModel()
-        binding.tvTableEmpty.isVisible(orderList.isEmpty())
+        val emptyList = orderList.isEmpty()
+        binding.tvTableEmpty.isVisible(emptyList)
+        if (emptyList)
+            viewModel.cleanTableAvailable()
     }
 
     private fun validateOrder(action: () -> Unit) {

@@ -44,13 +44,10 @@ class ProductsRepository @Inject constructor(
 
     suspend fun saveOrderRegister(day: String, order: OrderModel): Resource<Boolean> {
         var updateData = false
-        App.ordersList.orders.forEach {
+        App.ordersList.orders.onEach {
             if (it.id == order.id) {
                 updateData = true
-                it.productList = order.productList
-                it.time = order.time
-                it.table = order.table
-                it.address = order.address
+                it.status = order.status
             }
         }
         if (!updateData) {

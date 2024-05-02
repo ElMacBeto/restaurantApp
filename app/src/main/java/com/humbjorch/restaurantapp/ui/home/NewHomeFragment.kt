@@ -190,12 +190,10 @@ class NewHomeFragment : Fragment() {
                 Status.LOADING -> {
                     (activity as NewHomeActivity).showLoader()
                 }
-
                 Status.SUCCESS -> {
                     (activity as NewHomeActivity).dismissLoader()
                     viewModel.getCurrentDayOrders()
                 }
-
                 Status.ERROR -> {
                     (activity as NewHomeActivity).dismissLoader()
                     CustomToastWidget.show(

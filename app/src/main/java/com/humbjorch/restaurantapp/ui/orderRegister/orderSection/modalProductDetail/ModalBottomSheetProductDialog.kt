@@ -26,7 +26,7 @@ import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.NewOrderSection
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ExtraAdapter
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.IngredientsAdapter
 
-class ModalBottomSheetProductDialog() : BottomSheetDialogFragment() {
+class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
 
     private val activityViewModel: RegisterOrderViewModel by activityViewModels()
     private val viewModel: NewOrderSectionViewModel by viewModels()
@@ -176,15 +176,38 @@ class ModalBottomSheetProductDialog() : BottomSheetDialogFragment() {
     }
 
     private fun updateOrder() {
-        val newProductOrder = activityViewModel.productSelection.value!!
-        val productList =  activityViewModel.productList.value
-        newProductOrder.productType = products.productType
-        viewModel.updateOrder(newProductOrder, productList){
-            activityViewModel.productList.value = it
+        val productOrder = activityViewModel.productSelection.value!!
+        val newProductOrder = ProductsOrderModel(
+            product =productOrder.product,
+            amount = productOrder.amount,
+            ingredients = productOrder.ingredients,
+            price = productOrder.price,
+            extras = productOrder.extras,
+            otherName = productOrder.otherName,
+            other = productOrder.other,
+            productType = productOrder.productType
+        )
+        val productList =  activityViewModel.productList
+        var positionChanged = -1
+
+        productList.onEachIndexed { index, it ->
+            if (it.product == newProductOrder.product &&
+                it.ingredients == newProductOrder.ingredients &&
+                it.extras == newProductOrder.extras &&
+                it.other == newProductOrder.other
+            ) {
+                positionChanged = index
+                it.amount = (it.amount.toInt() + newProductOrder.amount.toInt()).toString()
+            }
+        }
+        if (positionChanged == -1) {
+            activityViewModel.productList =  activityViewModel.productList.plus(newProductOrder)
         }
         extraAdapter.clearCheckBoxes()
-        //activityViewModel.productSelection.value = ProductsOrderModel()
+        activityViewModel.productSelection.value!!.extras = emptyList()
+        activityViewModel.productSelection.value!!.amount = "1"
         binding.tvLabelAmount.text = "1"
+        binding.tvProductPrice.text = getString(R.string.label_price_product, productOrder.price.toInt())
     }
 
     companion object {

@@ -37,7 +37,7 @@ class RegisterOrderViewModel @Inject constructor(
     var order: OrderModel? = null
 
     var productSelection = MutableLiveData(ProductsOrderModel())
-    var productList = MutableLiveData<List<ProductsOrderModel>>()
+    var productList: List<ProductsOrderModel> = emptyList()
 
     private var _liveDataPrint = MutableLiveData<Resource<String>>()
     val liveDataPrint: LiveData<Resource<String>> get() = _liveDataPrint
@@ -52,7 +52,7 @@ class RegisterOrderViewModel @Inject constructor(
         val orderModel = OrderModel(
             id = if (currentOrder.id != "") currentOrder.id else Tools.generateID(),
             table = tableSelected.toString(),
-            productList = productList.value!!,
+            productList = productList,
             time = Tools.getCurrentTime(),
             address = orderAddress
         )

@@ -113,7 +113,7 @@ class NewOrderSelectionFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setListeners() {
         binding.imgCar.setOnClickListener {
-            if (activityViewModel.productList.value!!.isEmpty()) {
+            if (activityViewModel.productList.isEmpty()) {
                 CustomToastWidget.show(
                     requireActivity(),
                     getString(R.string.label_empty_order),
@@ -122,7 +122,7 @@ class NewOrderSelectionFragment : Fragment() {
                 return@setOnClickListener
             }
             binding.lyDrawer.openDrawer(GravityCompat.END)
-            productsOrder = activityViewModel.productList.value ?: emptyList()
+            productsOrder = activityViewModel.productList
             productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
                 actionListenersOrders(product, action)
             }
@@ -146,7 +146,7 @@ class NewOrderSelectionFragment : Fragment() {
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), spanColumn)
         binding.rvProducts.adapter = productAdapter
         //order products------------------------------------------------------------------------------
-        productsOrder = activityViewModel.productList.value ?: emptyList()
+        productsOrder = activityViewModel.productList
         productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
             actionListenersOrders(product, action)
         }

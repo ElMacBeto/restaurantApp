@@ -86,7 +86,7 @@ class OrderRegisterActivity : AppCompatActivity() {
         activityViewModel.order = order
         activityViewModel.tableSelected = order?.table?.toInt() ?: 0
         activityViewModel.orderAddress = order?.address ?: ""
-        activityViewModel.productList.value = order?.productList ?: emptyList()
+        activityViewModel.productList = order?.productList ?: emptyList()
         activityViewModel.isEditOrder = activityViewModel.order != null
     }
 

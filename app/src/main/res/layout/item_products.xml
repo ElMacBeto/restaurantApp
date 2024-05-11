@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="product"
             type="com.humbjorch.restaurantapp.data.model.ProductListModel" />
@@ -15,12 +14,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="4dp"
         app:cardCornerRadius="12dp"
-        app:cardElevation="8dp">
+        app:cardElevation="8dp"
+        android:layout_margin="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
             android:layout_width="120dp"
-            android:layout_height="wrap_content">
+            android:layout_height="120dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

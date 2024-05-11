@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="18dp"
+        android:text="@string/label_welcome"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/img_delivery"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_delivery"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/ic_delivery"
+        app:layout_constraintBottom_toBottomOf="@id/sw_delivery"
+        app:layout_constraintEnd_toStartOf="@id/sw_delivery"
+        app:layout_constraintTop_toTopOf="@+id/sw_delivery" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_4"
+        android:layout_marginEnd="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/container_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/container_logo"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardBackgroundColor="@color/blue3"
+        android:layout_margin="18dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="10dp">
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo_papiz2"
+            android:scaleType="centerCrop" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="martes 23 de abril"
+        android:textColor="@color/black1"
+        android:textSize="18sp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintEnd_toEndOf="@id/tv_welcome"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/tv_welcome"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

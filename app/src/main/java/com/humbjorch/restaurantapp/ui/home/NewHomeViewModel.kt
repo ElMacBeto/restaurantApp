@@ -22,16 +22,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class NewHomeViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val printerUtils: PrinterUtils,
     private val sharePreference: ModuleSharePreference
 ) : ViewModel() {
 
+
     private var _getAllOrdersLiveData = MutableLiveData<Resource<OrderListModel?>>()
     val getAllOrdersLiveData: LiveData<Resource<OrderListModel?>> get() = _getAllOrdersLiveData
+
+    private var _printLiveData = MutableLiveData<Resource<String>>()
+    val printLiveData: LiveData<Resource<String>> get() = _printLiveData
 
     private var _updateOrderLiveData = MutableLiveData<Resource<Boolean>>()
     val updateOrderLiveData: LiveData<Resource<Boolean>> get() = _updateOrderLiveData
@@ -39,8 +42,18 @@ class HomeViewModel @Inject constructor(
     private var _setProductsLiveData = MutableLiveData<Resource<List<ProductListModel>>>()
     val setProductsLiveData: LiveData<Resource<List<ProductListModel>>> get() = _setProductsLiveData
 
-    private var _printLiveData = MutableLiveData<Resource<String>>()
-    val printLiveData: LiveData<Resource<String>> get() = _printLiveData
+    private var _cleanTablesLiveData = MutableLiveData<Resource<Boolean>>()
+    val cleanTablesLiveData: LiveData<Resource<Boolean>> get() = _cleanTablesLiveData
+
+    fun getTableOrders() =
+        App.ordersList.orders.filter {
+            it.table.toInt() >= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+        }
+
+    fun getDeliveryOrders() =
+        App.ordersList.orders.filter {
+            it.table.toInt() < 0 && it.status == OrderStatus.WITHOUT_PAYING.value
+        }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentDayOrders() {
@@ -50,56 +63,6 @@ class HomeViewModel @Inject constructor(
             _getAllOrdersLiveData.value = productsRepository.getOrders(currentDate)
         }
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun changePaidOrder(order: OrderModel) {
-        _updateOrderLiveData.value = Resource.loading()
-        viewModelScope.launch {
-            val id = Tools.getCurrentDate()
-            updateTable(order.table)
-            order.status = OrderStatus.PAID.value
-
-            _updateOrderLiveData.value = productsRepository.saveOrderRegister(id, order)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun printTicket(order:OrderModel){
-        viewModelScope.launch {
-            val response = printerUtils.printNewTicket(
-                order,
-                App.printerPort,
-                App.printerAddress
-            )
-            if (response.status == Status.ERROR)
-                _printLiveData.value = response
-        }
-    }
-
-    fun setAllProducts() {
-        viewModelScope.launch {
-            _setProductsLiveData.value = productsRepository.getAllProducts()
-        }
-    }
-
-    fun getTableOrders() =
-        App.ordersList.orders.filter {
-            it.table.toInt() > 0 && it.status == OrderStatus.WITHOUT_PAYING.value
-        }
-
-    fun getDeliveryOrders() =
-        App.ordersList.orders.filter {
-            it.table.toInt() <= 0 && it.status == OrderStatus.WITHOUT_PAYING.value
-        }
-
-    private fun updateTable(position: String) {
-        if (position.toInt() < 1) return
-        App.tablesAvailable.onEach {
-            if (position == it.position)
-                it.available = true
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun printOrder(order: OrderModel) {
         _printLiveData.value = Resource.loading()
@@ -128,10 +91,51 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setPrinterSettings() {
-        App.printerPort = sharePreference.getPrinterPort()
-        App.printerAddress = sharePreference.getPrinterAddress() ?: ""
+    private fun updateTable(position: String) {
+        if (position.toInt() < 1) return
+        App.tablesAvailable.onEach {
+            if (position == it.position)
+                it.available = true
+        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun changePaidOrder(order: OrderModel) {
+        _updateOrderLiveData.value = Resource.loading()
+        viewModelScope.launch {
+            val day = Tools.getCurrentDate()
+            updateTable(order.table)
+            order.status = OrderStatus.PAID.value
+            _updateOrderLiveData.value = productsRepository.saveOrderRegister(day, order)
+        }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun printTicket(order:OrderModel){
+        viewModelScope.launch {
+            val response = printerUtils.printNewTicket(
+                order,
+                App.printerPort,
+                App.printerAddress
+            )
+            if (response.status == Status.ERROR)
+                _printLiveData.value = response
+        }
+    }
+
+    fun setAllProducts() {
+        viewModelScope.launch {
+            _setProductsLiveData.value = productsRepository.getAllProducts()
+        }
+    }
+
+    fun cleanTableAvailable(){
+        _cleanTablesLiveData.value = Resource.loading()
+        viewModelScope.launch {
+            App.tablesAvailable.onEach {
+                it.available = true
+            }
+            _cleanTablesLiveData.value = productsRepository.updateTables()
+        }
+    }
 }

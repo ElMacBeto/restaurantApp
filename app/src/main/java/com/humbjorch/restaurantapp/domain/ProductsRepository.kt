@@ -9,6 +9,8 @@ import com.humbjorch.restaurantapp.data.datasource.remote.webDb.ProductsWebDS
 import com.humbjorch.restaurantapp.data.mappers.ProductsMapper
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class ProductsRepository @Inject constructor(
@@ -40,14 +42,17 @@ class ProductsRepository @Inject constructor(
         return Resource.success(sortedProducts)
     }
 
-    suspend fun saveOrderRegister(id: String, order: OrderModel): Resource<Boolean> {
+    suspend fun saveOrderRegister(day: String, order: OrderModel): Resource<Boolean> {
         var updateData = false
-        App.ordersList.orders.forEach {
+        App.ordersList.orders.onEach {
             if (it.id == order.id) {
                 updateData = true
+                it.status = order.status
+                it.table = order.table
                 it.productList = order.productList
                 it.time = order.time
-                it.table = order.table
+                it.status = order.status
+                it.total = order.total
                 it.address = order.address
             }
         }
@@ -63,29 +68,45 @@ class ProductsRepository @Inject constructor(
             return Resource.error(tableResponse.message)
         }
 
-        return ordersWebDS.setOrderRegister(id, App.ordersList)
+        return ordersWebDS.setOrderRegister(day, App.ordersList)
     }
 
     suspend fun getOrders(date: String) = ordersWebDS.getOrdersRegister(date)
 
-    suspend fun getAllOrdersRegister(startDate: String, endDate: String): Resource<List<OrderModel>> {
+    suspend fun getAllOrdersRegister(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): Resource<List<OrderModel>> {
         val response = ordersWebDS.getAllOrdersRegister()
 
         return if (response.status == Status.SUCCESS) {
-            val filterOrders = response.data?.filter {
-                it.id in startDate..endDate
-            }
+            val dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
-            val allOrders = filterOrders?.flatMap {
-                it.orders
+            val filterOrders = response.data?.filter {
+                val orderDate = LocalDate.parse(it.id, dateFormat)
+                orderDate.isAfter(startDate.minusDays(1)) && orderDate.isBefore(endDate.plusDays(1))
             } ?: emptyList()
 
+            val allOrders = filterOrders.flatMap {
+                it.orders
+            }
+
             Resource.success(allOrders)
-        }else{
+        } else {
             Resource.error(response.message)
         }
     }
 
+    suspend fun getTables():Resource<Unit>{
+        val tableAvailableResponse = productsWebDS.getTablesAvailable()
+
+        return if (tableAvailableResponse.status == Status.ERROR)
+            return Resource.error(tableAvailableResponse.message)
+        else{
+            App.tablesAvailable = tableAvailableResponse.data!!.list
+            Resource.success(null)
+        }
+    }
 
     suspend fun updateTables(): Resource<Boolean> {
         return productsWebDS.updateTable(

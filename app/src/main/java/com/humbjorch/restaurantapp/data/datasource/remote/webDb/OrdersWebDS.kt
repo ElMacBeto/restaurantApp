@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class OrdersWebDS @Inject constructor(private val service: FirebaseApiService) {
 
-    suspend fun setOrderRegister(id: String, order: OrderListModel) =
-        service.sendRegisterProducts(id, order)
+    suspend fun setOrderRegister(day: String, order: OrderListModel) =
+        service.sendRegisterProducts(day, order)
 
     suspend fun getOrdersRegister(date:String) = service.getOrdersRegisterByDate(date)
 

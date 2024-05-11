@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:paddingBottom="20dp"
+        android:minHeight="200dp">
+
+        <TextView
+            android:id="@+id/tv_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:textSize="@dimen/text_size_4"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$95" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_product_type"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_price">
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_label_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_ingredients"
+            android:textColor="@color/black1"
+            android:textSize="@dimen/text_size_2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ti_product_type" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_product_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_ingredients"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="4dp"
+            app:spanCount="3"
+            tools:itemCount="6"
+            tools:listitem="@layout/item_ingredient" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_product_other"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_other"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_product_ingredients">
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_label_extras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_extras"
+            android:textColor="@color/black1"
+            android:textSize="@dimen/text_size_2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ti_product_other" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_product_extras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/btn_add_product"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_extras"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginBottom="8dp"
+            app:spanCount="3"
+            tools:itemCount="6"
+            tools:listitem="@layout/item_extra" />
+
+        <TextView
+            android:id="@+id/btn_minus_amount"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_filled_round"
+            android:backgroundTint="@color/red1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/foreground_nav_button"
+            android:text="@string/label_minus"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_2"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/tv_label_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/black1"
+            android:textSize="@dimen/text_size_2"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_minus_amount"
+            app:layout_constraintStart_toEndOf="@+id/btn_minus_amount"
+            app:layout_constraintTop_toTopOf="@+id/btn_minus_amount"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/btn_increase_amount"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_filled_round"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/foreground_nav_button"
+            android:text="@string/label_plus"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_2"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_minus_amount"
+            app:layout_constraintStart_toEndOf="@+id/tv_label_amount"
+            app:layout_constraintTop_toTopOf="@+id/btn_minus_amount"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="@color/blue1"
+            android:text="@string/label_add"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_1"
+            app:cornerRadius="12dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

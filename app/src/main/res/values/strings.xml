@@ -72,4 +72,13 @@
     <string name="printer_port">Printer port</string>
     <string name="label_table_btn">Hacer disponibles todas las mezas</string>
     <string name="description_clock">clock</string>
+    <string name="label_type">tipo</string>
+    <string name="label_other">Papas</string>
+    <string name="label_empty_table">No hay pedidos :c</string>
+    <string name="top_logo_store">logo</string>
+    <string name="todo">TODO</string>
+    <string name="label_end_date">fecha final</string>
+    <string name="label_welcome">Bienvenido Papiz!</string>
+    <string name="label_add_product">Producto agregado!</string>
+    <string name="label_order_list_empty">En espera de pedidos</string>
 </resources>

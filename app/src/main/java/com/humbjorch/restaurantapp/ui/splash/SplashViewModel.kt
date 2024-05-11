@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.humbjorch.restaurantapp.App
+import com.humbjorch.restaurantapp.core.di.ModuleSharePreference
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
 import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.domain.ProductsRepository
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val productsRepository: ProductsRepository
+    private val productsRepository: ProductsRepository,
+    private val sharePreference: ModuleSharePreference
 ) : ViewModel() {
 
     private var _setProductsLiveData = MutableLiveData<Resource<List<ProductListModel>>>()
@@ -24,5 +26,10 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
            _setProductsLiveData.value = productsRepository.getAllProducts()
         }
+    }
+
+    fun setPrinterSettings() {
+        App.printerPort = sharePreference.getPrinterPort()
+        App.printerAddress = sharePreference.getPrinterAddress() ?: ""
     }
 }

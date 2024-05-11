@@ -37,7 +37,7 @@ class GenericDialog : DialogFragment() {
         if (dialog != null && dialog?.window != null) {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(0) as Drawable)
             dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-            dialog?.window?.setLayout(dpToPx(this.requireContext(),500).toInt(), WindowManager.LayoutParams.WRAP_CONTENT);
+            dialog?.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         }
         binding =
             FragmentGenericDialogBinding.inflate(LayoutInflater.from(context), container, false)

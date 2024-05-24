@@ -43,8 +43,11 @@ class ProductsOrderAdapter(
             val ingredientText = StringBuilder()
             ingredientText.append(product.ingredients.joinToString())
 
-            if (product.other.isNotEmpty()){
-                ingredientText.append("\n${product.otherName}: " + product.other)
+            if (product.others.isNotEmpty()){
+                ingredientText.append("\n${product.others[0].name}: " + product.others[0].type)
+            }
+            if (product.others.size > 1){
+                ingredientText.append("\n${product.others[1].name}: " + product.others[1].type)
             }
 
             if (product.extras.isNotEmpty()){

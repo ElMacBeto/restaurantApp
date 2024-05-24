@@ -15,7 +15,8 @@ class ProductsMapper : Mapper<ProductResponse, ProductListModel> {
             orderNum = input.orderNum.toInt(),
             other = input.other,
             otherList = input.otherList,
-            productType = input.productType//nuevo
+            productType = input.productType,
+            others = input.others
         )
     }
 }

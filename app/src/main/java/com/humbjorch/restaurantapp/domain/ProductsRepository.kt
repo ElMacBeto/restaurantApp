@@ -60,12 +60,14 @@ class ProductsRepository @Inject constructor(
             val newList = App.ordersList.orders.plus(order)
             App.ordersList.orders = newList
         }
-        val tableResponse = productsWebDS.updateTable(
-            TablesAvailableResponse(ArrayList(App.tablesAvailable))
-        )
 
-        if (tableResponse.status == Status.ERROR) {
-            return Resource.error(tableResponse.message)
+        if (App.tablesAvailable.isNotEmpty()){
+            val tableResponse = productsWebDS.updateTable(
+                TablesAvailableResponse(ArrayList(App.tablesAvailable))
+            )
+            if (tableResponse.status == Status.ERROR) {
+                return Resource.error(tableResponse.message)
+            }
         }
 
         return ordersWebDS.setOrderRegister(day, App.ordersList)
@@ -109,9 +111,13 @@ class ProductsRepository @Inject constructor(
     }
 
     suspend fun updateTables(): Resource<Boolean> {
-        return productsWebDS.updateTable(
-            TablesAvailableResponse(ArrayList(App.tablesAvailable))
-        )
+        return if (App.tablesAvailable.isEmpty()){
+            Resource.error()
+        }else{
+            productsWebDS.updateTable(
+                TablesAvailableResponse(ArrayList(App.tablesAvailable))
+            )
+        }
     }
 
 }

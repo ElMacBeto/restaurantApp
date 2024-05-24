@@ -157,11 +157,17 @@ class PrinterUtils @Inject constructor(val context: Context) {
                         "extras: ${extrasList.joinToString()}"
                     }
 
-                val otherText =
-                    if (product.other.isEmpty())
-                        ""
-                    else
-                        product.otherName + " " + product.other
+                val otherText = if (product.others.isEmpty())
+                    ""
+                else{
+                    product.others[0].name + " " + product.others[0].type
+                }
+
+                val other1Text = if (product.others.size > 1)
+                    product.others[1].name + " " + product.others[1].type
+                else{
+                  ""
+                }
 
                 val endProductText =
                     "[C]<font size='normal'>================================================</font>\n"
@@ -170,9 +176,10 @@ class PrinterUtils @Inject constructor(val context: Context) {
                     "[L]<font size='big'>${product.amount}  ${product.product}</font>\n"
 
                 foodTicket.append(productText)
-                if (ingredientsText.isNotEmpty()) foodTicket.append(
-                    "${addOffsetToEachLine(ingredientsText)}"
-                )
+                if (ingredientsText.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(ingredientsText)}")
+
+                if (other1Text.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(other1Text)}")
+
                 if (otherText.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(otherText)}")
 
                 if (extrasText.isNotEmpty()) foodTicket.append("${addOffsetToEachLine(extrasText)}\n")

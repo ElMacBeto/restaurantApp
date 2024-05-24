@@ -18,5 +18,7 @@ data class ProductListModel(
     @field:JvmField
     val otherList: ArrayList<String> = arrayListOf(),
     @field:JvmField
-    val productType: String = ProductType.FOOD.value//nuevo
+    val productType: String = ProductType.FOOD.value,
+    @field:JvmField
+    val others: List<OthersModel> = emptyList()
 )

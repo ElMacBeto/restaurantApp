@@ -37,7 +37,6 @@ class NewOrderSelectionFragment : Fragment() {
     private lateinit var productsOrderAdapter: ProductsOrderAdapter
     private val modal by lazy { ModalBottomSheetProductDialog() }
 
-    private var productsOrder = listOf<ProductsOrderModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,8 +121,7 @@ class NewOrderSelectionFragment : Fragment() {
                 return@setOnClickListener
             }
             binding.lyDrawer.openDrawer(GravityCompat.END)
-            productsOrder = activityViewModel.productList
-            productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
+            productsOrderAdapter = ProductsOrderAdapter(activityViewModel.productList) { product, action ->
                 actionListenersOrders(product, action)
             }
             binding.rvProductsOrder.layoutManager = LinearLayoutManager(requireContext())
@@ -146,8 +144,7 @@ class NewOrderSelectionFragment : Fragment() {
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), spanColumn)
         binding.rvProducts.adapter = productAdapter
         //order products------------------------------------------------------------------------------
-        productsOrder = activityViewModel.productList
-        productsOrderAdapter = ProductsOrderAdapter(productsOrder) { product, action ->
+        productsOrderAdapter = ProductsOrderAdapter(activityViewModel.productList) { product, action ->
             actionListenersOrders(product, action)
         }
         binding.rvProductsOrder.layoutManager = LinearLayoutManager(requireContext())
@@ -159,13 +156,11 @@ class NewOrderSelectionFragment : Fragment() {
             return
 
         binding.btnDone.text = getString(R.string.label_save_button)
-        productsOrder = activityViewModel.order!!.productList
-        productsOrderAdapter.updateList(productsOrder)
+        productsOrderAdapter.updateList(activityViewModel.productList)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onDoneOrderListener() {
-
         (activity as OrderRegisterActivity).genericAlert(
             titleAlert = getString(R.string.dialog_title_confirmation_order),
             descriptionAlert = getString(R.string.dialog_description_confirmation_order),
@@ -182,10 +177,11 @@ class NewOrderSelectionFragment : Fragment() {
     private fun actionListenersOrders(product: ProductsOrderModel, action: ProductActionListener) =
         run {
             var position = 0
-            productsOrder = when (action) {
+            activityViewModel.productList = when (action) {
                 ProductActionListener.ADD_PRODUCT -> {
-                    productsOrder.onEachIndexed { index, it ->
-                        if (it.product == product.product && it.ingredients == product.ingredients) {
+                    activityViewModel.productList.onEachIndexed { index, it ->
+                        if (it.product == product.product && it.ingredients == product.ingredients &&
+                            it.extras == product.extras && it.others == product.others) {
                             position = index
                             it.amount = (it.amount.toInt() + 1).toString()
                         }
@@ -193,8 +189,9 @@ class NewOrderSelectionFragment : Fragment() {
                 }
 
                 ProductActionListener.REMOVE_PRODUCT -> {
-                    productsOrder.onEachIndexed { index, it ->
-                        if (it.product == product.product && it.ingredients == product.ingredients) {
+                    activityViewModel.productList.onEachIndexed { index, it ->
+                        if (it.product == product.product && it.ingredients == product.ingredients &&
+                            it.extras == product.extras && it.others == product.others) {
                             position = index
                             it.amount = (it.amount.toInt() - 1).toString()
                         }
@@ -202,13 +199,13 @@ class NewOrderSelectionFragment : Fragment() {
                 }
             }
 
-            val itemChanged = productsOrder[position]
+            val itemChanged = activityViewModel.productList[position]
             if (itemChanged.amount.toInt() >= 1) {
-                productsOrderAdapter.updateList(productsOrder)
+                productsOrderAdapter.updateList(activityViewModel.productList)
                 productsOrderAdapter.notifyItemChanged(position)
             } else {
-                productsOrder = productsOrder.minus(itemChanged)
-                productsOrderAdapter.updateList(productsOrder)
+                activityViewModel.productList = activityViewModel.productList.minus(itemChanged)
+                productsOrderAdapter.updateList(activityViewModel.productList)
             }
         }
 

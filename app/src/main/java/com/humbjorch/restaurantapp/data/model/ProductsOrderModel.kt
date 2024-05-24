@@ -13,5 +13,6 @@ data class ProductsOrderModel(
     var extras: List<ExtraModel> = emptyList(),
     var otherName: String = "",
     var other: String = "",
-    var productType: String = ProductType.FOOD.value
+    var productType: String = ProductType.FOOD.value,
+    var others: List<OtherModel> = emptyList()
 ) : Parcelable

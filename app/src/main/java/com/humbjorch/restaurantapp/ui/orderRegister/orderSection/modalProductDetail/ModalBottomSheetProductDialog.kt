@@ -17,6 +17,7 @@ import com.humbjorch.restaurantapp.core.utils.Constants
 import com.humbjorch.restaurantapp.core.utils.alerts.CustomToastWidget
 import com.humbjorch.restaurantapp.core.utils.alerts.TypeToast
 import com.humbjorch.restaurantapp.core.utils.isVisible
+import com.humbjorch.restaurantapp.data.model.OtherModel
 import com.humbjorch.restaurantapp.data.model.ProductListModel
 import com.humbjorch.restaurantapp.data.model.ProductsModel
 import com.humbjorch.restaurantapp.data.model.ProductsOrderModel
@@ -35,10 +36,11 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
     private lateinit var binding : DialogModalBottomSheetProductBinding
     private lateinit var productsAdapter: ArrayAdapter<String>
     private lateinit var otherAdapter: ArrayAdapter<String>
+    private lateinit var otherAdapter2: ArrayAdapter<String>
     private lateinit var ingredientAdapter: IngredientsAdapter
     private lateinit var extraAdapter: ExtraAdapter
-
     private var ingredientList: List<String> = emptyList()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DialogModalBottomSheetProductBinding.inflate(inflater, container, false)
@@ -58,7 +60,6 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
         initOtherDropDownMenu()
         setListeners()
         setView()
-        activityViewModel.productSelection.value?.otherName = products.other
     }
 
     private fun setView() {
@@ -66,7 +67,11 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
         binding.tvLabelExtras.isVisible(products.extras.isNotEmpty())
         binding.tvLabelIngredients.isVisible(ingredientList.isNotEmpty())
         binding.tvLabelExtras.isVisible(products.extras.isNotEmpty())
-        binding.tiProductOther.isVisible(products.other.isNotEmpty())
+
+        if (products.other.isNotEmpty())
+            binding.tiProductOther.hint = products.others[0].name
+        if (products.others.size > 1)
+            binding.tiProductOther1.hint = products.others[1].name
     }
 
     private fun initProductDropDownMenu() {
@@ -80,35 +85,46 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
     }
 
     private fun initOtherDropDownMenu(){
-        val others = products.otherList
-        if (others.isEmpty()){
-            binding.tiProductOther.visibility = View.GONE
-            return
-        }
-        otherAdapter = ArrayAdapter(requireContext(), R.layout.item_drop_dowm, others)
+        val isVisibleOther1 = products.others.isNotEmpty()
+        binding.tiProductOther.isVisible(isVisibleOther1)
+        binding.tiProductOther1.isVisible(false)
+        if (!isVisibleOther1) return
+
+        val others1 = products.others[0]
+        otherAdapter = ArrayAdapter(requireContext(), R.layout.item_drop_dowm, others1.type)
         (binding.tiProductOther.editText as? AutoCompleteTextView)?.apply {
             setAdapter(otherAdapter)
-            setText(others[0], false)
+            setText(others1.type[0], false)
         }
-        setOnOtherSelected(products.otherList[0])
+        setOnOtherSelected()
+        //------------------------------------------------------------------------------------------
+        val isVisibleOther2 = products.others.size > 1
+        binding.tiProductOther1.isVisible(isVisibleOther2)
+
+        if (!isVisibleOther2) return
+
+        val others2 = products.others[1]
+        otherAdapter2 = ArrayAdapter(requireContext(), R.layout.item_drop_dowm, others2.type)
+        (binding.tiProductOther1.editText as? AutoCompleteTextView)?.apply {
+            setAdapter(otherAdapter2)
+            setText(others2.type[0], false)
+        }
+        setOnOtherSelected()
     }
 
     private fun setListeners() {
         binding.btnAddProduct.setOnClickListener {
             updateOrder()
-            CustomToastWidget.show(
-                requireActivity(),
-                getString(R.string.label_add_product),
-                TypeToast.SUCCESS
-            )
         }
         (binding.tiProductType.editText as AutoCompleteTextView).setOnItemClickListener { _, _, position, _ ->
             val product = products.list[position]
             setOnProductSelected(product)
         }
-        (binding.tiProductOther.editText as AutoCompleteTextView).setOnItemClickListener { _, _, position, _ ->
-            val other = products.otherList[position]
-            setOnOtherSelected(other)
+        (binding.tiProductOther.editText as AutoCompleteTextView).setOnItemClickListener { _, _, _, _ ->
+            setOnOtherSelected()
+        }
+        (binding.tiProductOther1.editText as AutoCompleteTextView).setOnItemClickListener { _, _, _, _ ->
+            setOnOtherSelected()
         }
         binding.btnIncreaseAmount.setOnClickListener {
             activityViewModel.productSelection.value?.amount =
@@ -159,8 +175,23 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
         setView()
     }
 
-    private fun setOnOtherSelected(other: String) {
-        activityViewModel.productSelection.value?.other = other
+    private fun setOnOtherSelected() {
+        if (products.others.isEmpty())
+            return
+
+        val other = OtherModel(
+            name = products.others[0].name,
+            type = binding.tiProductOther.editText!!.text.toString(),
+            )
+        if (products.others.size > 1){
+            val other2 = OtherModel(
+                name = products.others[1].name,
+                type = binding.tiProductOther1.editText!!.text.toString(),
+            )
+            activityViewModel.productSelection.value?.others = listOf(other,other2)
+        }else{
+            activityViewModel.productSelection.value?.others = listOf(other)
+        }
     }
 
     private fun updateIngredientsSelected() {
@@ -185,16 +216,17 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
             extras = productOrder.extras,
             otherName = productOrder.otherName,
             other = productOrder.other,
-            productType = productOrder.productType
+            productType = products.productType,
+            others = productOrder.others
         )
-        val productList =  activityViewModel.productList
+
         var positionChanged = -1
 
-        productList.onEachIndexed { index, it ->
+        activityViewModel.productList.onEachIndexed { index, it ->
             if (it.product == newProductOrder.product &&
                 it.ingredients == newProductOrder.ingredients &&
                 it.extras == newProductOrder.extras &&
-                it.other == newProductOrder.other
+                it.others == newProductOrder.others
             ) {
                 positionChanged = index
                 it.amount = (it.amount.toInt() + newProductOrder.amount.toInt()).toString()
@@ -208,6 +240,12 @@ class ModalBottomSheetProductDialog : BottomSheetDialogFragment() {
         activityViewModel.productSelection.value!!.amount = "1"
         binding.tvLabelAmount.text = "1"
         binding.tvProductPrice.text = getString(R.string.label_price_product, productOrder.price.toInt())
+
+        CustomToastWidget.show(
+            requireActivity(),
+            getString(R.string.label_add_product),
+            TypeToast.SUCCESS
+        )
     }
 
     companion object {

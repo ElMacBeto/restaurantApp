@@ -7,12 +7,12 @@
         android:visible="true"/>
     <item
         android:id="@+id/navigation_history"
-        android:title="Search"
-        android:icon="@drawable/ic_history"
+        android:title="Historial"
+        android:icon="@drawable/ic_new_history"
         android:visible="true"/>
     <item
         android:id="@+id/navigation_settings"
-        android:title="Profile"
-        android:icon="@drawable/ic_settings"
+        android:title="Configuraciones"
+        android:icon="@drawable/ic_new_settings"
         android:visible="true"/>
 </menu>

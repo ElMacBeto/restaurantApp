@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="end"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:layout_marginTop="?attr/actionBarSize">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -74,7 +75,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/black"
                 android:text="@string/label_edit"
-                android:textSize="@dimen/text_size_2"
+                android:textSize="@dimen/text_size_1"
                 app:cornerRadius="12dp"
                 app:icon="@drawable/ic_edit"
                 app:iconGravity="textStart"
@@ -88,7 +89,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/red1"
                 android:text="@string/label_cancel_order"
-                android:textSize="@dimen/text_size_2"
+                android:textSize="@dimen/text_size_1"
                 app:cornerRadius="12dp"
                 app:icon="@drawable/ic_cancel"
                 app:iconGravity="textStart"
@@ -103,7 +104,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue3"
             android:text="@string/label_print_order"
-            android:textSize="@dimen/text_size_2"
+            android:textSize="@dimen/text_size_1"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_print"
             app:iconGravity="textStart"
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green1"
             android:text="@string/label_take_order"
-            android:textSize="@dimen/text_size_2"
+            android:textSize="@dimen/text_size_1"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_money"
             app:iconGravity="textStart"

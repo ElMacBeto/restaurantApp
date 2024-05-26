@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.humbjorch.restaurantapp.R
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.ItemNewOrderBinding
-import com.humbjorch.restaurantapp.databinding.ItemOrderBinding
 
 class OrderAdapter(
     private var dataSet: List<OrderModel>,
@@ -42,7 +41,7 @@ class OrderAdapter(
                 binding.container.setBackgroundColor(ctx.getColor(R.color.white))
             }
 
-            if (order.table.toInt() > 0) {
+            if (order.table.toInt() > -1) {
                 binding.tvTableNumber.text = order.table
                 binding.imgOrderType.setImageDrawable(ctx.getDrawable(R.drawable.ic_table))
             } else {

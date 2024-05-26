@@ -20,9 +20,10 @@
 
     <style name="BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <!-- Color when item is selected -->
-        <item name="itemBackground">@color/blue5</item>
+        <item name="itemBackground">@color/white</item>
         <item name="itemIconTint">@color/selector_bottom_menu</item>
         <!-- Color for text -->
         <item name="itemTextColor">@color/selector_bottom_menu</item>
+        <item name="itemRippleColor">@color/selector_bottom_menu</item>
     </style>
 </resources>

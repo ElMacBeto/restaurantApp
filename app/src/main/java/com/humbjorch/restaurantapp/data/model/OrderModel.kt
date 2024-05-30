@@ -12,5 +12,6 @@ data class OrderModel(
     var time: String = "",
     var status: String = OrderStatus.WITHOUT_PAYING.value,
     var total: String = "",
-    var address: String = ""
+    var address: String = "",
+    var orderNumber: Int = 1
 ): Parcelable

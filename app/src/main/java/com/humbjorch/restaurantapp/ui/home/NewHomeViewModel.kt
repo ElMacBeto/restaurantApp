@@ -67,12 +67,12 @@ class NewHomeViewModel @Inject constructor(
     fun printOrder(order: OrderModel) {
         _printLiveData.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
-            val currentOrderNumber = sharePreference.getOrderNumber()
+            //val currentOrderNumber = sharePreference.getOrderNumber()
 
             _printLiveData.postValue(
                 printerUtils.printOrder(
                     order,
-                    currentOrderNumber,
+                    //currentOrderNumber,
                     App.printerPort,
                     App.printerAddress
                 )

@@ -48,6 +48,7 @@ class OrderAdapter(
                 binding.tvTableNumber.text = ""
                 binding.imgOrderType.setImageDrawable(ctx.getDrawable(R.drawable.ic_delivery))
             }
+            binding.tvOrderNumber.text = order.orderNumber.toString()
         }
     }
 

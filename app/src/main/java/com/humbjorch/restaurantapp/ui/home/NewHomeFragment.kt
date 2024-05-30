@@ -62,7 +62,7 @@ class NewHomeFragment : Fragment() {
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(requireActivity(), OrderRegisterActivity::class.java))
         }
-        binding.containerTopToolbar.swDelivery.setOnCheckedChangeListener { _, isChecked ->
+        binding.swDelivery.setOnCheckedChangeListener { _, isChecked ->
             orderList = if (isChecked) {
                 viewModel.getDeliveryOrders()
             } else {
@@ -244,14 +244,14 @@ class NewHomeFragment : Fragment() {
     private fun setView() {
         binding.tvTableEmpty.isVisible(orderList.isEmpty())
         binding.lyDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        binding.containerTopToolbar.tvDate.text = Tools.getCurrentDate(true)
+        binding.tvDate.text = Tools.getCurrentDate(true)
         viewModel.getCurrentDayOrders()
     }
 
     private fun updateOrderList(orders: OrderListModel) {
         App.ordersList = orders
 
-        orderList = if (binding.containerTopToolbar.swDelivery.isChecked)
+        orderList = if (binding.swDelivery.isChecked)
             viewModel.getDeliveryOrders()
         else
             viewModel.getTableOrders()

@@ -3,6 +3,7 @@ package com.humbjorch.restaurantapp.domain
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
+import com.humbjorch.restaurantapp.data.datasource.remote.response.OrderNumberResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.webDb.OrdersWebDS
 import com.humbjorch.restaurantapp.data.datasource.remote.webDb.ProductsWebDS
@@ -103,7 +104,7 @@ class ProductsRepository @Inject constructor(
         val tableAvailableResponse = productsWebDS.getTablesAvailable()
 
         return if (tableAvailableResponse.status == Status.ERROR)
-            return Resource.error(tableAvailableResponse.message)
+            Resource.error(tableAvailableResponse.message)
         else{
             App.tablesAvailable = tableAvailableResponse.data!!.list
             Resource.success(null)
@@ -118,6 +119,22 @@ class ProductsRepository @Inject constructor(
                 TablesAvailableResponse(ArrayList(App.tablesAvailable))
             )
         }
+    }
+
+    suspend fun getOrderNumber(): Resource<Int>{
+        val orderNumberResponse = productsWebDS.getOrderNumber()
+        return if (orderNumberResponse.status == Status.ERROR)
+            Resource.error(orderNumberResponse.message)
+        else
+            Resource.success(orderNumberResponse.data?.value?.toInt())
+    }
+
+    suspend fun updateOrderNumber(orderNumber: OrderNumberResponse): Resource<Boolean>{
+        val orderNumberResponse = productsWebDS.updateOrderNumber(orderNumber)
+        return if (orderNumberResponse.status == Status.ERROR)
+            Resource.error(orderNumberResponse.message)
+        else
+            orderNumberResponse
     }
 
 }

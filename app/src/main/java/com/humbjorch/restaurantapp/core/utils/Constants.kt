@@ -6,6 +6,7 @@ object Constants {
     const val ORDERS_REGISTER_COLLECTION = "OrderRegister"
 
     const val TABLES_AVAILABLE_DOCUMENT = "TablesAvailable"
+    const val ORDER_NUMBER_DOCUMENT = "OrderNumber"
 
     //preference
     const val SETTING_PREFERENCE = "SETTINGS_PREFERENCE"

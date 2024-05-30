@@ -2,8 +2,10 @@ package com.humbjorch.restaurantapp.data.datasource.remote.api
 
 import com.google.gson.Gson
 import com.humbjorch.restaurantapp.core.di.FirebaseClientModule
+import com.humbjorch.restaurantapp.core.utils.Constants.ORDER_NUMBER_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Constants.TABLES_AVAILABLE_DOCUMENT
 import com.humbjorch.restaurantapp.data.datasource.remote.makeCall
+import com.humbjorch.restaurantapp.data.datasource.remote.response.OrderNumberResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.ProductResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
 import com.humbjorch.restaurantapp.data.model.OrderListModel
@@ -59,9 +61,7 @@ class FirebaseApiService @Inject constructor(private val client: FirebaseClientM
     }
 
     suspend fun updateTable(tables: TablesAvailableResponse) = makeCall {
-        client.tableCollection.document(TABLES_AVAILABLE_DOCUMENT).set(
-            tables
-        ).let { it ->
+        client.tableCollection.document(TABLES_AVAILABLE_DOCUMENT).set(tables).let { it ->
             var isSuccess = false
             it.addOnCompleteListener {
                 isSuccess = it.isSuccessful
@@ -69,4 +69,23 @@ class FirebaseApiService @Inject constructor(private val client: FirebaseClientM
             isSuccess
         }
     }
+
+    suspend fun getOrderNumber() = makeCall {
+        client.tableCollection.document(ORDER_NUMBER_DOCUMENT).get().await().let {
+            val json = Gson().toJson(it.data)
+            val orderNumber = Gson().fromJson(json, OrderNumberResponse::class.java)
+            orderNumber
+        }
+    }
+
+    suspend fun updateOrderNumber(orderNumber: OrderNumberResponse) = makeCall {
+        client.tableCollection.document(ORDER_NUMBER_DOCUMENT).set(orderNumber).let { it ->
+            var isSuccess = false
+            it.addOnCompleteListener {
+                isSuccess = it.isSuccessful
+            }.await()
+            isSuccess
+        }
+    }
+
 }

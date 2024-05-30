@@ -125,12 +125,13 @@ class PrinterUtils @Inject constructor(val context: Context) {
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun printOrder(
         order: OrderModel,
-        orderNumber: Int,
+       // orderNumber: Int,
         printerPort: Int,
         printerAddress: String
     ): Resource<String> = withContext(Dispatchers.IO) {
         val beverageList = order.productList.filter { it.productType == ProductType.BEVERAGE.value }
         val foodList = order.productList.filter { it.productType == ProductType.FOOD.value }
+        val orderNumber = order.orderNumber
 
         try {
             val printer =

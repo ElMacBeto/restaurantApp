@@ -81,4 +81,5 @@
     <string name="label_welcome">Bienvenido Papiz!</string>
     <string name="label_add_product">Producto agregado!</string>
     <string name="label_order_list_empty">En espera de pedidos</string>
+    <string name="label_papiz_burger">Papiz Burger</string>
 </resources>

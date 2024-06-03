@@ -4,6 +4,8 @@ object Constants {
     const val PRODUCTS_COLLECTION = "Products"
     const val TABLES_COLLECTION = "Tables"
     const val ORDERS_REGISTER_COLLECTION = "OrderRegister"
+    const val INCOME_COLLECTION = "IncomesRegister"
+    const val EXPENSES_COLLECTION = "ExpensesRegister"
 
     const val TABLES_AVAILABLE_DOCUMENT = "TablesAvailable"
     const val ORDER_NUMBER_DOCUMENT = "OrderNumber"
@@ -25,7 +27,9 @@ enum class ProductActionListener {
 enum class OrderStatus(val value: String) {
     PAID("PAID"),
     WITHOUT_PAYING("WITHOUT_PAYING"),
-    CANCEL("CANCEL")
+    CANCEL("CANCEL"),
+    CASH_PAYMENT("CASH_PAYMENT"),
+    CARD_PAYMENT("CARD PAYMENT")
 }
 
 enum class ProductType(val value:String){

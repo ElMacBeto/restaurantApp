@@ -3,6 +3,7 @@ package com.humbjorch.restaurantapp.core.utils
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.humbjorch.restaurantapp.data.model.OrderModel
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -79,7 +80,7 @@ object Tools {
     fun getTotalForList(orders: List<OrderModel>): Int {
         var total = 0
         for (order in orders) {
-            if (order.status == OrderStatus.PAID.value)
+            if (order.status in listOf(OrderStatus.PAID.value, OrderStatus.CASH_PAYMENT.value, OrderStatus.CARD_PAYMENT.value))
                 order.productList.forEach {
                     val extraPrice = it.extras.sumOf { extra -> extra.price.toInt() }
                     val price = it.price.toInt() * it.amount.toInt()
@@ -87,5 +88,10 @@ object Tools {
                 }
         }
         return total
+    }
+
+    fun formatMoney(amount: Double): String {
+        val format = NumberFormat.getCurrencyInstance(Locale.US)
+        return format.format(amount)
     }
 }

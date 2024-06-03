@@ -12,4 +12,6 @@ class FirebaseClientModule @Inject constructor() {
     val productsCollection = Firebase.firestore.collection(Constants.PRODUCTS_COLLECTION)
     val tableCollection = Firebase.firestore.collection(Constants.TABLES_COLLECTION)
     val orderRegisterCollection = Firebase.firestore.collection(Constants.ORDERS_REGISTER_COLLECTION)
+    val incomeCollection = Firebase.firestore.collection(Constants.INCOME_COLLECTION)
+    val expensesCollection = Firebase.firestore.collection(Constants.EXPENSES_COLLECTION)
 }

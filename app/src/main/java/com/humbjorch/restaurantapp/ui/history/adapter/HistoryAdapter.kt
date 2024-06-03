@@ -49,7 +49,9 @@ class HistoryAdapter(
             val statusDrawable:Int
 
             when(order.status){
-                OrderStatus.PAID.value->{
+                OrderStatus.PAID.value,
+                OrderStatus.CASH_PAYMENT.value,
+                OrderStatus.CARD_PAYMENT.value ->{
                     color = R.color.green1
                     statusDrawable = R.drawable.ic_pay
                 }

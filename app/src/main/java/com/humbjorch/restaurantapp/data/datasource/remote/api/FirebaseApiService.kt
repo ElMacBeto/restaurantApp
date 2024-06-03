@@ -5,6 +5,7 @@ import com.humbjorch.restaurantapp.core.di.FirebaseClientModule
 import com.humbjorch.restaurantapp.core.utils.Constants.ORDER_NUMBER_DOCUMENT
 import com.humbjorch.restaurantapp.core.utils.Constants.TABLES_AVAILABLE_DOCUMENT
 import com.humbjorch.restaurantapp.data.datasource.remote.makeCall
+import com.humbjorch.restaurantapp.data.datasource.remote.response.CashRegisterResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.OrderNumberResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.ProductResponse
 import com.humbjorch.restaurantapp.data.datasource.remote.response.TablesAvailableResponse
@@ -80,6 +81,42 @@ class FirebaseApiService @Inject constructor(private val client: FirebaseClientM
 
     suspend fun updateOrderNumber(orderNumber: OrderNumberResponse) = makeCall {
         client.tableCollection.document(ORDER_NUMBER_DOCUMENT).set(orderNumber).let { it ->
+            var isSuccess = false
+            it.addOnCompleteListener {
+                isSuccess = it.isSuccessful
+            }.await()
+            isSuccess
+        }
+    }
+
+    suspend fun getIncomes(date: String) = makeCall {
+        client.incomeCollection.document(date).get().await().let {
+            val json = Gson().toJson(it.data)
+            val cashRegister = Gson().fromJson(json, CashRegisterResponse::class.java)
+            cashRegister
+        }
+    }
+
+    suspend fun saveIncomes(date: String, cashRegister: CashRegisterResponse) = makeCall {
+        client.incomeCollection.document(date).set(cashRegister).let { it ->
+            var isSuccess = false
+            it.addOnCompleteListener {
+                isSuccess = it.isSuccessful
+            }.await()
+            isSuccess
+        }
+    }
+
+    suspend fun getExpenses(date: String) = makeCall {
+        client.expensesCollection.document(date).get().await().let {
+            val json = Gson().toJson(it.data)
+            val cashRegister = Gson().fromJson(json, CashRegisterResponse::class.java)
+            cashRegister
+        }
+    }
+
+    suspend fun saveExpenses(date: String, cashRegister: CashRegisterResponse) = makeCall {
+        client.expensesCollection.document(date).set(cashRegister).let { it ->
             var isSuccess = false
             it.addOnCompleteListener {
                 isSuccess = it.isSuccessful

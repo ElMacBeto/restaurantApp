@@ -32,6 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
+        app:labelVisibilityMode="unlabeled"
         android:background="@drawable/bg_shadow_top"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

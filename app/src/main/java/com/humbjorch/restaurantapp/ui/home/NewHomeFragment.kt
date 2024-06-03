@@ -25,6 +25,7 @@ import com.humbjorch.restaurantapp.data.model.OrderListModel
 import com.humbjorch.restaurantapp.data.model.OrderModel
 import com.humbjorch.restaurantapp.databinding.FragmentNewHomeBinding
 import com.humbjorch.restaurantapp.ui.home.adapter.OrderAdapter
+import com.humbjorch.restaurantapp.ui.home.dialog.PaymentDialog
 import com.humbjorch.restaurantapp.ui.orderRegister.OrderRegisterActivity
 import com.humbjorch.restaurantapp.ui.orderRegister.orderSection.adapter.ProductsOrderAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,17 +96,10 @@ class NewHomeFragment : Fragment() {
         }
         binding.nvDrawer.payOrderBtn.setOnClickListener {
             validateOrder {
-                (activity as NewHomeActivity).genericAlert(
-                    titleAlert = getString(R.string.dialog_title_pay_order),
-                    descriptionAlert = getString(R.string.dialog_description_pay_order),
-                    txtBtnNegativeAlert = getString(R.string.dialog_cancel_button),
-                    txtBtnPositiveAlert = getString(R.string.dialog_positive_button),
-                    buttonPositiveAction = {
-                        updateType = OrderStatus.PAID.value
-                        viewModel.changePaidOrder(orderSelected)
-                    },
-                    buttonNegativeAction = { }
-                )
+                PaymentDialog {
+                    updateType = it.value
+                    viewModel.changePaidOrder(orderSelected, updateType)
+                }.show(parentFragmentManager, PaymentDialog.TAG)
             }
         }
         binding.nvDrawer.btnCancelOrder.setOnClickListener {

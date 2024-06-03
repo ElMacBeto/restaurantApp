@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_newHomeFragment_to_historyFragment2"
             app:destination="@id/historyFragment2" />
+        <action
+            android:id="@+id/action_newHomeFragment_to_cashRegisterFragment"
+            app:destination="@id/cashRegisterFragment" />
     </fragment>
 
     <fragment
@@ -29,7 +32,11 @@
         <action
             android:id="@+id/action_settingsFragment2_to_historyFragment2"
             app:destination="@id/historyFragment2" />
+        <action
+            android:id="@+id/action_settingsFragment2_to_cashRegisterFragment"
+            app:destination="@id/cashRegisterFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/historyFragment2"
         android:name="com.humbjorch.restaurantapp.ui.history.HistoryFragment"
@@ -41,6 +48,25 @@
         <action
             android:id="@+id/action_historyFragment2_to_settingsFragment2"
             app:destination="@id/settingsFragment2" />
+        <action
+            android:id="@+id/action_historyFragment2_to_cashRegisterFragment"
+            app:destination="@id/cashRegisterFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cashRegisterFragment"
+        android:name="com.humbjorch.restaurantapp.ui.cashRegister.CashRegisterFragment"
+        android:label="fragment_cash_register"
+        tools:layout="@layout/fragment_cash_register" >
+        <action
+            android:id="@+id/action_cashRegisterFragment_to_newHomeFragment"
+            app:destination="@id/newHomeFragment" />
+        <action
+            android:id="@+id/action_cashRegisterFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+        <action
+            android:id="@+id/action_cashRegisterFragment_to_historyFragment2"
+            app:destination="@id/historyFragment2" />
     </fragment>
 
 

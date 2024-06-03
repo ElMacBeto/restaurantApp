@@ -13,6 +13,7 @@ import com.humbjorch.restaurantapp.core.utils.extDismissLoader
 import com.humbjorch.restaurantapp.core.utils.extShowLoader
 import com.humbjorch.restaurantapp.core.utils.genericAlert
 import com.humbjorch.restaurantapp.databinding.ActivityNewHomeBinding
+import com.humbjorch.restaurantapp.ui.cashRegister.CashRegisterFragmentDirections
 import com.humbjorch.restaurantapp.ui.history.HistoryFragmentDirections
 import com.humbjorch.restaurantapp.ui.settings.SettingsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class NewHomeActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var settingNav: (() -> Unit)? = null
     private var homeNav: (() -> Unit)? = null
+    private var cashRegisterNav: (() -> Unit)? = null
     private var historyNav: (() -> Unit)? = null
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -62,6 +64,11 @@ class NewHomeActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.navigation_cash_register -> {
+                    cashRegisterNav?.invoke()
+                    true
+                }
+
                 R.id.navigation_history -> {
                     historyNav?.invoke()
                     true
@@ -84,6 +91,11 @@ class NewHomeActivity : AppCompatActivity() {
             when (fragment.id) {
                 R.id.newHomeFragment -> {
                     homeNav = null
+                    cashRegisterNav = {
+                        val action =
+                            NewHomeFragmentDirections.actionNewHomeFragmentToCashRegisterFragment()
+                        navController.navigate(action)
+                    }
                     settingNav = {
                         val action =
                             NewHomeFragmentDirections.actionNewHomeFragmentToSettingsFragment2()
@@ -103,6 +115,11 @@ class NewHomeActivity : AppCompatActivity() {
                             SettingsFragmentDirections.actionSettingsFragment2ToNewHomeFragment()
                         navController.navigate(action)
                     }
+                    cashRegisterNav = {
+                        val action =
+                            SettingsFragmentDirections.actionSettingsFragment2ToCashRegisterFragment()
+                        navController.navigate(action)
+                    }
                     historyNav = {
                         val action =
                             SettingsFragmentDirections.actionSettingsFragment2ToHistoryFragment2()
@@ -112,14 +129,38 @@ class NewHomeActivity : AppCompatActivity() {
 
                 R.id.historyFragment2 -> {
                     historyNav = null
+                    homeNav = {
+                        val action =
+                            HistoryFragmentDirections.actionHistoryFragment2ToNewHomeFragment()
+                        navController.navigate(action)
+                    }
+                    cashRegisterNav = {
+                        val action =
+                            HistoryFragmentDirections.actionHistoryFragment2ToCashRegisterFragment()
+                        navController.navigate(action)
+                    }
                     settingNav = {
                         val action =
                             HistoryFragmentDirections.actionHistoryFragment2ToSettingsFragment2()
                         navController.navigate(action)
                     }
+                }
+
+                R.id.cashRegisterFragment -> {
+                    cashRegisterNav = null
                     homeNav = {
                         val action =
-                            HistoryFragmentDirections.actionHistoryFragment2ToNewHomeFragment()
+                            CashRegisterFragmentDirections.actionCashRegisterFragmentToNewHomeFragment()
+                        navController.navigate(action)
+                    }
+                    historyNav = {
+                        val action =
+                            CashRegisterFragmentDirections.actionCashRegisterFragmentToHistoryFragment2()
+                        navController.navigate(action)
+                    }
+                    settingNav = {
+                        val action =
+                            CashRegisterFragmentDirections.actionCashRegisterFragmentToSettingsFragment2()
                         navController.navigate(action)
                     }
                 }

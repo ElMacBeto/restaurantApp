@@ -6,6 +6,11 @@
         android:icon="@drawable/ic_home"
         android:visible="true"/>
     <item
+        android:id="@+id/navigation_cash_register"
+        android:title="Corte de caja"
+        android:icon="@drawable/ic_cash_register"
+        android:visible="true"/>
+    <item
         android:id="@+id/navigation_history"
         android:title="Historial"
         android:icon="@drawable/ic_new_history"

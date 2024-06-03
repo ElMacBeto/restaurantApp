@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.humbjorch.restaurantapp.App
-import com.humbjorch.restaurantapp.core.di.ModuleSharePreference
 import com.humbjorch.restaurantapp.core.utils.OrderStatus
 import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.core.utils.Tools
@@ -25,8 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NewHomeViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
-    private val printerUtils: PrinterUtils,
-    private val sharePreference: ModuleSharePreference
+    private val printerUtils: PrinterUtils
 ) : ViewModel() {
 
 
@@ -63,6 +61,7 @@ class NewHomeViewModel @Inject constructor(
             _getAllOrdersLiveData.value = productsRepository.getOrders(currentDate)
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun printOrder(order: OrderModel) {
         _printLiveData.value = Resource.loading()
@@ -100,12 +99,12 @@ class NewHomeViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun changePaidOrder(order: OrderModel) {
+    fun changePaidOrder(order: OrderModel, updateType: String) {
         _updateOrderLiveData.value = Resource.loading()
         viewModelScope.launch {
             val day = Tools.getCurrentDate()
             updateTable(order.table)
-            order.status = OrderStatus.PAID.value
+            order.status = updateType
             _updateOrderLiveData.value = productsRepository.saveOrderRegister(day, order)
         }
     }

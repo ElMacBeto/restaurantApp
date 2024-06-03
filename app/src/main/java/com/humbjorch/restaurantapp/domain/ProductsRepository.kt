@@ -1,5 +1,7 @@
 package com.humbjorch.restaurantapp.domain
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.humbjorch.restaurantapp.App
 import com.humbjorch.restaurantapp.core.utils.Status
 import com.humbjorch.restaurantapp.data.datasource.remote.Resource
@@ -76,6 +78,7 @@ class ProductsRepository @Inject constructor(
 
     suspend fun getOrders(date: String) = ordersWebDS.getOrdersRegister(date)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getAllOrdersRegister(
         startDate: LocalDate,
         endDate: LocalDate

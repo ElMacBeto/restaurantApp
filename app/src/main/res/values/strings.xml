@@ -82,4 +82,18 @@
     <string name="label_add_product">Producto agregado!</string>
     <string name="label_order_list_empty">En espera de pedidos</string>
     <string name="label_papiz_burger">Papiz Burger</string>
+    <string name="title_cash_register">Corte de caja</string>
+    <string name="label_income">Ingresos</string>
+    <string name="label_new_income">nuevo ingreso</string>
+    <string name="label_expenses">Egresos</string>
+    <string name="label_new_expenses">nuevo egreso</string>
+    <string name="label_total_income">Total ingresos: %s</string>
+    <string name="label_total_expenses">Total egresos: %s</string>
+    <string name="label_name">Nombre</string>
+    <string name="label_value">valor</string>
+    <string name="label_cash_register_income">Registro de ingreso</string>
+    <string name="label_cash_register_expenses">Registro de egreso</string>
+
+    <string name="dialog_title_delete_cash_register">Confirmacion</string>
+    <string name="dialog_description_delete_cash_register">esta seguro de eliminar este registro?</string>
 </resources>
